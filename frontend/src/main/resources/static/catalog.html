@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Каталог — Мой Магазин</title>
+    <style>
+        :root { --bg:#f6f7f9; --card:#fff; --text:#1f2937; --muted:#6b7280;
+            --primary:#2563eb; --primary-hover:#1d4ed8; --ok:#22c55e; --danger:#ef4444; }
+        * { box-sizing:border-box; }
+        body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--text); background:var(--bg); }
+        a { color:inherit; text-decoration:none; }
+
+        /* header */
+        header { background:#0f172a; color:#fff; padding:14px 18px; position:sticky; top:0; z-index:50;
+            display:flex; gap:16px; align-items:center; justify-content:space-between; }
+        .brand { display:flex; align-items:center; gap:10px; font-weight:700; }
+        .brand .logo { width:28px; height:28px; background:#22c55e; display:grid; place-items:center; border-radius:8px; font-size:16px; }
+        nav { display:flex; align-items:center; gap:14px; }
+        nav .muted { opacity:.9 }
+        nav .btn { border:0; border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:600; }
+        nav .btn-outline { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.3); }
+        nav .btn-outline:hover { border-color:#fff; }
+        nav .btn-primary { background:var(--primary); color:#fff; }
+        nav .btn-primary:hover { background:var(--primary-hover); }
+
+        /* layout */
+        .container { max-width:1180px; margin:0 auto; padding:18px; }
+        .page-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+        .filters-bar { display:flex; gap:10px; align-items:center; }
+        .filters-bar input[type="search"] { width:360px; max-width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:10px; }
+        .select { padding:10px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; }
+
+        .layout { display:grid; grid-template-columns: 260px 1fr; gap:16px; }
+
+        /* sidebar categories */
+        .sidebar { background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:14px; }
+        .sidebar h3 { margin:4px 0 10px 0; font-size:18px; }
+        .cat-list, .cat-sub { list-style:none; margin:0; padding:0; }
+        .cat-item { margin:4px 0; }
+        .cat-link { display:flex; justify-content:space-between; align-items:center;
+            padding:8px 10px; border-radius:10px; border:1px solid transparent; }
+        .cat-link:hover { background:#f3f4f6; }
+        .cat-link.active { background:#eef2ff; border-color:#c7d2fe; }
+        .cat-count { color:var(--muted); font-size:12px; }
+
+        /* products grid */
+        .panel { background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:14px; }
+        .breadcrumbs { color:var(--muted); font-size:14px; margin-bottom:8px; }
+        .grid { display:grid; gap:16px; grid-template-columns: repeat(4, 1fr); }
+        .product { background:var(--card); border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; display:flex; flex-direction:column;
+            transition: transform .06s ease, box-shadow .06s ease; }
+        .product:hover { transform: translateY(-2px); box-shadow:0 8px 20px rgba(2,6,23,.06); }
+        .product img { width:100%; aspect-ratio:4/3; object-fit:cover; background:#f1f5f9; }
+        .product .body { padding:12px; display:flex; flex-direction:column; gap:8px; }
+        .product h4 { margin:0; font-size:15px; line-height:1.25; }
+        .price { font-weight:700; }
+        .muted { color:var(--muted); }
+        .actions { margin-top:auto; display:flex; gap:8px; }
+        .btn-ok { background:var(--ok); color:#fff; border:0; border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:700; }
+        .btn-ok[disabled] { opacity:.6; cursor:not-allowed; }
+
+        /* skeletons */
+        .sk { background:#e5e7eb; border-radius:10px; }
+        .sk-img { width:100%; aspect-ratio:4/3; }
+        .sk-line { height:14px; }
+
+        /* empty */
+        .empty { text-align:center; color:var(--muted); padding:30px 10px; }
+
+        /* pagination */
+        .pagination { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:14px; }
+        .page-btn { padding:8px 12px; border-radius:8px; border:1px solid #e5e7eb; background:#fff; cursor:pointer; }
+        .page-btn[disabled] { opacity:.5; cursor:not-allowed; }
+        .page-btn.active { background:#eef2ff; border-color:#c7d2fe; }
+
+        footer { color:var(--muted); font-size:14px; text-align:center; padding:26px 10px; }
+
+        /* toast */
+        .toast { position:fixed; right:16px; bottom:16px; background:#111827; color:#fff;
+            padding:12px 14px; border-radius:10px; box-shadow:0 10px 24px rgba(0,0,0,.2);
+            display:none; gap:10px; align-items:center; }
+        .toast.show { display:flex; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <div class="logo">🛒</div>
+        <a href="/" class="title">Мой Магазин</a>
+    </div>
+    <nav id="nav-public">
+        <a class="muted" href="/catalog">Каталог</a>
+        <a class="muted" href="/login">Войти</a>
+        <a class="btn btn-primary" href="/register">Регистрация</a>
+    </nav>
+    <nav id="nav-auth" style="display:none">
+        <a class="muted" href="/catalog">Каталог</a>
+        <a class="muted" href="/cart">Корзина</a>
+        <a class="btn btn-outline" id="userBtn" href="/account">username</a>
+        <button class="btn btn-outline" id="logoutBtn">Выйти</button>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="page-head">
+        <h2 style="margin:0;">Каталог</h2>
+        <div class="filters-bar">
+            <input id="q" type="search" placeholder="Поиск по каталогу…" />
+            <select id="sort" class="select" aria-label="Сортировка">
+                <option value="popularity">Популярность</option>
+                <option value="price_asc">Цена ↑</option>
+                <option value="price_desc">Цена ↓</option>
+                <option value="newest">Новинки</option>
+                <option value="rating">Рейтинг</option>
+            </select>
+            <button id="applyBtn" class="btn btn-primary">Найти</button>
+        </div>
+    </div>
+
+    <div class="layout">
+        <!-- Sidebar: Категории -->
+        <aside class="sidebar">
+            <h3>Категории</h3>
+            <ul id="catList" class="cat-list" aria-live="polite">
+                <!-- категории подгрузятся -->
+            </ul>
+        </aside>
+
+        <!-- Основная панель: товары -->
+        <section class="panel">
+            <div class="breadcrumbs" id="breadcrumbs">Главная / Каталог</div>
+            <div id="products" class="grid" aria-live="polite">
+                <!-- товары/скелетоны -->
+            </div>
+            <div id="pager" class="pagination" aria-label="Пагинация">
+                <!-- пагинация -->
+            </div>
+        </section>
+    </div>
+</div>
+
+<footer>© <span id="year"></span> Мой Магазин</footer>
+
+<div class="toast" id="toast">
+    <span id="toastMsg">Текст тоста</span>
+    <button id="toastClose" class="page-btn">OK</button>
+</div>
+
+<script>
+    // ====== УТИЛИТЫ / UI ======
+    const $ = (s)=>document.querySelector(s);
+    const show = (el,on=true)=> el.style.display = on ? '' : 'none';
+    const toast = (msg)=>{
+        const t = $('#toast'); $('#toastMsg').textContent = msg;
+        t.classList.add('show'); const close=()=>t.classList.remove('show');
+        $('#toastClose').onclick = close; setTimeout(close,3500);
+    };
+    const parseJsonSafe = async (res)=>{
+        const ct = res.headers.get('content-type')||'';
+        if (ct.includes('application/json')) return res.json();
+        if (res.status===204) return null;
+        const text = await res.text().catch(()=> '');
+        try { return text? JSON.parse(text): null; } catch { return null; }
+    };
+    const formatPrice = (v,c='RUB')=>{
+        try { return new Intl.NumberFormat('ru-RU',{style:'currency',currency:c}).format(v); }
+        catch { return `${v} ${c}`; }
+    };
+    const escapeHtml=(s='')=> String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const escapeAttr=(s='')=> escapeHtml(s);
+
+    // ====== AUTH / TOKENS ======
+    const TOKEN_KEY='accessToken', META_KEY='authMeta';
+    const getAccessToken=()=> sessionStorage.getItem(TOKEN_KEY)||'';
+    const setAccessToken=(t)=> t? sessionStorage.setItem(TOKEN_KEY,t): sessionStorage.removeItem(TOKEN_KEY);
+    const clearAuthStorage=()=> { sessionStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(META_KEY); };
+
+    async function authFetch(input, init={}) {
+        const headers = new Headers(init.headers||{});
+        const token = getAccessToken(); if (token) headers.set('Authorization', `Bearer ${token}`);
+        let res = await fetch(input, { ...init, headers, credentials:'include' });
+        if (res.status===401 || res.status===403) {
+            const ok = await tryRefreshToken();
+            if (ok) {
+                const h2 = new Headers(init.headers||{});
+                const t2 = getAccessToken(); if (t2) h2.set('Authorization', `Bearer ${t2}`);
+                res = await fetch(input, { ...init, headers:h2, credentials:'include' });
+            }
+        }
+        return res;
+    }
+    async function tryRefreshToken() {
+        try {
+            const r = await fetch('/api/v1/auth/refresh', { method:'POST', credentials:'include' });
+            if (!r.ok) { setAccessToken(''); return false; }
+            const data = await parseJsonSafe(r);
+            if (data?.accessToken) { setAccessToken(data.accessToken); return true; }
+            setAccessToken(''); return false;
+        } catch { setAccessToken(''); return false; }
+    }
+
+    // ====== GLOBAL STATE ======
+    let auth = { isAuth:false, user:null };
+    let state = {
+        categoryId: null,
+        page: 1,
+        size: 12,
+        sort: 'popularity',
+        query: ''
+    };
+
+    // ====== INIT ======
+    document.addEventListener('DOMContentLoaded', ()=>{
+        $('#year').textContent = new Date().getFullYear();
+        wireControls();
+        wireLogout();
+        readStateFromUrl();
+        Promise.all([checkAuth(), loadCategories()]).then(loadProducts);
+    });
+
+    function wireControls() {
+        $('#applyBtn').addEventListener('click', ()=>{
+            state.query = $('#q').value.trim();
+            state.page = 1;
+            syncUrl(); loadProducts();
+        });
+        $('#sort').addEventListener('change', ()=>{
+            state.sort = $('#sort').value;
+            state.page = 1;
+            syncUrl(); loadProducts();
+        });
+    }
+
+    function wireLogout() {
+        $('#logoutBtn').addEventListener('click', async ()=>{
+            try { await fetch('/api/v1/auth/logout', { method:'POST', credentials:'include' }); } catch {}
+            clearAuthStorage(); auth = {isAuth:false, user:null}; renderNav();
+            toast('Вы вышли из аккаунта');
+        });
+    }
+
+    // ====== AUTH CHECK ======
+    async function checkAuth() {
+        try {
+            const res = await authFetch('/api/v1/user/me', { method:'GET' });
+            if (!res.ok) { auth = {isAuth:false, user:null}; renderNav(); return; }
+            const user = await parseJsonSafe(res);
+            if (user && (user.username || user.mail || user.companyName)) {
+                auth = { isAuth:true, user };
+            } else { auth = { isAuth:false, user:null }; }
+        } catch { auth = { isAuth:false, user:null }; }
+        renderNav();
+    }
+
+    function renderNav() {
+        const navPublic = $('#nav-public'), navAuth = $('#nav-auth');
+        if (auth.isAuth) {
+            const name = auth.user?.username || auth.user?.mail || auth.user?.email || auth.user?.companyName || 'user';
+            const userBtn = $('#userBtn'); userBtn.textContent = name; userBtn.href = '/account';
+            show(navPublic, false); show(navAuth, true);
+        } else { show(navPublic, true); show(navAuth, false); }
+    }
+
+    // ====== URL STATE ======
+    function readStateFromUrl() {
+        const p = new URLSearchParams(location.search);
+        state.categoryId = p.get('categoryId');
+        state.page = parseInt(p.get('page')||'1',10) || 1;
+        state.size = parseInt(p.get('size')||'12',10) || 12;
+        state.sort = p.get('sort') || 'popularity';
+        state.query = p.get('query') || '';
+        $('#q').value = state.query;
+        $('#sort').value = state.sort;
+    }
+    function syncUrl() {
+        const p = new URLSearchParams();
+        if (state.categoryId) p.set('categoryId', state.categoryId);
+        if (state.page>1) p.set('page', String(state.page));
+        if (state.size!==12) p.set('size', String(state.size));
+        if (state.sort!=='popularity') p.set('sort', state.sort);
+        if (state.query) p.set('query', state.query);
+        const qs = p.toString(); const url = qs? `/catalog?${qs}` : '/catalog';
+        history.replaceState(null,'',url);
+        renderBreadcrumbs();
+    }
+
+    // ====== CATEGORIES ======
+    async function loadCategories() {
+        const ul = $('#catList'); ul.innerHTML = '';
+        // скелет
+        for (let i=0;i<7;i++) {
+            const li = document.createElement('li'); li.className='cat-item';
+            li.innerHTML = `<div class="cat-link sk" style="height:34px;"></div>`;
+            ul.appendChild(li);
+        }
+
+        try {
+            const res = await fetch('/api/v1/categories', { credentials:'include' });
+            if (!res.ok) throw new Error('Failed to load categories');
+            const data = await parseJsonSafe(res);
+            const cats = normalizeCategories(data);
+            ul.innerHTML = renderCategories(cats, state.categoryId);
+            // события:
+            ul.querySelectorAll('[data-cat]').forEach(el=>{
+                el.addEventListener('click', (e)=>{
+                    e.preventDefault();
+                    state.categoryId = el.dataset.cat || null;
+                    state.page = 1;
+                    syncUrl(); // обновим URL и хлебные крошки
+                    // визуально активируем
+                    ul.querySelectorAll('.cat-link').forEach(a=>a.classList.remove('active'));
+                    el.classList.add('active');
+                    loadProducts();
+                });
+            });
+            renderBreadcrumbs(cats);
+        } catch {
+            ul.innerHTML = `<li class="cat-item"><span class="muted">Не удалось загрузить категории</span></li>`;
+        }
+    }
+
+    function normalizeCategories(data) {
+        // ожидаем массив вида [{id,name,count,children:[...]}, ...]
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.items)) return data.items;
+        return [];
+    }
+
+    function renderCategories(cats, activeId) {
+        const renderNode = (c, level=0)=>{
+            const active = String(activeId||'') === String(c.id||'');
+            const pad = level? `style="margin-left:${level*8}px"` : '';
+            const count = c.count!=null ? `<span class="cat-count">${c.count}</span>` : '';
+            const self = `<li class="cat-item">
+        <a href="/catalog?categoryId=${encodeURIComponent(c.id)}" class="cat-link ${active?'active':''}" ${pad} data-cat="${escapeAttr(c.id)}">
+          <span>${escapeHtml(c.name||'Категория')}</span>${count}
+        </a>
+      </li>`;
+            const children = Array.isArray(c.children) && c.children.length
+                ? `<ul class="cat-sub">${c.children.map(ch=>renderNode(ch, level+1)).join('')}</ul>` : '';
+            return self + children;
+        };
+        const root = [{ id: null, name:'Все товары', count:null, children:[] }, ...cats];
+        return root.map(c=>renderNode(c, 0)).join('');
+    }
+
+    function renderBreadcrumbs() {
+        // упрощённо: Главная / Каталог / [Название категории]
+        const bc = $('#breadcrumbs');
+        const base = `Главная / Каталог`;
+        const selected = $('#catList .cat-link.active span')?.textContent;
+        bc.textContent = selected ? `${base} / ${selected}` : base;
+    }
+
+    // ====== PRODUCTS ======
+    async function loadProducts() {
+        const grid = $('#products'); const pager = $('#pager');
+        grid.innerHTML = renderSkeletons(12); pager.innerHTML = '';
+
+        try {
+            const params = new URLSearchParams();
+            if (state.categoryId) params.set('categoryId', state.categoryId);
+            if (state.query) params.set('query', state.query);
+            params.set('page', String(state.page-1)); // если бэк 0-based
+            params.set('size', String(state.size));
+            params.set('sort', state.sort);
+
+            const res = await authFetch(`/api/v1/products?${params.toString()}`, { method:'GET' });
+            if (!res.ok) throw new Error('Failed to load products');
+            const data = await parseJsonSafe(res);
+
+            const items = Array.isArray(data) ? data
+                : (data && Array.isArray(data.items)) ? data.items : [];
+            const total = (data && (data.total || data.totalElements || 0)) || items.length;
+            const size  = (data && (data.size || state.size)) || state.size;
+            const page0 = (data && (data.page || data.pageIndex || 0)) || (state.page-1);
+            const pages = Math.max(1, Math.ceil(total / size));
+
+            if (!items.length) {
+                grid.innerHTML = `<div class="empty">Ничего не найдено. Попробуйте изменить фильтры или поиск.</div>`;
+                pager.innerHTML = '';
+                return;
+            }
+
+            grid.innerHTML = items.map(renderProductCard).join('');
+            grid.querySelectorAll('button[data-id]').forEach(btn=>{
+                btn.addEventListener('click', ()=> addToCart(btn.dataset.id));
+                if (!auth.isAuth) btn.setAttribute('disabled','disabled');
+            });
+
+            renderPagination(pager, page0+1, pages);
+        } catch (e) {
+            grid.innerHTML = `<div class="empty">Не удалось загрузить товары</div>`;
+        }
+    }
+
+    function renderSkeletons(n=8) {
+        return Array.from({length:n}).map(()=>`
+      <div class="product" aria-busy="true">
+        <div class="sk sk-img"></div>
+        <div class="body">
+          <div class="sk sk-line" style="width:70%;"></div>
+          <div class="sk sk-line" style="width:50%; margin-top:6px;"></div>
+          <div class="actions"><button class="btn-ok" disabled>Загрузка…</button></div>
+        </div>
+      </div>
+    `).join('');
+    }
+
+    function renderProductCard(p) {
+        const title = escapeHtml(p.title || p.name || 'Товар');
+        const price = formatPrice(p.price ?? p.amount ?? 0, p.currency || 'RUB');
+        const id    = p.id || p.uuid || p.sku || Math.random().toString(36).slice(2);
+        const img   = (p.imageUrl || p.image || p.thumbnail) || 'https://via.placeholder.com/600x400?text=No+Image';
+        const desc  = p.shortDescription ? `<p class="muted" style="margin:0">${escapeHtml(p.shortDescription)}</p>` : '';
+        return `
+      <div class="product">
+        <img src="${escapeAttr(img)}" alt="${escapeAttr(title)}" loading="lazy">
+        <div class="body">
+          <h4 title="${escapeAttr(title)}">${title}</h4>
+          <div><span class="price">${price}</span> <span class="muted">/ шт.</span></div>
+          ${desc}
+          <div class="actions">
+            <button class="btn-ok" data-id="${escapeAttr(id)}" ${!auth.isAuth ? 'disabled':''}>В корзину</button>
+          </div>
+        </div>
+      </div>
+    `;
+    }
+
+    function renderPagination(container, current, total) {
+        const btn = (label, page, disabled=false, active=false)=> `
+      <button class="page-btn ${active?'active':''}" ${disabled?'disabled':''} data-page="${page}">${label}</button>
+    `;
+        const parts = [];
+        parts.push(btn('‹', Math.max(1, current-1), current===1));
+        const windowSize = 5;
+        let start = Math.max(1, current - Math.floor(windowSize/2));
+        let end = Math.min(total, start + windowSize - 1);
+        if (end - start + 1 < windowSize) start = Math.max(1, end - windowSize + 1);
+        if (start > 1) parts.push(btn('1', 1, false, current===1));
+        if (start > 2) parts.push(`<span class="muted">…</span>`);
+        for (let p=start; p<=end; p++) parts.push(btn(String(p), p, false, current===p));
+        if (end < total-1) parts.push(`<span class="muted">…</span>`);
+        if (end < total) parts.push(btn(String(total), total, false, current===total));
+        parts.push(btn('›', Math.min(total, current+1), current===total));
+        container.innerHTML = parts.join('');
+
+        container.querySelectorAll('.page-btn[data-page]').forEach(b=>{
+            b.addEventListener('click', ()=>{
+                const page = parseInt(b.dataset.page,10);
+                if (page && page!==state.page) {
+                    state.page = page; syncUrl(); loadProducts();
+                    window.scrollTo({ top:0, behavior:'smooth' });
+                }
+            });
+        });
+    }
+
+    // ====== CART ======
+    async function addToCart(productId) {
+        if (!auth.isAuth) { toast('Войдите, чтобы добавлять товары в корзину'); return; }
+        try {
+            const res = await authFetch('/api/cart/items', {
+                method:'POST',
+                headers:{ 'Content-Type':'application/json' },
+                body: JSON.stringify({ productId, qty:1 })
+            });
+            if (!res.ok) {
+                const body = await parseJsonSafe(res);
+                const msg = (body && (body.message || body.error)) || `Ошибка ${res.status}`;
+                throw new Error(msg);
+            }
+            toast('Товар добавлен в корзину');
+        } catch (e) {
+            toast(`Не удалось добавить: ${e.message}`);
+        }
+    }
+</script>
+</body>
+</html>

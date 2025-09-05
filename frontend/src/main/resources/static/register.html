@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Регистрация — Мой Магазин</title>
+    <style>
+        body { font-family:sans-serif; background:#f6f7f9; margin:0; }
+        header { background:#0f172a; color:#fff; padding:14px 18px; display:flex; justify-content:space-between; }
+        .brand { display:flex; gap:10px; font-weight:700; }
+        .logo { width:28px;height:28px;background:#22c55e;display:grid;place-items:center;border-radius:8px; }
+        nav { display:flex; gap:14px; }
+        .container { max-width:420px; margin:40px auto; padding:20px; background:#fff; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.06);}
+        form input, form button { width:100%; margin-bottom:12px; padding:10px; font-size:14px; border-radius:8px; }
+        form input { border:1px solid #ccc; }
+        form button { background:#22c55e; color:#fff; border:none; cursor:pointer; }
+        form button:hover { background:#16a34a; }
+        #message { text-align:center; margin-top:10px; font-weight:bold; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand"><div class="logo">🛒</div><a href="/" class="title">Мой Магазин</a></div>
+    <nav><a href="/">Главная</a><a href="/login">Войти</a></nav>
+</header>
+
+<div class="container">
+    <h2>Регистрация</h2>
+    <form id="registerForm">
+        <input name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        <input type="password" name="confirmPassword" placeholder="Повторите пароль" required>
+        <input name="companyName" placeholder="Название компании">
+        <input name="inn" placeholder="ИНН">
+        <input name="city" placeholder="Город">
+        <input name="phone" placeholder="Телефон">
+        <input name="mail" placeholder="Почта">
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <p id="message"></p>
+</div>
+
+<script>
+    const form = document.getElementById("registerForm");
+    const msg  = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form).entries());
+
+        try {
+            const response = await fetch("/api/v1/auth/register", {
+                method:"POST",
+                headers:{ "Content-Type":"application/json" },
+                body: JSON.stringify(data)
+            });
+            const body = await response.json();
+
+            if (response.ok) {
+                msg.textContent = "✅ " + (body.message || "Регистрация успешна");
+                msg.style.color = "green";
+                setTimeout(()=> window.location.href="/login", 1500);
+            } else {
+                msg.textContent = "❌ " + (body.message || "Ошибка регистрации");
+                msg.style.color = "red";
+            }
+        } catch {
+            msg.textContent = "❌ Ошибка соединения";
+            msg.style.color = "red";
+        }
+    });
+</script>
+</body>
+</html>

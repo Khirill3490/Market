@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Активация аккаунта — Мой Магазин</title>
+    <style>
+        :root {
+            --bg:#f6f7f9; --card:#fff; --text:#1f2937; --muted:#6b7280;
+            --primary:#2563eb; --primary-hover:#1d4ed8; --ok:#22c55e; --danger:#ef4444;
+            --border:#e5e7eb;
+        }
+        *{box-sizing:border-box}
+        body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+        a{text-decoration:none;color:inherit}
+        /* header */
+        header{background:#0f172a;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+        .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+        .logo{width:28px;height:28px;background:#22c55e;display:grid;place-items:center;border-radius:8px}
+        nav{display:flex;gap:14px;align-items:center}
+        .muted{color:#cbd5e1}
+        /* card */
+        .auth-container{max-width:480px;margin:40px auto;padding:22px;background:var(--card);border-radius:14px;border:1px solid var(--border);box-shadow:0 8px 20px rgba(0,0,0,.06);text-align:center}
+        h2{margin:0 0 14px 0}
+        #message{font-weight:600;margin:14px 0}
+        .ok{color:var(--ok)}
+        .error{color:var(--danger)}
+        .btn{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:8px;background:var(--primary);color:#fff;font-weight:600;border:0;cursor:pointer}
+        .btn:hover{background:var(--primary-hover)}
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <div class="logo">🛒</div>
+        <a href="/" class="title" style="color:#fff">Мой Магазин</a>
+    </div>
+    <nav>
+        <a class="muted" href="/">Главная</a>
+        <a class="muted" href="/login">Войти</a>
+        <a class="muted" href="/register">Регистрация</a>
+    </nav>
+</header>
+
+<div class="auth-container">
+    <h2>Активация аккаунта</h2>
+    <div id="message" class="muted" role="status" aria-live="polite">Проверяем ссылку…</div>
+    <a href="/" class="btn" id="goHomeBtn" style="display:none;">На главную</a>
+</div>
+
+<script>
+    (async () => {
+        const params = new URLSearchParams(location.search);
+        const id = params.get("id");
+        const msgEl = document.getElementById("message");
+        const homeBtn = document.getElementById("goHomeBtn");
+
+        const show = (ok, text) => {
+            msgEl.textContent = (ok ? "✅ " : "❌ ") + text;
+            msgEl.className = ok ? "ok" : "error";
+            if (ok) homeBtn.style.display = "inline-block";
+        };
+
+        if (!id) { show(false, "Ошибка: параметр активации не найден."); return; }
+
+        try {
+            const resp = await fetch(`/api/v1/auth/activate?token=${encodeURIComponent(id)}`, { credentials: "include" });
+            const ct = resp.headers.get("content-type") || "";
+            let payload;
+            if (ct.includes("application/json")) {
+                payload = await resp.json().catch(() => ({}));
+            } else {
+                payload = await resp.text().catch(() => "");
+            }
+
+            const extractMsg = () => {
+                if (typeof payload === "string" && payload.trim()) return payload;
+                if (payload && typeof payload === "object") {
+                    if (payload.message) return payload.message;
+                    if (payload.error) return payload.error;
+                }
+                return resp.ok ? "Активация выполнена." : `Ошибка активации (HTTP ${resp.status}).`;
+            };
+
+            if (resp.ok) {
+                show(true, extractMsg());
+            } else {
+                const friendly =
+                    resp.status === 403 ? "Ссылка недействительна, уже использована или истекла."
+                        : resp.status === 404 ? "Ссылка не найдена. Проверьте адрес."
+                            : extractMsg();
+                show(false, friendly);
+            }
+        } catch {
+            show(false, "Ошибка соединения с сервером.");
+        }
+    })();
+</script>
+
+</body>
+</html>

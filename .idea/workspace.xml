@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="312342ff-22f0-447a-90fe-fb16d9fcc9d0" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/api-gateway">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/auth-module">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/eureca-client">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/eureka-client">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/eureka-server">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/frontend">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/product-service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/user-service">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/product-service">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/common">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/user-service">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/api-gateway">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/frontend">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="untitled3" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="untitled3" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="untitled3" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="package-info" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="KotlinScriptingSettings">
+    <option name="suppressDefinitionsCheck" value="true" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2y93dEwuQjFGpSJZU0mMlAjY7OJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build auth-module.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build eureca-client.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build eureka-client.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build eureka-server.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build untitled3.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.frontend [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.product-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3 [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3 [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3 [wrapper].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:api-gateway [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:api-gateway [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:api-gateway [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:api-gateway [wrapper].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:common [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:product-service [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:product-service [buildDependents].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:product-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:product-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:product-service [wrapper].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.untitled3:user-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #1.executor&quot;: &quot;Run&quot;,
+    &quot;Multirun.Eureka.executor&quot;: &quot;Run&quot;,
+    &quot;Multirun.module.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;Spring Boot.ApiGateway.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiGatewayApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthModule.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthModuleApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthModuleApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurecaClientApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaClient.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaClientApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaClientApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaServer.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaServerApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FrontendApplication (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FrontendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ProductService.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserService.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/khodzherkirill/IdeaProjects/untitled3/frontend/src/main/resources/static&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.language.Kotlin.scripting&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;h2&quot;,
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/auth-module/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/common/src/main/java/ru/example/common" />
+      <recent name="$PROJECT_DIR$/user-service/src/main/java/ru/example/userservice" />
+      <recent name="$PROJECT_DIR$/user-service/src/main/resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/product-service/src/main/resources/images" />
+      <recent name="$PROJECT_DIR$/frontend/src/main/resources/static/assets" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.example.productservice.repository" />
+      <recent name="ru.example.productservice.entity" />
+      <recent name="ru.example.apigateway.security" />
+      <recent name="ru.example.authmodule.controller" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="Multirun" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="excludedTypes">
+      <set>
+        <option value="HttpClient.HttpRequestRunConfigurationType" />
+      </set>
+    </option>
+    <option name="hiddenConfigurations">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <set>
+              <option value="EurekaClient" />
+              <option value="FrontendApplication" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.untitled3 [build]">
+    <configuration name="frontend [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/frontend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="untitled3 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="untitled3:api-gateway [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/api-gateway" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="untitled3:product-service [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/product-service" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="untitled3:user-service [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/user-service" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Eureka" type="Multirun" separateTabs="false" reuseTabsWithFailures="false" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
+      <runConfiguration name="EurekaServer" type="Spring Boot" />
+      <method v="2" />
+    </configuration>
+    <configuration name="module" type="Multirun" separateTabs="false" reuseTabsWithFailures="false" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
+      <runConfiguration name="ProductService" type="Spring Boot" />
+      <runConfiguration name="UserService" type="Spring Boot" />
+      <runConfiguration name="AuthModule" type="Spring Boot" />
+      <runConfiguration name="Frontend" type="Spring Boot" />
+      <runConfiguration name="ApiGateway" type="Spring Boot" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ApiGateway" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="untitled3.api-gateway.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.apigateway.ApiGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthModule" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="untitled3.auth-module.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.authmodule.AuthModuleApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaClient" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="untitled3.eureka-client.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.eurekaclient.EurekaClientApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="untitled3.eureka-server.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.eurekaserver.EurekaServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Frontend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="untitled3.frontend.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.frontend.FrontendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FrontendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="frontend.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.frontend.FrontendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ProductService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="untitled3.product-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.productservice.ProductServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="untitled3.user-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.userservice.UserServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.frontend [build]" />
+      <item itemvalue="Gradle.untitled3:user-service [build]" />
+      <item itemvalue="Gradle.untitled3 [build]" />
+      <item itemvalue="Gradle.untitled3:product-service [build]" />
+      <item itemvalue="Gradle.untitled3:api-gateway [build]" />
+      <item itemvalue="Multirun.Eureka" />
+      <item itemvalue="Multirun.module" />
+      <item itemvalue="Spring Boot.FrontendApplication" />
+      <item itemvalue="Spring Boot.Frontend" />
+      <item itemvalue="Spring Boot.ApiGateway" />
+      <item itemvalue="Spring Boot.AuthModule" />
+      <item itemvalue="Spring Boot.EurekaClient" />
+      <item itemvalue="Spring Boot.EurekaServer" />
+      <item itemvalue="Spring Boot.ProductService" />
+      <item itemvalue="Spring Boot.UserService" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.untitled3 [build]" />
+        <item itemvalue="Gradle.frontend [build]" />
+        <item itemvalue="Gradle.untitled3:user-service [build]" />
+        <item itemvalue="Gradle.untitled3:api-gateway [build]" />
+        <item itemvalue="Gradle.untitled3:product-service [build]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="312342ff-22f0-447a-90fe-fb16d9fcc9d0" name="Changes" comment="" />
+      <created>1749233053276</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1749233053276</updated>
+      <workItem from="1749233054907" duration="1211000" />
+      <workItem from="1749395267696" duration="20543000" />
+      <workItem from="1749730057177" duration="40387000" />
+      <workItem from="1750176534800" duration="10936000" />
+      <workItem from="1750271456345" duration="554000" />
+      <workItem from="1750437201437" duration="3150000" />
+      <workItem from="1750518437345" duration="1345000" />
+      <workItem from="1750584806705" duration="1874000" />
+      <workItem from="1750587515777" duration="546000" />
+      <workItem from="1750588157044" duration="72000" />
+      <workItem from="1750596839894" duration="9131000" />
+      <workItem from="1750606559741" duration="4721000" />
+      <workItem from="1750668996958" duration="8527000" />
+      <workItem from="1750683397129" duration="11344000" />
+      <workItem from="1751123258109" duration="1161000" />
+      <workItem from="1751697814424" duration="19549000" />
+      <workItem from="1751906346484" duration="3313000" />
+      <workItem from="1752052058186" duration="12115000" />
+      <workItem from="1752076405952" duration="794000" />
+      <workItem from="1752154203576" duration="14720000" />
+      <workItem from="1752373834767" duration="3908000" />
+      <workItem from="1752395989913" duration="3244000" />
+      <workItem from="1752512699175" duration="1397000" />
+      <workItem from="1752514106257" duration="1729000" />
+      <workItem from="1752593649583" duration="3555000" />
+      <workItem from="1754051135754" duration="9917000" />
+      <workItem from="1754321887832" duration="10397000" />
+      <workItem from="1755187472805" duration="3651000" />
+      <workItem from="1755271845631" duration="54188000" />
+      <workItem from="1755535772368" duration="3950000" />
+      <workItem from="1755791701300" duration="8722000" />
+      <workItem from="1755965862198" duration="2801000" />
+      <workItem from="1756028124635" duration="10017000" />
+      <workItem from="1756401563964" duration="4313000" />
+      <workItem from="1756486400411" duration="6261000" />
+      <workItem from="1756543302899" duration="14728000" />
+      <workItem from="1756627342484" duration="12207000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/untitled3$Frontend.ic" NAME="Frontend Coverage Results" MODIFIED="1755794306737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+  </component>
+</project>

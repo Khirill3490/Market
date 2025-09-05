@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+#  main:
+#    web-application-type: reactive
+#          routes:
+#            - id: client_route
+#              uri: lb://eureka-client
+#              predicates:
+#                - Path=/api/test
+
+server:
+  port: 9090
+
+
+app:
+  jwt:
+    secret: EFnoiYH3fUV5q9dls3vKojW0FBpZcueVC6UgQzLn68OaZKS5eDcnHdWLLLNEH3QQV76nRdnDg1kAjrKbWHrCoA==
+    tokenExpiration: 10
+    refreshTokenExpiration: 30
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/eureka
+
+logging:
+  level:
+    root: INFO
+    ru.example.apigateway: DEBUG
+
+

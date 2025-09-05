@@ -1,0 +1,57 @@
+package ru.example.productservice.mapper;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.example.common.entity.Brand;
+import ru.example.common.entity.Product;
+import ru.example.common.exception.EntityNotFoundException;
+import ru.example.productservice.model.request.ProductRequest;
+import ru.example.productservice.model.response.ProductResponse;
+import ru.example.productservice.repository.BrandRepository;
+import ru.example.productservice.service.CategoryService;
+
+@Component
+@RequiredArgsConstructor
+public class ProductMapper {
+
+    private final BrandRepository brandRepository;
+    private final CategoryService categoryService;
+
+    public Product toProduct(ProductRequest request) {
+        return Product.builder()
+                .art(request.getArt())
+                .brand(throwExceptionIfBrandNotExists(request.getBrand()))
+                .name(request.getName())
+                .inf(request.getInf())
+                .ext(request.getExt())
+                .img(request.getUrl())
+                .url(request.getUrl())
+                .unit(request.getUnit())
+                .sml(request.getSml())
+                .category(categoryService.findByName(request.getCat()))
+                .bar(request.getBar())
+                .build();
+    }
+
+    public ProductResponse toResponse(Product product) {
+        return ProductResponse.builder()
+                .art(product.getArt())
+                .brand(product.getBrand().getName())
+                .name(product.getName())
+                .inf(product.getInf())
+                .ext(product.getExt())
+                .img(product.getImg())
+                .url(product.getUrl())
+                .unit(product.getUnit())
+                .sml(product.getSml())
+                .cat(product.getCategory().getName())
+                .bar(product.getBar())
+                .build();
+    }
+
+    private Brand throwExceptionIfBrandNotExists(String brand) {
+        return brandRepository.findByNameEqualsIgnoreCase(brand)
+                .orElseThrow(() -> new EntityNotFoundException("Ошибка в поле Бренд"));
+    }
+
+}
