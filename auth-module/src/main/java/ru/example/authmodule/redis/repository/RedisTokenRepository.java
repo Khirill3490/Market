@@ -27,11 +27,8 @@ public class RedisTokenRepository {
         return resetKeyPrefix + token;
     }
 
-    public String getActivationKey(String token) {
-        return activationKeyPrefix + token;
-    }
-
-    public void save(String key, String publicId) {
+    public void save(String token, String publicId) {
+        String key = getResetKey(token);
         redis.opsForValue().set(key, publicId, ttl);
     }
 

@@ -15,6 +15,7 @@ import ru.example.authmodule.model.request.UserRegRequest;
 import ru.example.authmodule.model.request.RefreshTokenRequest;
 import ru.example.authmodule.model.response.AuthResponse;
 import ru.example.authmodule.model.response.RefreshTokenResponse;
+import ru.example.authmodule.redis.repository.RefreshTokenRepository;
 import ru.example.authmodule.repository.CompanyRepository;
 import ru.example.authmodule.repository.UserRepository;
 import ru.example.authmodule.security.AppUserPrincipal;
@@ -29,6 +30,7 @@ import ru.example.common.entity.enums.RulesType;
 import ru.example.common.exception.ErrorMessageGlobal;
 import ru.example.common.exception.IncorrectDataException;
 import ru.example.common.exception.RefreshTokenException;
+import ru.example.common.util.GenerateToken;
 
 import java.util.Optional;
 
@@ -38,7 +40,8 @@ public class SecurityService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final RefreshTokenService refreshTokenService;
+
+    private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
@@ -58,18 +61,23 @@ public class SecurityService {
         AppUserPrincipal userPrincipal = (AppUserPrincipal) authentication.getPrincipal();
         String role = userPrincipal.getAuthorities().toString();
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userPrincipal.getId());
+        String refreshToken = GenerateToken.newOpaqueToken();
+        refreshTokenRepository.save(refreshToken, userPrincipal.getPublicId());
 
 
         return AuthResponse.builder()
                 .accessToken(jwtUtils.generateJwtToken(userPrincipal))
-                .refreshToken(refreshToken.getToken())
+                .refreshToken(refreshToken)
                 .email(userPrincipal.getUsername())
                 .role(role)
                 .build();
     }
 
     public void register(UserRegRequest request) {
+        if (companyRepository.existsByInn(request.getInn())) {
+            throw new EntityAlreadyExistsException("Компания с данным ИНН уже зарегистрирована");
+        }
+
         Optional<User> userOptional = userRepository.findByEmailEqualsIgnoreCase(request.getEmail());
         String inn = request.getInn();
 
@@ -89,6 +97,8 @@ public class SecurityService {
 
         Company company = userAndCompanyMapper.toCompany(request);
 
+
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -106,6 +116,8 @@ public class SecurityService {
 
     public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
         String requestRefreshToken = request.getRefreshToken();
+
+        return refreshTokenRepository.
 
         return refreshTokenService.findByRefreshToken(requestRefreshToken)
                 .map(refreshTokenService::checkRefreshToken)
@@ -126,8 +138,9 @@ public class SecurityService {
     public void logout() {
         var currentPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (currentPrincipal instanceof AppUserPrincipal userDetails) {
-            Long userId = userDetails.getId();
+            String publicId = userDetails.getPublicId();
 
+            refreshTokenRepository.delete();
             refreshTokenService.deleteByUserId(userId);
         }
     }

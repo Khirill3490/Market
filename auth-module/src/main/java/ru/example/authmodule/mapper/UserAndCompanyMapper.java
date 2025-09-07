@@ -14,6 +14,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserAndCompanyMapper {
 
+
+
     public User toUser(UserRegRequest request) {
         return User.builder()
                 .email(request.getEmail())

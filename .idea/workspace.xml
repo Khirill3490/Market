@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="312342ff-22f0-447a-90fe-fb16d9fcc9d0" name="Changes" comment="" />
+    <list default="true" id="312342ff-22f0-447a-90fe-fb16d9fcc9d0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,23 +77,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="untitled3" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="untitled3" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="untitled3" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -99,6 +95,21 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Khirill3490&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Khirill3490/Market.git&quot;,
+    &quot;accountId&quot;: &quot;d0168946-d914-4688-b7bc-ee989f6e0dbb&quot;
+  }
+}</component>
   <component name="KotlinScriptingSettings">
     <option name="suppressDefinitionsCheck" value="true" />
   </component>
@@ -113,6 +124,7 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2y93dEwuQjFGpSJZU0mMlAjY7OJ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -120,6 +132,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Gradle.Build Market.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build auth-module.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build eureca-client.executor&quot;: &quot;Run&quot;,
@@ -156,6 +169,8 @@
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.ApiGateway.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ApiGatewayApplication (1).executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
@@ -178,18 +193,20 @@
     &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/khodzherkirill/IdeaProjects/untitled3/frontend/src/main/resources/static&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Кирилл Ходжер/IdeaProjects/Market&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.language.Kotlin.scripting&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -360,15 +377,6 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
     <configuration name="Eureka" type="Multirun" separateTabs="false" reuseTabsWithFailures="false" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
       <runConfiguration name="EurekaServer" type="Spring Boot" />
       <method v="2" />
@@ -440,18 +448,18 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.frontend [build]" />
-      <item itemvalue="Gradle.untitled3:user-service [build]" />
       <item itemvalue="Gradle.untitled3 [build]" />
-      <item itemvalue="Gradle.untitled3:product-service [build]" />
       <item itemvalue="Gradle.untitled3:api-gateway [build]" />
+      <item itemvalue="Gradle.untitled3:product-service [build]" />
+      <item itemvalue="Gradle.untitled3:user-service [build]" />
       <item itemvalue="Multirun.Eureka" />
       <item itemvalue="Multirun.module" />
-      <item itemvalue="Spring Boot.FrontendApplication" />
-      <item itemvalue="Spring Boot.Frontend" />
       <item itemvalue="Spring Boot.ApiGateway" />
       <item itemvalue="Spring Boot.AuthModule" />
       <item itemvalue="Spring Boot.EurekaClient" />
       <item itemvalue="Spring Boot.EurekaServer" />
+      <item itemvalue="Spring Boot.FrontendApplication" />
+      <item itemvalue="Spring Boot.Frontend" />
       <item itemvalue="Spring Boot.ProductService" />
       <item itemvalue="Spring Boot.UserService" />
     </list>
@@ -518,11 +526,27 @@
       <workItem from="1756486400411" duration="6261000" />
       <workItem from="1756543302899" duration="14728000" />
       <workItem from="1756627342484" duration="12207000" />
+      <workItem from="1757088852557" duration="289000" />
+      <workItem from="1757089161726" duration="2800000" />
+      <workItem from="1757138424426" duration="1369000" />
+      <workItem from="1757139830426" duration="114000" />
+      <workItem from="1757140444758" duration="527000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

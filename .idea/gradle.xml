@@ -5,6 +5,7 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="ms-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -21,6 +22,7 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/frontend" />
+        <option name="gradleJvm" value="ms-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/frontend" />

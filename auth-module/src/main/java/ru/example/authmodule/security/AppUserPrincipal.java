@@ -24,7 +24,9 @@ public class AppUserPrincipal implements UserDetails {
         return user.getId();
     }
 
-    public String getPublicId() {return user.getPublicId();}
+    public String getPublicId() {
+        return user.getPublicId();
+    }
 
     @Override
     public String getPassword() {
