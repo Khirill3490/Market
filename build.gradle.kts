@@ -1,18 +1,29 @@
 plugins {
-    id("java")
+    base
 }
 
-group = "ru.example"
-version = "1.0-SNAPSHOT"
+group = "com.market"
+version = "0.0.1-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
 
-dependencies {
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
 
-}
+    plugins.withId("java") {
+        extensions.configure<JavaPluginExtension> {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(21))
+            }
+        }
 
-tasks.test {
-    useJUnitPlatform()
+        tasks.withType<Test>().configureEach {
+            useJUnitPlatform()
+        }
+    }
 }
