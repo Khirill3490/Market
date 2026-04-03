@@ -2,7 +2,8 @@ package ru.example.authmodule.service;
 
 
 
-import ru.example.common.entity.Company;
+
+import ru.example.identitydomain.entity.Company;
 
 import java.util.List;
 

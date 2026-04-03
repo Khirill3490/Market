@@ -1,11 +1,11 @@
-package ru.example.common.entity;
+package ru.example.identitydomain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.example.common.entity.enums.RulesType;
+import ru.example.identitydomain.entity.enums.RulesType;
 
 
 @Entity

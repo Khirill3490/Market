@@ -1,6 +1,7 @@
 package ru.example.productservice.service;
 
-import ru.example.common.entity.User;
+
+import ru.example.identitydomain.entity.User;
 
 public interface UserService {
 

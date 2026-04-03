@@ -2,8 +2,8 @@ package ru.example.productservice.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.example.common.entity.Brand;
-import ru.example.common.entity.Product;
+import ru.example.productservice.entity.Brand;
+import ru.example.productservice.entity.Product;
 import ru.example.common.exception.EntityNotFoundException;
 import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.model.response.ProductResponse;

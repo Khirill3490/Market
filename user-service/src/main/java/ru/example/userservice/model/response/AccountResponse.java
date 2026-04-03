@@ -1,14 +1,9 @@
 package ru.example.userservice.model.response;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.example.common.entity.enums.RoleType;
-import ru.example.common.entity.enums.RulesType;
 
 @Data
 @AllArgsConstructor

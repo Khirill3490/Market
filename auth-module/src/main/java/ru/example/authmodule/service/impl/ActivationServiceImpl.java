@@ -3,20 +3,15 @@ package ru.example.authmodule.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import ru.example.authmodule.mail.MailSenderUtil;
 import ru.example.authmodule.redis.repository.RedisTokenRepository;
 import ru.example.authmodule.repository.UserRepository;
-import ru.example.authmodule.security.jwt.JwtUtils;
 import ru.example.authmodule.service.ActivationService;
 import ru.example.authmodule.service.UserService;
-import ru.example.common.entity.User;
-import ru.example.common.exception.ErrorMessageGlobal;
 import ru.example.common.exception.IncorrectDataException;
 import ru.example.common.util.GenerateToken;
+import ru.example.identitydomain.entity.User;
 
 import java.util.Locale;
 
@@ -42,8 +37,9 @@ public class ActivationServiceImpl implements ActivationService {
             // 1) Сгенерить токен
             String token = GenerateToken.newOpaqueToken();
             String mailBody = getMailBody(token);
-            String key = tokenRepository.getActivationKey(token);
+//            String key = tokenRepository.getActivationKey(token);
 
+            String key = "tokenRepository.getActivationKey(token);";
             // 2) Сохранить в Redis
             tokenRepository.save(key, user.getPublicId());
             // 3) Отправить письмо

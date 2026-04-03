@@ -22,15 +22,13 @@ import ru.example.authmodule.security.AppUserPrincipal;
 import ru.example.authmodule.security.jwt.JwtUtils;
 import ru.example.authmodule.service.ActivationService;
 import ru.example.authmodule.service.UserService;
-import ru.example.common.entity.Company;
-import ru.example.common.entity.RefreshToken;
-import ru.example.common.entity.User;
-import ru.example.common.entity.enums.RoleType;
-import ru.example.common.entity.enums.RulesType;
 import ru.example.common.exception.ErrorMessageGlobal;
-import ru.example.common.exception.IncorrectDataException;
 import ru.example.common.exception.RefreshTokenException;
 import ru.example.common.util.GenerateToken;
+import ru.example.identitydomain.entity.Company;
+import ru.example.identitydomain.entity.User;
+import ru.example.identitydomain.entity.enums.RoleType;
+import ru.example.identitydomain.entity.enums.RulesType;
 
 import java.util.Optional;
 
@@ -48,6 +46,7 @@ public class SecurityService {
     private final ActivationService activationService;
     private final UserAndCompanyMapper userAndCompanyMapper;
     private final UserService userService;
+
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
@@ -116,36 +115,39 @@ public class SecurityService {
 
     public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
         String requestRefreshToken = request.getRefreshToken();
+        return null;
 
-        return refreshTokenRepository.
-
-        return refreshTokenService.findByRefreshToken(requestRefreshToken)
-                .map(refreshTokenService::checkRefreshToken)
-                .map(RefreshToken::getUserId)
-                .map(userId -> {
-                    User tokenOwner = userRepository.findById(userId).orElseThrow(() ->
-                            new RefreshTokenException("Exception trying to get token for userId: " + userId));
-
-                    String token = jwtUtils.generateJwtToken(new AppUserPrincipal(tokenOwner));
-
-                    return new RefreshTokenResponse(
-                            token,
-                            refreshTokenService.createRefreshToken(userId).getToken()
-                    );
-                }).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh token not found"));
+//        return refreshTokenr.findByRefreshToken(requestRefreshToken)
+//                .map(refreshTokenService::checkRefreshToken)
+//                .map(RefreshToken::getUserId)
+//                .map(userId -> {
+//                    User tokenOwner = userRepository.findById(userId).orElseThrow(() ->
+//                            new RefreshTokenException("Exception trying to get token for userId: " + userId));
+//
+//                    String token = jwtUtils.generateJwtToken(new AppUserPrincipal(tokenOwner));
+//
+//                    return new RefreshTokenResponse(
+//                            token,
+//                            refreshTokenService.createRefreshToken(userId).getToken()
+//                    );
+//                }).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh token not found"));
     }
 
-    public void logout() {
-        var currentPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (currentPrincipal instanceof AppUserPrincipal userDetails) {
-            String publicId = userDetails.getPublicId();
-
-            refreshTokenRepository.delete();
-            refreshTokenService.deleteByUserId(userId);
-        }
-    }
+//    public void logout() {
+//        var currentPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (currentPrincipal instanceof AppUserPrincipal userDetails) {
+//            String publicId = userDetails.getPublicId();
+//
+//            refreshTokenRepository.delete();
+//            refreshTokenService.deleteByUserId(userId);
+//        }
+//    }
 
     private AppUserPrincipal toUserPrincipal(User user) {
         return new AppUserPrincipal(user);
     }
+
+    public void logout() {
+    }
+
 }

@@ -1,8 +1,9 @@
 package ru.example.userservice.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.example.common.entity.Company;
-import ru.example.common.entity.User;
+
+import ru.example.identitydomain.entity.Company;
+import ru.example.identitydomain.entity.User;
 import ru.example.userservice.model.response.AccountResponse;
 
 @Component

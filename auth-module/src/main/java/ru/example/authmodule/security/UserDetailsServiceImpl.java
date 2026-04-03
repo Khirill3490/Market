@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.example.authmodule.repository.UserRepository;
-import ru.example.common.entity.User;
 import ru.example.common.exception.EntityNotFoundException;
+import ru.example.identitydomain.entity.User;
 
 @Service
 @RequiredArgsConstructor

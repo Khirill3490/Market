@@ -7,7 +7,7 @@
 //import org.springframework.stereotype.Service;
 //import ru.example.authmodule.repository.UserRepository;
 //import ru.example.authmodule.security.AppUserPrincipal;
-//import ru.example.common.entity.User;
+//import ru.example.identitydomain.entity.User;
 //import ru.example.common.exception.EntityNotFoundException;
 //
 //@Service("customUserDetailsService")

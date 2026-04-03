@@ -8,13 +8,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import ru.example.common.entity.User;
-import ru.example.common.exception.EntityNotFoundException;
 import ru.example.common.exception.ErrorMessageGlobal;
-import ru.example.productservice.repository.UserRepository;
+import ru.example.identitydomain.entity.User;
 import ru.example.productservice.service.UserService;
-
-import java.util.Optional;
 
 @Aspect
 @Component

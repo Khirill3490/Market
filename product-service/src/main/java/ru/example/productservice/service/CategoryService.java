@@ -1,7 +1,7 @@
 package ru.example.productservice.service;
 
 
-import ru.example.common.entity.Category;
+import ru.example.productservice.entity.Category;
 
 import java.util.List;
 

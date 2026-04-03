@@ -3,7 +3,7 @@ package ru.example.productservice.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import ru.example.common.entity.Category;
+import ru.example.productservice.entity.Category;
 import ru.example.common.exception.EntityNotFoundException;
 import ru.example.productservice.mapper.CategoryMapper;
 import ru.example.productservice.repository.CategoryRepository;

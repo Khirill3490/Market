@@ -1,13 +1,12 @@
 package ru.example.productservice.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.example.common.entity.Product;
+import ru.example.productservice.entity.Product;
 import ru.example.common.exception.EntityAlreadyExistsException;
 import ru.example.common.exception.EntityNotFoundException;
 import ru.example.productservice.model.request.ProductRequest;

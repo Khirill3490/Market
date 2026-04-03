@@ -8,3 +8,5 @@ include("product-service")
 include("user-service")
 include("common")
 include("frontend")
+
+include("identity-domain")

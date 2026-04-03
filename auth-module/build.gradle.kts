@@ -27,6 +27,7 @@ extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":identity-domain"))
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")

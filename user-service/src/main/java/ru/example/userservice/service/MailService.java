@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import ru.example.common.entity.User;
-import ru.example.common.exception.ErrorMessageGlobal;
+import ru.example.identitydomain.entity.User;
+
 
 import java.util.List;
 

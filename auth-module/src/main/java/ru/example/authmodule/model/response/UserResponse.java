@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.example.common.entity.enums.RoleType;
+import ru.example.identitydomain.entity.enums.RoleType;
 
 import java.util.List;
 

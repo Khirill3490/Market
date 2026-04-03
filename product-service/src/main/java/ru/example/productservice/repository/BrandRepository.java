@@ -1,7 +1,7 @@
 package ru.example.productservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.example.common.entity.Brand;
+import ru.example.productservice.entity.Brand;
 
 
 import java.util.Optional;

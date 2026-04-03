@@ -1,4 +1,4 @@
-package ru.example.common.entity;
+package ru.example.productservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,19 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "brands")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Brand {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     private String name;
-
-    private String psName;
-    private String url;
+//    @Formula("(SELECT COUNT(p.id) FROM product p WHERE p.category_id = id)")
+    @Transient
+    private Long productCount;
 }

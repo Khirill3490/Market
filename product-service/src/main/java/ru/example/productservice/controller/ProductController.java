@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import ru.example.common.entity.Product;
+import ru.example.productservice.entity.Product;
 import ru.example.productservice.mapper.ProductMapper;
 import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.model.request.ProductPagSearchRequest;

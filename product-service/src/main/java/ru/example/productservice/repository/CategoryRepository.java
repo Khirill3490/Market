@@ -4,10 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.example.common.entity.Category;
+import ru.example.productservice.entity.Category;
 import ru.example.productservice.dto.CategoryWithCountDto;
-
-import ru.example.productservice.model.response.CategoryResponse;
 
 import java.util.List;
 import java.util.Optional;

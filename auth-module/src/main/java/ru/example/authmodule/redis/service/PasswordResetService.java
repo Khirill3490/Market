@@ -8,9 +8,10 @@ import ru.example.authmodule.mail.MailSenderUtil;
 import ru.example.authmodule.redis.repository.RedisTokenRepository;
 import ru.example.authmodule.repository.UserRepository;
 import ru.example.authmodule.service.UserService;
-import ru.example.common.entity.User;
+
 import ru.example.common.exception.IncorrectDataException;
 import ru.example.common.util.GenerateToken;
+import ru.example.identitydomain.entity.User;
 
 import java.util.Locale;
 

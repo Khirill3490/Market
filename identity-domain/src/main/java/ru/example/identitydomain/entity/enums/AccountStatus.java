@@ -1,4 +1,4 @@
-package ru.example.common.entity.enums;
+package ru.example.identitydomain.entity.enums;
 
 public enum AccountStatus {
     INACTIVE,   // не активирован (ожидает подтверждения почты / проверки)

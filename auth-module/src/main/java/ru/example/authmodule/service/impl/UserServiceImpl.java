@@ -11,8 +11,8 @@ import java.util.UUID;
 
 import ru.example.authmodule.repository.UserRepository;
 import ru.example.authmodule.service.UserService;
-import ru.example.common.entity.User;
 import ru.example.common.exception.EntityNotFoundException;
+import ru.example.identitydomain.entity.User;
 
 import java.util.List;
 

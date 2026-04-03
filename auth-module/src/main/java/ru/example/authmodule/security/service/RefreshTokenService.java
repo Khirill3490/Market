@@ -6,7 +6,7 @@
 //import org.springframework.stereotype.Service;
 //import ru.example.authmodule.redis.repository.RefreshTokenRepository;
 //import ru.example.authmodule.service.UserService;
-//import ru.example.common.entity.RefreshToken;
+//
 //import ru.example.common.exception.RefreshTokenException;
 //
 //import java.time.LocalDateTime;

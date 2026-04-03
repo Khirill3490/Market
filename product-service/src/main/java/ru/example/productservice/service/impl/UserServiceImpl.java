@@ -2,8 +2,8 @@ package ru.example.productservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.example.common.entity.User;
 import ru.example.common.exception.EntityNotFoundException;
+import ru.example.identitydomain.entity.User;
 import ru.example.productservice.repository.UserRepository;
 import ru.example.productservice.service.UserService;
 

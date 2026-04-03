@@ -3,7 +3,7 @@ package ru.example.productservice.service;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import ru.example.common.entity.Product;
+import ru.example.productservice.entity.Product;
 import ru.example.productservice.model.request.ProductRequest;
 
 import java.util.List;

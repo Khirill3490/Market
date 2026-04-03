@@ -3,12 +3,9 @@ package ru.example.authmodule.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.example.authmodule.model.request.UserRegRequest;
-import ru.example.common.entity.Company;
-import ru.example.common.entity.User;
-import ru.example.common.entity.enums.RoleType;
-import ru.example.common.entity.enums.RulesType;
-
-import java.util.UUID;
+import ru.example.identitydomain.entity.Company;
+import ru.example.identitydomain.entity.User;
+import ru.example.identitydomain.entity.enums.RulesType;
 
 @Component
 @RequiredArgsConstructor

@@ -3,9 +3,9 @@ package ru.example.productservice.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import ru.example.common.entity.Brand;
-import ru.example.common.entity.Category;
-import ru.example.common.entity.Product;
+import ru.example.productservice.entity.Brand;
+import ru.example.productservice.entity.Category;
+import ru.example.productservice.entity.Product;
 import ru.example.productservice.repository.BrandRepository;
 import ru.example.productservice.repository.CategoryRepository;
 import ru.example.productservice.repository.ProductRepository;

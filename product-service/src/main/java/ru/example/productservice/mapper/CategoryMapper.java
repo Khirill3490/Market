@@ -1,7 +1,7 @@
 package ru.example.productservice.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.example.common.entity.Category;
+import ru.example.productservice.entity.Category;
 import ru.example.productservice.dto.CategoryWithCountDto;
 
 import ru.example.productservice.model.response.CategoryResponse;

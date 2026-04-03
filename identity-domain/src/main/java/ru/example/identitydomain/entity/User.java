@@ -1,11 +1,9 @@
-package ru.example.common.entity;
+package ru.example.identitydomain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.example.common.entity.enums.RoleType;
-import ru.example.common.entity.enums.RulesType;
-
-import java.util.UUID;
+import ru.example.identitydomain.entity.enums.RoleType;
+import ru.example.identitydomain.entity.enums.RulesType;
 
 
 @Entity
