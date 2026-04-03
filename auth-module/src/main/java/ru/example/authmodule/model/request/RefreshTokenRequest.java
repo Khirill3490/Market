@@ -1,6 +1,7 @@
 package ru.example.authmodule.model.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ public class RefreshTokenRequest {
             example = "c7f6e6d5b4a3495ebf8b0d2c2ab7c9d1",
             requiredMode = Schema.RequiredMode.REQUIRED
     )
+    @NotBlank(message = "Refresh token обязателен")
     private String refreshToken;
 }
