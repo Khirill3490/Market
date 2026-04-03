@@ -4,10 +4,7 @@ package ru.example.authmodule.configuration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +16,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.example.authmodule.security.UserDetailsServiceImpl;
 import ru.example.authmodule.security.jwt.JwtTokenFilter;
 import ru.example.authmodule.util.CryptoTool;
@@ -115,7 +108,9 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/register**",
                                 "/activate**",
-                                "/signin**"
+                                "/signin**",
+                                "/refreshtoken**",
+                                "/logout**"
                         ).permitAll()
                         .requestMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()

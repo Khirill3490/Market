@@ -23,7 +23,7 @@ import ru.example.authmodule.security.jwt.JwtUtils;
 import ru.example.authmodule.service.ActivationService;
 import ru.example.authmodule.service.UserService;
 import ru.example.common.exception.ErrorMessageGlobal;
-import ru.example.common.exception.RefreshTokenException;
+import ru.example.authmodule.exception.RefreshTokenException;
 import ru.example.common.util.GenerateToken;
 import ru.example.identitydomain.entity.Company;
 import ru.example.identitydomain.entity.User;
@@ -114,40 +114,59 @@ public class SecurityService {
     }
 
     public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
-        return null;
+        String oldRefreshToken = request.getRefreshToken();
 
-//        return refreshTokenr.findByRefreshToken(requestRefreshToken)
-//                .map(refreshTokenService::checkRefreshToken)
-//                .map(RefreshToken::getUserId)
-//                .map(userId -> {
-//                    User tokenOwner = userRepository.findById(userId).orElseThrow(() ->
-//                            new RefreshTokenException("Exception trying to get token for userId: " + userId));
-//
-//                    String token = jwtUtils.generateJwtToken(new AppUserPrincipal(tokenOwner));
-//
-//                    return new RefreshTokenResponse(
-//                            token,
-//                            refreshTokenService.createRefreshToken(userId).getToken()
-//                    );
-//                }).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh token not found"));
+        if (oldRefreshToken == null || oldRefreshToken.isBlank()) {
+            throw new RefreshTokenException("Refresh token is blank");
+        }
+
+        String publicId = refreshTokenRepository.getPublicId(oldRefreshToken)
+                .orElseThrow(() -> new RefreshTokenException(
+                        oldRefreshToken,
+                        "Refresh token not found or expired"
+                ));
+
+        User tokenOwner = userRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new RefreshTokenException(
+                        oldRefreshToken,
+                        "User for refresh token not found"
+                ));
+
+        if (!tokenOwner.isActive()) {
+            refreshTokenRepository.delete(oldRefreshToken);
+            throw new RefreshTokenException(
+                    oldRefreshToken,
+                    "User is not active"
+            );
+        }
+
+        String newRefreshToken = GenerateToken.newOpaqueToken();
+
+        boolean rotated = refreshTokenRepository.rotate(oldRefreshToken, newRefreshToken);
+        if (!rotated) {
+            throw new RefreshTokenException(
+                    oldRefreshToken,
+                    "Refresh token was already used or removed"
+            );
+        }
+
+        String newAccessToken = jwtUtils.generateJwtToken(toUserPrincipal(tokenOwner));
+
+        return new RefreshTokenResponse(newAccessToken, newRefreshToken);
     }
-
-//    public void logout() {
-//        var currentPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (currentPrincipal instanceof AppUserPrincipal userDetails) {
-//            String publicId = userDetails.getPublicId();
-//
-//            refreshTokenRepository.delete();
-//            refreshTokenService.deleteByUserId(userId);
-//        }
-//    }
 
     private AppUserPrincipal toUserPrincipal(User user) {
         return new AppUserPrincipal(user);
     }
 
-    public void logout() {
+    public void logout(RefreshTokenRequest request) {
+        String refreshToken = request.getRefreshToken();
+
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new RefreshTokenException("Refresh token is blank");
+        }
+
+        refreshTokenRepository.delete(refreshToken);
     }
 
 }

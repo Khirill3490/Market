@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan(basePackages = "ru.example.common.entity")
+@EntityScan("ru.example.identitydomain.entity")
 public class AuthModuleApplication {
 
     public static void main(String[] args) {

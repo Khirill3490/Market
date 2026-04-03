@@ -25,7 +25,7 @@ public class PasswordResetController {
 
     @PostMapping("/reset")
     public ResponseEntity<?> reset(@RequestBody ResetPasswordRequest request) {
-        // проверь длину/политику пароля вручную или через Bean Validation
+
         service.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.ok(new SimpleMessageResponse("Пароль успешно изменен"));
     }

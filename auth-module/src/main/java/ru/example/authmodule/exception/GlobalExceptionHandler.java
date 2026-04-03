@@ -76,5 +76,14 @@ public class GlobalExceptionHandler {
         return response;
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(RefreshTokenException.class)
+    public Map<String, String> refreshTokenException(RefreshTokenException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return response;
+    }
+
 
 }

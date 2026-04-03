@@ -37,6 +37,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.hashids:hashids:1.0.2")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     compileOnly("org.projectlombok:lombok")
