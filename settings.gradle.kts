@@ -1,4 +1,4 @@
-rootProject.name = "untitled3"
+rootProject.name = "market"
 
 include("eureka-server")
 include("eureka-client")

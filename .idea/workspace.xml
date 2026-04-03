@@ -5,67 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="312342ff-22f0-447a-90fe-fb16d9fcc9d0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/brief.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-module/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/auth-module/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-module/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-module/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-module/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-module/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-module/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-client/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-client/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-client/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-client/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-client/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-client/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-client/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +77,12 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="untitled3" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -165,6 +115,7 @@
     &quot;accountId&quot;: &quot;27fcfbe8-ab04-4dec-9634-0dfab1293633&quot;
   }
 }</component>
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-8.10-bin/deqhafrv1ntovfmgh0nh3npr9/gradle-8.10" javaHome="/usr/lib/jvm/java-21-openjdk-amd64" gradleVersion="8.10" />
   <component name="KotlinScriptingSettings">
     <option name="suppressDefinitionsCheck" value="true" />
   </component>
@@ -183,94 +134,94 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Gradle.Build Market.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build auth-module.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build eureca-client.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build eureka-client.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build eureka-server.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build frontend.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build untitled3.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.frontend [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.product-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3 [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3 [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3 [wrapper].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:api-gateway [bootJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:api-gateway [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:api-gateway [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:api-gateway [wrapper].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:common [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:product-service [bootJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:product-service [buildDependents].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:product-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:product-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:product-service [wrapper].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.untitled3:user-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #1.executor&quot;: &quot;Run&quot;,
-    &quot;Multirun.Eureka.executor&quot;: &quot;Run&quot;,
-    &quot;Multirun.module.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ApiGateway.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ApiGatewayApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.AuthModule.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.AuthModuleApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.AuthModuleApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurecaClientApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaClient.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaClientApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaClientApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaServer.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaServerApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaServerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.Frontend.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.FrontendApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.FrontendApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ProductService.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.UserService.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;chore/project-sanity&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/kirill/IdeaProjects/Market&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.Build Market.executor": "Run",
+    "Gradle.Build api-gateway.executor": "Run",
+    "Gradle.Build auth-module.executor": "Run",
+    "Gradle.Build eureca-client.executor": "Run",
+    "Gradle.Build eureka-client.executor": "Run",
+    "Gradle.Build eureka-server.executor": "Run",
+    "Gradle.Build frontend.executor": "Run",
+    "Gradle.Build product-service.executor": "Run",
+    "Gradle.Build untitled3.executor": "Run",
+    "Gradle.Build user-service.executor": "Run",
+    "Gradle.frontend [build].executor": "Run",
+    "Gradle.product-service [clean].executor": "Run",
+    "Gradle.untitled3 [build].executor": "Run",
+    "Gradle.untitled3 [clean].executor": "Run",
+    "Gradle.untitled3 [wrapper].executor": "Run",
+    "Gradle.untitled3:api-gateway [bootJar].executor": "Run",
+    "Gradle.untitled3:api-gateway [build].executor": "Run",
+    "Gradle.untitled3:api-gateway [clean].executor": "Run",
+    "Gradle.untitled3:api-gateway [wrapper].executor": "Run",
+    "Gradle.untitled3:common [build].executor": "Run",
+    "Gradle.untitled3:product-service [bootJar].executor": "Run",
+    "Gradle.untitled3:product-service [buildDependents].executor": "Run",
+    "Gradle.untitled3:product-service [build].executor": "Run",
+    "Gradle.untitled3:product-service [clean].executor": "Run",
+    "Gradle.untitled3:product-service [wrapper].executor": "Run",
+    "Gradle.untitled3:user-service [build].executor": "Run",
+    "Gradle.user-service [build].executor": "Run",
+    "HTTP Request.generated-requests | #1.executor": "Run",
+    "Multirun.Eureka.executor": "Run",
+    "Multirun.module.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.ApiGateway.executor": "Run",
+    "Spring Boot.ApiGatewayApplication (1).executor": "Run",
+    "Spring Boot.ApiGatewayApplication.executor": "Run",
+    "Spring Boot.AuthModule.executor": "Run",
+    "Spring Boot.AuthModuleApplication (1).executor": "Run",
+    "Spring Boot.AuthModuleApplication.executor": "Run",
+    "Spring Boot.EurecaClientApplication.executor": "Run",
+    "Spring Boot.EurekaClient.executor": "Run",
+    "Spring Boot.EurekaClientApplication (1).executor": "Run",
+    "Spring Boot.EurekaClientApplication.executor": "Run",
+    "Spring Boot.EurekaServer.executor": "Run",
+    "Spring Boot.EurekaServerApplication (1).executor": "Run",
+    "Spring Boot.EurekaServerApplication.executor": "Run",
+    "Spring Boot.Frontend.executor": "Run",
+    "Spring Boot.FrontendApplication (1).executor": "Run",
+    "Spring Boot.FrontendApplication.executor": "Run",
+    "Spring Boot.ProductService.executor": "Run",
+    "Spring Boot.ProductServiceApplication.executor": "Run",
+    "Spring Boot.UserService.executor": "Run",
+    "Spring Boot.UserServiceApplication.executor": "Run",
+    "dart.analysis.tool.window.visible": "false",
+    "deletionFromPopupRequiresConfirmation": "false",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/kirill/IdeaProjects/Market",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;h2&quot;,
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "h2",
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -307,18 +258,6 @@
       <set>
         <option value="HttpClient.HttpRequestRunConfigurationType" />
       </set>
-    </option>
-    <option name="hiddenConfigurations">
-      <map>
-        <entry key="SpringBootApplicationConfigurationType">
-          <value>
-            <set>
-              <option value="EurekaClient" />
-              <option value="FrontendApplication" />
-            </set>
-          </value>
-        </entry>
-      </map>
     </option>
   </component>
   <component name="RunManager" selected="Gradle.untitled3 [build]">
@@ -432,6 +371,17 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="kotlin.scripts.KotlinBuildScript.user-service:build.gradle.kts" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="kotlin.scripts.KotlinBuildScript.user-service:build.gradle.kts" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
     <configuration name="Eureka" type="Multirun" separateTabs="false" reuseTabsWithFailures="false" startOneByOne="true" markFailedProcess="true" hideSuccessProcess="false" delayTime="0.0">
       <runConfiguration name="EurekaServer" type="Spring Boot" />
       <method v="2" />
@@ -445,28 +395,28 @@
       <method v="2" />
     </configuration>
     <configuration name="ApiGateway" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="untitled3.api-gateway.main" />
+      <module name="market.api-gateway.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.apigateway.ApiGatewayApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="AuthModule" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="untitled3.auth-module.main" />
+      <module name="market.auth-module.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.authmodule.AuthModuleApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="EurekaClient" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="untitled3.eureka-client.main" />
+      <module name="market.eureka-client.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.eurekaclient.EurekaClientApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="EurekaServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="untitled3.eureka-server.main" />
+      <module name="market.eureka-server.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.eurekaserver.EurekaServerApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -480,14 +430,14 @@
       </method>
     </configuration>
     <configuration name="FrontendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="frontend.main" />
+      <module name="market.frontend.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.frontend.FrontendApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="ProductService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="untitled3.product-service.main" />
+      <module name="market.product-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.productservice.ProductServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -495,7 +445,7 @@
     </configuration>
     <configuration name="UserService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="untitled3.user-service.main" />
+      <module name="market.user-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ru.example.userservice.UserServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -584,7 +534,7 @@
       <workItem from="1757138424426" duration="1369000" />
       <workItem from="1757139830426" duration="114000" />
       <workItem from="1757140444758" duration="527000" />
-      <workItem from="1775220728974" duration="1621000" />
+      <workItem from="1775220728974" duration="2355000" />
     </task>
     <servers />
   </component>
