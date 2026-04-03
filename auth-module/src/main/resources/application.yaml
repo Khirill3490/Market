@@ -48,7 +48,6 @@ app:
   jwt:
     secret: EFnoiYH3fUV5q9dls3vKojW0FBpZcueVC6UgQzLn68OaZKS5eDcnHdWLLLNEH3QQV76nRdnDg1kAjrKbWHrCoA==
     tokenExpiration: 15m
-    refreshTokenExpiration: 30
   reset:
     url: http://127.0.0.1:9090/reset?token={token}
     redis:
@@ -71,8 +70,6 @@ app:
 
 server:
   port: 0
-  servlet:
-    context-path: /api/v1/auth
 
 
 eureka:

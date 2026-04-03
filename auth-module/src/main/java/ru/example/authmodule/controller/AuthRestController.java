@@ -19,7 +19,6 @@ import ru.example.authmodule.model.response.SimpleResponse;
 import ru.example.authmodule.redis.service.PasswordResetService;
 import ru.example.authmodule.security.service.SecurityService;
 import ru.example.authmodule.service.ActivationService;
-import ru.example.authmodule.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,7 +31,6 @@ public class AuthRestController {
 
     private final SecurityService securityService;
     private final ActivationService activationService;
-    private final UserService userService;
     private final PasswordResetService passwordResetService;
 
     @Operation(

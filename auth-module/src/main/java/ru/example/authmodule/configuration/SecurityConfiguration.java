@@ -106,11 +106,16 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/register**",
-                                "/activate**",
-                                "/signin**",
-                                "/refreshtoken**",
-                                "/logout**"
+                                "/api/v1/auth/register**",
+                                "/api/v1/auth/activate**",
+                                "/api/v1/auth/signin**",
+                                "/api/v1/auth/refreshtoken**",
+                                "/api/v1/auth/logout**",
+                                "/api/v1/auth/forgot-password**",
+                                "/api/v1/auth/reset-password**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
