@@ -5,17 +5,67 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="312342ff-22f0-447a-90fe-fb16d9fcc9d0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/brief.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/app_db.XLfkqw/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10bfc110-8c2e-4bd5-ba1a-a797a6150e39/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-module/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/auth-module/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-module/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-module/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-module/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-module/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-module/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-client/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-client/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-client/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-client/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-client/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-client/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-client/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/settings.gradle.kts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +74,11 @@
   </component>
   <component name="CompilerWorkspaceConfiguration">
     <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/kirill/IdeaProjects/Market" value="2y93dEwuQjFGpSJZU0mMlAjY7OJ" />
+    </persistenceIdMap>
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -107,7 +162,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Khirill3490/Market.git&quot;,
-    &quot;accountId&quot;: &quot;d0168946-d914-4688-b7bc-ee989f6e0dbb&quot;
+    &quot;accountId&quot;: &quot;27fcfbe8-ab04-4dec-9634-0dfab1293633&quot;
   }
 }</component>
   <component name="KotlinScriptingSettings">
@@ -124,7 +179,6 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2y93dEwuQjFGpSJZU0mMlAjY7OJ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -170,6 +224,7 @@
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.ApiGateway.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ApiGatewayApplication (1).executor&quot;: &quot;Run&quot;,
@@ -193,10 +248,10 @@
     &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;chore/project-sanity&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Кирилл Ходжер/IdeaProjects/Market&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/kirill/IdeaProjects/Market&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -206,7 +261,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -221,11 +276,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/frontend/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/auth-module/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/common/src/main/java/ru/example/common" />
       <recent name="$PROJECT_DIR$/user-service/src/main/java/ru/example/userservice" />
-      <recent name="$PROJECT_DIR$/user-service/src/main/resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/product-service/src/main/resources/images" />
@@ -452,8 +507,6 @@
       <item itemvalue="Gradle.untitled3:api-gateway [build]" />
       <item itemvalue="Gradle.untitled3:product-service [build]" />
       <item itemvalue="Gradle.untitled3:user-service [build]" />
-      <item itemvalue="Multirun.Eureka" />
-      <item itemvalue="Multirun.module" />
       <item itemvalue="Spring Boot.ApiGateway" />
       <item itemvalue="Spring Boot.AuthModule" />
       <item itemvalue="Spring Boot.EurekaClient" />
@@ -476,8 +529,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28539.33" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28539.33" />
       </set>
     </attachedChunks>
   </component>
@@ -531,6 +584,7 @@
       <workItem from="1757138424426" duration="1369000" />
       <workItem from="1757139830426" duration="114000" />
       <workItem from="1757140444758" duration="527000" />
+      <workItem from="1775220728974" duration="1621000" />
     </task>
     <servers />
   </component>
@@ -554,5 +608,13 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/untitled3$Frontend.ic" NAME="Frontend Coverage Results" MODIFIED="1755794306737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>
