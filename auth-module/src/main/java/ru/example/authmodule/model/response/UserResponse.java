@@ -1,6 +1,7 @@
 package ru.example.authmodule.model.response;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,12 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Информация о пользователе")
 public class UserResponse {
 
+    @Schema(description = "Email пользователя", example = "user@example.com")
     private String email;
 
-    private String password;
-
+    @Schema(description = "Список ролей пользователя")
     private List<RoleType> roles;
-
 }

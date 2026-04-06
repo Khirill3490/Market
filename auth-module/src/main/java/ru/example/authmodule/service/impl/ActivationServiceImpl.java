@@ -2,6 +2,7 @@ package ru.example.authmodule.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.example.authmodule.mail.MailSenderUtil;
@@ -17,6 +18,7 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ActivationServiceImpl implements ActivationService {
 
     private final UserService userService;
@@ -33,41 +35,21 @@ public class ActivationServiceImpl implements ActivationService {
         String subject = "Активация аккаунта";
         String email = rawEmail.trim().toLowerCase(Locale.ROOT);
 
-        userRepository.findByEmailEqualsIgnoreCase(email).ifPresent(user -> {
-            // 1) Сгенерить токен
-            String token = GenerateToken.newOpaqueToken();
-            String mailBody = getMailBody(token);
-//            String key = tokenRepository.getActivationKey(token);
+        String token = GenerateToken.newOpaqueToken();
+        String mailBody = getMailBody(token);
 
-            String key = "tokenRepository.getActivationKey(token);";
-            // 2) Сохранить в Redis
-            tokenRepository.save(key, user.getPublicId());
-            // 3) Отправить письмо
-            mailSenderUtil.sendUri(subject, mailBody, email);
-        });
+        tokenRepository.saveActivationToken(token, publicId);
 
+        log.info("Activation: перед отправкой на {}", email);
+        mailSenderUtil.sendUri(subject, mailBody, email);
+        log.info("MAIL: после отправки на {}", email);
     }
 
-//    @Override
-//    public void activate(String token) {
-//        if (!jwtUtils.validate(token)) {
-//            throw new ErrorMessageGlobal("Ошибка. Ссылка некорректна");
-//        }
-//
-//        String publicId = jwtUtils.getPublicId(token);
-//        User userFromDb = userService.findByPublicId(publicId);
-//
-//        if (userFromDb.isActive()) {
-//            throw new ErrorMessageGlobal("Срок действия ссылки истёк. Аккаунт уже активирован");
-//        }
-//
-//        userFromDb.setActive(true);
-//        userRepository.save(userFromDb);
-//    }
-
+    @Override
     public void activate(String token) {
-        String publicId = tokenRepository.consume(token)
+        String publicId = tokenRepository.consumeActivationToken(token)
                 .orElseThrow(() -> new IncorrectDataException("Ссылка недействительна"));
+
         User user = userService.findByPublicId(publicId);
 
         user.setActive(true);

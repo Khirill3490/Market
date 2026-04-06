@@ -24,14 +24,14 @@ public class UserRegRequest {
     private String email;
 
     @Schema(
-            description = "Пароль пользователя. Должен содержать от 8 до 64 символов, минимум одну букву и одну цифру",
+            description = "Пароль пользователя. Должен содержать от 3 до 64 символов, минимум одну букву и одну цифру",
             example = "Password123",
             requiredMode = Schema.RequiredMode.REQUIRED
     )
     @NotBlank(message = "Пароль обязателен")
     @Pattern(
-            regexp = "^(?=.*[A-Za-z])(?=.*\\d).{8,64}$",
-            message = "Пароль: 8–64 символов, минимум 1 буква и 1 цифра"
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d).{3,64}$",
+            message = "Пароль: 3–64 символов, минимум 1 буква и 1 цифра"
     )
     private String password;
 

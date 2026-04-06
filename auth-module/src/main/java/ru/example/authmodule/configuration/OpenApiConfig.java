@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Market Auth API",
+                title = "API аутентификации Market",
                 version = "v1",
-                description = "Authentication and authorization API for Market project",
+                description = "API для регистрации, входа в систему, обновления токенов, сброса пароля и выхода из аккаунта",
                 contact = @Contact(name = "Kirill")
         )
 )

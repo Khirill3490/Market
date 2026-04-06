@@ -18,16 +18,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("Вызов loadUserByUsername: " + username);
         return new AppUserPrincipal(userRepository.findByEmailEqualsIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + username + " not found")));
     }
 
     public UserDetails loadUserByPublicId(String publicId) throws UsernameNotFoundException {
-        System.out.println("Вызов loadUserByPublicId: " + publicId);
         User user = userRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
 
         return new AppUserPrincipal(user);
     }
 }
+

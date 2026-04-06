@@ -19,18 +19,50 @@ spring:
         jdbc:
           batch_size: 1000
 
+#  mail:
+#    host: smtp.yandex.ru
+#    port: 465
+#    username: ru.kirill.service@yandex.ru
+#    password: dxfecwnvjopxnwuz
+#    protocol: smtp
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          ssl:
+#            enable: true
+#            trust: smtp.yandex.ru
+
+
   mail:
     host: smtp.yandex.ru
     port: 465
     username: ru.kirill.service@yandex.ru
-    password: pfnqjqfzybbooqgr
+    password: dxfecwnvjopxnwuz
+    protocol: smtp
     properties:
       mail:
         smtp:
           auth: true
           ssl:
             enable: true
-    default-encoding: UTF-8
+            trust: smtp.yandex.ru
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+#  mail:
+#    host: smtp.yandex.ru
+#    port: 465
+#    username: ru.kirill.service@yandex.ru
+#    password: pfnqjqfzybbooqgr
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          ssl:
+#            enable: true
+#    default-encoding: UTF-8
 
   data:
     redis:
@@ -69,13 +101,16 @@ app:
 
 
 server:
-  port: 0
+  port: 8181
 
 
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8080/eureka
 eureka:
   client:
-    service-url:
-      defaultZone: http://localhost:8080/eureka
+    enabled: false
 
 springdoc:
   swagger-ui:

@@ -21,32 +21,48 @@ public class RedisTokenRepository {
     private String activationKeyPrefix;
 
     @Value("${app.reset.redis.ttl}")
-    private Duration ttl; // Spring Boot умеет конвертить строки вида 30m, 10s → java.time.Duration
+    private Duration resetTtl;
+
+    @Value("${app.activation.redis.ttl}")
+    private Duration activationTtl;
 
     public String getResetKey(String token) {
         return resetKeyPrefix + token;
     }
 
-    public void save(String token, String publicId) {
+    public String getActivationKey(String token) {
+        return activationKeyPrefix + token;
+    }
+
+    public void saveResetToken(String token, String publicId) {
+        redis.opsForValue().set(getResetKey(token), publicId, resetTtl);
+    }
+
+    public Optional<String> consumeResetToken(String token) {
         String key = getResetKey(token);
-        redis.opsForValue().set(key, publicId, ttl);
+        String value = redis.opsForValue().get(key);
+        if (value == null) return Optional.empty();
+        redis.delete(key);
+        return Optional.of(value);
     }
 
-    public Optional<String> consume(String token) {
-        String k = getResetKey(token);
-        String v = redis.opsForValue().get(k);
-        if (v == null) return Optional.empty();
-        redis.delete(k);
-        return Optional.of(v);
+    public void saveActivationToken(String token, String publicId) {
+        redis.opsForValue().set(getActivationKey(token), publicId, activationTtl);
     }
 
-    public void revoke(String token) {
+    public Optional<String> consumeActivationToken(String token) {
+        String key = getActivationKey(token);
+        String value = redis.opsForValue().get(key);
+        if (value == null) return Optional.empty();
+        redis.delete(key);
+        return Optional.of(value);
+    }
+
+    public void revokeResetToken(String token) {
         redis.delete(getResetKey(token));
     }
 
-    public boolean exists(String token) {
-        return redis.hasKey(getResetKey(token));
+    public void revokeActivationToken(String token) {
+        redis.delete(getActivationKey(token));
     }
 }
-
-
