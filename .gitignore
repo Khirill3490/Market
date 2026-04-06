@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 exports/
 uploads/
+.env.properties
 
 ### IntelliJ IDEA ###
 

@@ -60,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(Long id, User user) {
+        User existingUser = findById(id);
+
+
         return null;
     }
 

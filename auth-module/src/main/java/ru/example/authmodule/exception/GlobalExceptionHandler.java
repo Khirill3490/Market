@@ -1,89 +1,133 @@
 package ru.example.authmodule.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.HashMap;
+import java.time.Instant;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
-    public Map<String, String> entityNotFoundException(EntityNotFoundException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-
-        return response;
+    public ResponseEntity<ApiErrorResponse> handleEntityNotFound(
+            EntityNotFoundException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IncorrectDataException.class)
-    public Map<String, String> incorrectDataException(IncorrectDataException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-
-        return response;
+    public ResponseEntity<ApiErrorResponse> handleIncorrectData(
+            IncorrectDataException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ErrorMessageGlobal.class)
-    public Map<String, String> errorMessageGlobal(ErrorMessageGlobal ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage());
-
-        return response;
+    public ResponseEntity<ApiErrorResponse> handleErrorMessageGlobal(
+            ErrorMessageGlobal ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-//    @ResponseBody
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(CustomNotFoundException.class)
-//    public Map<String, String> entityNotFoundException(CustomNotFoundException ex) {
-//        Map<String, String> response = new HashMap<>();
-//        response.put("error", ex.getMessage());
-//
-//        return response;
-//    }
-
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    public Map<String, String> entityAlreadyExistsException(EntityAlreadyExistsException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-
-        return response;
+    public ResponseEntity<ApiErrorResponse> handleEntityAlreadyExists(
+            EntityAlreadyExistsException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> response = new HashMap<>();
-        BindingResult bindingResult = ex.getBindingResult();
-        bindingResult.getFieldErrors().forEach(error ->
-                response.put(error.getField(), error.getDefaultMessage()));
-
-        return response;
-    }
-
-    @ResponseBody
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(RefreshTokenException.class)
-    public Map<String, String> refreshTokenException(RefreshTokenException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-        return response;
+    public ResponseEntity<ApiErrorResponse> handleRefreshTokenException(
+            RefreshTokenException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidationException(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request
+    ) {
+        BindingResult bindingResult = ex.getBindingResult();
 
+        Map<String, String> validationErrors = new LinkedHashMap<>();
+        bindingResult.getFieldErrors().forEach(error ->
+                validationErrors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Ошибка валидации запроса",
+                request,
+                validationErrors
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleUnexpectedException(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Внутренняя ошибка сервера",
+                request,
+                null
+        );
+    }
+
+    private ResponseEntity<ApiErrorResponse> buildErrorResponse(
+            HttpStatus status,
+            String message,
+            HttpServletRequest request,
+            Map<String, String> validationErrors
+    ) {
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(status.value())
+                .error(status.getReasonPhrase())
+                .message(message)
+                .path(request.getRequestURI())
+                .validationErrors(validationErrors)
+                .build();
+
+        return ResponseEntity.status(status).body(response);
+    }
 }
