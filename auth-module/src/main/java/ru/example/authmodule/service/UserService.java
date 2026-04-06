@@ -1,5 +1,7 @@
 package ru.example.authmodule.service;
 
+import ru.example.authmodule.model.request.AdminUpdateUserRequest;
+import ru.example.authmodule.model.response.UserUpdatedResponse;
 import ru.example.identitydomain.entity.User;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public interface UserService {
     User save(User user);
 
 
-    User update(Long id, User user);
+    UserUpdatedResponse update(String publicId, AdminUpdateUserRequest request);
 
     void delete(Long id);
 }
