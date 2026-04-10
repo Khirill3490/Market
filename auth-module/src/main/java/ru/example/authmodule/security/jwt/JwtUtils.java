@@ -10,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.example.authmodule.security.AppUserPrincipal;
-import ru.example.common.exception.ErrorMessageGlobal;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;

@@ -9,13 +9,13 @@ import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.UUID;
 
+import ru.example.authmodule.exception.EntityAlreadyExistsException;
+import ru.example.authmodule.exception.EntityNotFoundException;
 import ru.example.authmodule.model.request.AdminUpdateUserRequest;
 import ru.example.authmodule.model.response.UserUpdatedResponse;
 import ru.example.authmodule.repository.CompanyRepository;
 import ru.example.authmodule.repository.UserRepository;
 import ru.example.authmodule.service.UserService;
-import ru.example.common.exception.EntityAlreadyExistsException;
-import ru.example.common.exception.EntityNotFoundException;
 import ru.example.identitydomain.entity.Company;
 import ru.example.identitydomain.entity.User;
 

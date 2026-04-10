@@ -1,43 +1,65 @@
-.gradle
-.idea/
+# Gradle
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-exports/
-uploads/
-.env.properties
 
-### IntelliJ IDEA ###
-
-*.iws
+# IDE
+.idea/
 *.iml
 *.ipr
+*.iws
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-### Eclipse ###
-.apt_generated
+common.env.properties
+!common.env.example.properties
+
+# VS Code
+.vscode/
+
+# Eclipse / STS
+.apt_generated/
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+.sts4-cache/
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
-
-### Mac OS ###
+# OS
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+hs_err_pid*
+replay_pid*
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+!.env.template
+.env.properties
+
+# Project local dirs
+uploads/
+exports/
+
+# Binaries / archives
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.gz
+
+# Generated folders sometimes created in sources/tools
+bin/

@@ -19,10 +19,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.example.authmodule.security.UserDetailsServiceImpl;
-import ru.example.authmodule.security.jwt.JwtTokenFilter;
 import ru.example.authmodule.util.CryptoTool;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import ru.example.authmodule.security.jwt.JwtAuthEntryPoint;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 import java.util.List;
 
@@ -34,7 +43,7 @@ import java.util.List;
 public class SecurityConfiguration {
 
     private final UserDetailsServiceImpl userDetailsService;
-    private final JwtTokenFilter jwtTokenFilter;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Value("${app.activation.salt}")
     private String salt;
@@ -75,34 +84,36 @@ public class SecurityConfiguration {
         return authManagerBuilder.build();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        // Укажи нужные источники (можно * для разрешения всех, но на проде не рекомендуется)
-//        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-//
-//        // Разрешенные методы
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//
-//        // Разрешенные заголовки
-//        configuration.setAllowedHeaders(List.of("*"));
-//
-//        // Если используешь Authorization header — это обязательно
-//        configuration.setExposedHeaders(List.of("Authorization"));
-//
-//        // Разрешить передачу куков (если нужно)
-//        configuration.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    @Bean
+    public Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+            Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+            if (realmAccess != null) {
+                Object roles = realmAccess.get("roles");
+                if (roles instanceof Collection<?> roleList) {
+                    roleList.stream()
+                            .filter(String.class::isInstance)
+                            .map(String.class::cast)
+                            .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                            .map(SimpleGrantedAuthority::new)
+                            .forEach(authorities::add);
+                }
+            }
+
+            return authorities;
+        });
+
+        return converter;
+    }
+
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,
-                                           AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -124,8 +135,14 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)  // ← Добавьте JWT фильтр
-                .authenticationManager(authenticationManager);
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthEntryPoint)
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
+                );
 
         return http.build();
     }

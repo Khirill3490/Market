@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.example.authmodule.exception.IncorrectDataException;
 import ru.example.authmodule.mail.MailSenderUtil;
 import ru.example.authmodule.redis.repository.RedisTokenRepository;
 import ru.example.authmodule.repository.UserRepository;
 import ru.example.authmodule.service.ActivationService;
 import ru.example.authmodule.service.UserService;
-import ru.example.common.exception.IncorrectDataException;
 import ru.example.common.util.GenerateToken;
 import ru.example.identitydomain.entity.User;
 

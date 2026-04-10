@@ -1,6 +1,9 @@
 spring:
   application:
     name: api-gateway
+  config:
+    import:
+      - optional:file:common.env.properties
   cloud:
     gateway:
       server:
@@ -16,9 +19,14 @@ spring:
 #              uri: lb://eureka-client
 #              predicates:
 #                - Path=/api/test
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8088/realms/market
 
 server:
-  port: 9090
+  port: 8080
 
 
 app:
@@ -30,7 +38,11 @@ app:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8080/eureka
+      defaultZone: ${EUREKA_SERVER_URL}
+
+#eureka:
+#  client:
+#    enabled: false
 
 logging:
   level:
