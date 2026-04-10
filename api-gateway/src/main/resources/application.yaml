@@ -29,12 +29,6 @@ server:
   port: 8080
 
 
-app:
-  jwt:
-    secret: EFnoiYH3fUV5q9dls3vKojW0FBpZcueVC6UgQzLn68OaZKS5eDcnHdWLLLNEH3QQV76nRdnDg1kAjrKbWHrCoA==
-    tokenExpiration: 10
-    refreshTokenExpiration: 30
-
 eureka:
   client:
     service-url:
