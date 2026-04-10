@@ -84,6 +84,7 @@ app:
       ttl: 30m
 
   auth:
+    legacy-local-auth-enabled: false
     refresh-ttl: 30d
     key:
       refresh-prefix: "auth:rt:"

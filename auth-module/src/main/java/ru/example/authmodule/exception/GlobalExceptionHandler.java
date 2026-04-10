@@ -158,4 +158,17 @@ public class GlobalExceptionHandler {
                 null
         );
     }
+
+    @ExceptionHandler(LegacyAuthFlowDisabledException.class)
+    public ResponseEntity<ApiErrorResponse> handleLegacyAuthFlowDisabled(
+            LegacyAuthFlowDisabledException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.GONE,
+                ex.getMessage(),
+                request,
+                null
+        );
+    }
 }

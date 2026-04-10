@@ -19,6 +19,9 @@ import ru.example.authmodule.model.response.SimpleResponse;
 import ru.example.authmodule.redis.service.PasswordResetService;
 import ru.example.authmodule.security.service.SecurityService;
 import ru.example.authmodule.service.ActivationService;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import ru.example.authmodule.model.response.CurrentUserResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -120,6 +123,7 @@ public class AuthRestController {
         );
     }
 
+
     @Operation(
             summary = "Сброс пароля",
             description = "Устанавливает новый пароль по токену сброса пароля"
@@ -132,5 +136,20 @@ public class AuthRestController {
     public ResponseEntity<SimpleResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.ok(new SimpleResponse("Пароль успешно изменен"));
+    }
+
+
+
+    @Operation(
+            summary = "Текущий пользователь",
+            description = "Возвращает данные текущего пользователя из Keycloak JWT и локального профиля, если он найден"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Данные текущего пользователя получены"),
+            @ApiResponse(responseCode = "401", description = "Пользователь не аутентифицирован")
+    })
+    @GetMapping("/me")
+    public ResponseEntity<CurrentUserResponse> me(@AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok(securityService.getCurrentUser(jwt));
     }
 }

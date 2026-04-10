@@ -25,6 +25,9 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Column(name = "keycloak_user_id", unique = true)
+    private String keycloakUserId;
+
     private String password;
 
     private boolean isActive;
@@ -37,4 +40,5 @@ public class User {
 
     @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Company company;
+
 }

@@ -8,8 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.example.authmodule.exception.EntityAlreadyExistsException;
-import ru.example.authmodule.exception.ErrorMessageGlobal;
+import ru.example.authmodule.exception.*;
 import ru.example.authmodule.mapper.UserAndCompanyMapper;
 import ru.example.authmodule.model.request.LoginRequest;
 import ru.example.authmodule.model.request.UserRegRequest;
@@ -23,12 +22,17 @@ import ru.example.authmodule.security.AppUserPrincipal;
 import ru.example.authmodule.security.jwt.JwtUtils;
 import ru.example.authmodule.service.ActivationService;
 import ru.example.authmodule.service.UserService;
-import ru.example.authmodule.exception.RefreshTokenException;
 import ru.example.common.util.GenerateToken;
 import ru.example.identitydomain.entity.Company;
 import ru.example.identitydomain.entity.User;
 import ru.example.identitydomain.entity.enums.RoleType;
 import ru.example.identitydomain.entity.enums.RulesType;
+import ru.example.authmodule.configuration.AuthFlowProperties;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import ru.example.authmodule.model.response.CurrentUserResponse;
+
+import java.util.List;
 
 import java.util.Optional;
 
@@ -46,9 +50,12 @@ public class SecurityService {
     private final ActivationService activationService;
     private final UserAndCompanyMapper userAndCompanyMapper;
     private final UserService userService;
+    private final AuthFlowProperties authFlowProperties;
 
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
+        ensureLegacyLocalAuthEnabled();
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(),
@@ -114,6 +121,8 @@ public class SecurityService {
     }
 
     public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
+        ensureLegacyLocalAuthEnabled();
+
         String oldRefreshToken = request.getRefreshToken();
 
         if (oldRefreshToken == null || oldRefreshToken.isBlank()) {
@@ -160,6 +169,8 @@ public class SecurityService {
     }
 
     public void logout(RefreshTokenRequest request) {
+        ensureLegacyLocalAuthEnabled();
+
         String refreshToken = request.getRefreshToken();
 
         if (refreshToken == null || refreshToken.isBlank()) {
@@ -167,6 +178,118 @@ public class SecurityService {
         }
 
         refreshTokenRepository.delete(refreshToken);
+    }
+
+    private void ensureLegacyLocalAuthEnabled() {
+        if (!authFlowProperties.legacyLocalAuthEnabled()) {
+            throw new LegacyAuthFlowDisabledException(
+                    "Локальный flow аутентификации отключен. Используйте вход через Keycloak."
+            );
+        }
+    }
+
+
+    public CurrentUserResponse getCurrentUser(Jwt jwt) {
+        String keycloakUserId = jwt.getSubject();
+        String email = extractEmail(jwt);
+        String username = extractUsername(jwt);
+
+        List<String> authorities = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        Optional<User> localUserOptional = resolveAndSyncLocalUser(jwt);
+
+        if (localUserOptional.isEmpty()) {
+            return CurrentUserResponse.builder()
+                    .keycloakUserId(keycloakUserId)
+                    .username(username)
+                    .email(email)
+                    .authorities(authorities)
+                    .localUserExists(false)
+                    .build();
+        }
+
+        User localUser = localUserOptional.get();
+
+        return CurrentUserResponse.builder()
+                .keycloakUserId(keycloakUserId)
+                .username(username)
+                .email(email)
+                .authorities(authorities)
+                .localUserExists(true)
+                .localPublicId(localUser.getPublicId())
+                .localRole(localUser.getRole() != null ? localUser.getRole().name() : null)
+                .localActive(localUser.isActive())
+                .build();
+    }
+
+    private String extractEmail(Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        if (email != null && !email.isBlank()) {
+            return email;
+        }
+
+        String preferredUsername = jwt.getClaimAsString("preferred_username");
+        if (preferredUsername != null && !preferredUsername.isBlank()) {
+            return preferredUsername;
+        }
+
+        return null;
+    }
+
+    private String extractUsername(Jwt jwt) {
+        String preferredUsername = jwt.getClaimAsString("preferred_username");
+        if (preferredUsername != null && !preferredUsername.isBlank()) {
+            return preferredUsername;
+        }
+
+        String email = jwt.getClaimAsString("email");
+        if (email != null && !email.isBlank()) {
+            return email;
+        }
+
+        return jwt.getSubject();
+    }
+
+    private Optional<User> resolveAndSyncLocalUser(Jwt jwt) {
+        String keycloakUserId = jwt.getSubject();
+
+        if (keycloakUserId == null || keycloakUserId.isBlank()) {
+            throw new IncorrectDataException("В JWT отсутствует subject пользователя");
+        }
+
+        Optional<User> byKeycloakId = userRepository.findByKeycloakUserId(keycloakUserId);
+        if (byKeycloakId.isPresent()) {
+            return byKeycloakId;
+        }
+
+        String email = extractEmail(jwt);
+        if (email == null || email.isBlank()) {
+            return Optional.empty();
+        }
+
+        Optional<User> byEmail = userRepository.findByEmailEqualsIgnoreCase(email);
+        if (byEmail.isEmpty()) {
+            return Optional.empty();
+        }
+
+        User localUser = byEmail.get();
+
+        if (localUser.getKeycloakUserId() != null
+                && !localUser.getKeycloakUserId().equals(keycloakUserId)) {
+            throw new EntityAlreadyExistsException(
+                    "Локальный пользователь уже привязан к другому Keycloak аккаунту"
+            );
+        }
+
+        localUser.setKeycloakUserId(keycloakUserId);
+        User savedUser = userRepository.save(localUser);
+
+        return Optional.of(savedUser);
     }
 
 }
