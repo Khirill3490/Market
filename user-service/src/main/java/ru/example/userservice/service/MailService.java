@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import ru.example.identitydomain.entity.User;
+import ru.example.identitydomain.entity.Account;
 
 
 import java.util.List;
@@ -22,9 +22,9 @@ public class MailService {
     @Value("${spring.adminEmail.recipients}")
     private List<String> recipients;
 
-    public void sendMessage(User user) {
+    public void sendMessage(Account account) {
         String subject = "Запрос на смену статуса";
-        String messageBody = "Пользователь:\npublicId: " + user.getPublicId() + "\nemail: " + user.getEmail()
+        String messageBody = "Пользователь:\npublicId: " + account.getPublicId() + "\nemail: " + account.getEmail()
                 + "\nзапрос на смену статуса аккаунта";
 
         for (String adminEmail : recipients) {

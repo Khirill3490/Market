@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import ru.example.authmodule.exception.IncorrectDataException;
 import ru.example.authmodule.mail.MailSenderUtil;
 import ru.example.authmodule.redis.repository.RedisTokenRepository;
-import ru.example.authmodule.repository.UserRepository;
-import ru.example.authmodule.service.UserService;
+import ru.example.authmodule.repository.AccountRepository;
+import ru.example.authmodule.service.AccountService;
 import ru.example.common.util.GenerateToken;
-import ru.example.identitydomain.entity.User;
+import ru.example.identitydomain.entity.Account;
 
 import java.util.Locale;
 
@@ -19,8 +19,8 @@ import java.util.Locale;
 public class PasswordResetService {
 
     private final RedisTokenRepository tokenRepository;
-    private final UserService userService;
-    private final UserRepository userRepository;
+    private final AccountService accountService;
+    private final AccountRepository accountRepository;
     private final PasswordEncoder encoder;
     private final MailSenderUtil mailSenderUtil;
 
@@ -32,7 +32,7 @@ public class PasswordResetService {
     public void requestReset(String rawEmail) {
         String email = rawEmail.trim().toLowerCase(Locale.ROOT);
 
-        userRepository.findByEmailEqualsIgnoreCase(email).ifPresent(user -> {
+        accountRepository.findByEmailEqualsIgnoreCase(email).ifPresent(user -> {
             String token = GenerateToken.newOpaqueToken();
             String mailBody = getMailBody(token);
 
@@ -45,9 +45,9 @@ public class PasswordResetService {
         String publicId = tokenRepository.consumeResetToken(token)
                 .orElseThrow(() -> new IncorrectDataException("Ссылка недействительна"));
 
-        User user = userService.findByPublicId(publicId);
-        user.setPassword(encoder.encode(newPassword));
-        userRepository.save(user);
+        Account account = accountService.findByPublicId(publicId);
+        account.setPassword(encoder.encode(newPassword));
+        accountRepository.save(account);
     }
 
     private String getMailBody(String token) {

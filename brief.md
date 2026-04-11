@@ -10,7 +10,7 @@
 - `api-gateway`
 - `auth-module`
 - `product-service`
-- `user-service`
+- `account-service`
 - `eureka-server`
 - `common`
 - `frontend`
@@ -140,7 +140,7 @@
 
 - `api-gateway` — единая точка входа
 - `keycloak` — identity provider / authentication / authorization
-- `user-service` — профиль, настройки, данные пользователя
+- `account-service` — профиль, настройки, данные пользователя
 - `product-service` — каталог, товары, категории
 - `postgres` — желательно раздельное владение данными по сервисам
 - `redis` — кэш / технические механики / rate limiting / временные данные

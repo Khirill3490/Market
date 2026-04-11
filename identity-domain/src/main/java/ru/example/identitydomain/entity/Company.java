@@ -1,16 +1,22 @@
 package ru.example.identitydomain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.example.identitydomain.entity.enums.RulesType;
+import lombok.*;
+import ru.example.identitydomain.entity.enums.CompanyStatus;
 
+import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "companies")
-@Data
+@Table(
+        name = "companies",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_companies_public_id", columnNames = "public_id"),
+                @UniqueConstraint(name = "uk_companies_inn", columnNames = "inn"),
+                @UniqueConstraint(name = "uk_companies_owner_account_id", columnNames = "owner_account_id")
+        }
+)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,32 +26,44 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "public_id", nullable = false, length = 64)
+    private String publicId;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_account_id", nullable = false)
+    private Account owner;
+
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "inn", nullable = false, length = 32)
     private String inn;
 
-    private String city;
-    private String phone;
-    private String mail;
-
-//    @Column(nullable = false)
-//    private String password;
-
-    private String url;
-
     @Enumerated(EnumType.STRING)
-    private RulesType rules;
+    @Column(name = "status", nullable = false, length = 32)
+    private CompanyStatus status;
 
-    private String logo;
+    @Column(name = "contact_email", length = 255)
+    private String contactEmail;
 
-    private Double tax;
+    @Column(name = "contact_phone", length = 32)
+    private String contactPhone;
 
-    private Double rating;
+    @Column(name = "created_at", nullable = false)
+    private OffsetDateTime createdAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", unique = true)
-    private User owner;
-    
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
+
+    @PrePersist
+    void prePersist() {
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        this.updatedAt = OffsetDateTime.now();
+    }
 }
-

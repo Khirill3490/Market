@@ -161,7 +161,7 @@
     }
 
     // --- состояние ---
-    let auth = { isAuth:false, user:null };
+    let auth = { isAuth:false, account:null };
 
     document.addEventListener('DOMContentLoaded', () => {
         $('#year').textContent = new Date().getFullYear();
@@ -173,7 +173,7 @@
         $('#logoutBtn').addEventListener('click', async () => {
             try { await fetch('/api/v1/auth/logout', { method:'POST', credentials:'include' }); } catch {}
             clearAuthStorage();
-            auth = { isAuth:false, user:null };
+            auth = { isAuth:false, account:null };
             renderNav();
             toast('Вы вышли из аккаунта');
             // опционально: редирект гостей на /login
@@ -182,21 +182,21 @@
     }
 
     async function ensureAuthAndLoad() {
-        const res = await authFetch('/api/v1/user/me', { method:'GET' });
+        const res = await authFetch('/api/v1/account/me', { method:'GET' });
         if (!res.ok) {
-            auth = { isAuth:false, user:null };
+            auth = { isAuth:false, account:null };
             renderNav();
             // если хочешь жёсткий редирект гостей:
             location.href = '/login';
             return;
         }
-        const user = await parseJsonSafe(res);
-        if (user && (user.username || user.mail || user.companyName)) {
-            auth = { isAuth:true, user };
+        const account = await parseJsonSafe(res);
+        if (account && (account.username || account.mail || account.companyName)) {
+            auth = { isAuth:true, account };
             renderNav();
-            renderProfile(user);
+            renderProfile(account);
         } else {
-            auth = { isAuth:false, user:null };
+            auth = { isAuth:false, account:null };
             renderNav();
             location.href = '/login';
         }
@@ -206,7 +206,7 @@
         const navPublic = $('#nav-public');
         const navAuth = $('#nav-auth');
         if (auth.isAuth) {
-            const name = auth.user?.username || auth.user?.mail || auth.user?.email || auth.user?.companyName || 'user';
+            const name = auth.account?.username || auth.account?.mail || auth.account?.email || auth.account?.companyName || 'account';
             const userBtn = $('#userBtn');
             userBtn.textContent = name;
             userBtn.setAttribute('href', '/account');
@@ -233,7 +233,7 @@
 
     function renderProfile(u) {
         const card = $('#profileCard');
-        const name = u.username || u.companyName || u.mail || 'user';
+        const name = u.username || u.companyName || u.mail || 'account';
         const avatarText = (u.logo && u.logo.trim()) ? '' : initials(name);
 
         card.innerHTML = `

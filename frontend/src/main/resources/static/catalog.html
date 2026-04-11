@@ -201,7 +201,7 @@
     }
 
     // ====== GLOBAL STATE ======
-    let auth = { isAuth:false, user:null };
+    let auth = { isAuth:false, account:null };
     let state = {
         categoryId: null,
         page: 1,
@@ -235,7 +235,7 @@
     function wireLogout() {
         $('#logoutBtn').addEventListener('click', async ()=>{
             try { await fetch('/api/v1/auth/logout', { method:'POST', credentials:'include' }); } catch {}
-            clearAuthStorage(); auth = {isAuth:false, user:null}; renderNav();
+            clearAuthStorage(); auth = {isAuth:false, account:null}; renderNav();
             toast('Вы вышли из аккаунта');
         });
     }
@@ -243,20 +243,20 @@
     // ====== AUTH CHECK ======
     async function checkAuth() {
         try {
-            const res = await authFetch('/api/v1/user/me', { method:'GET' });
-            if (!res.ok) { auth = {isAuth:false, user:null}; renderNav(); return; }
-            const user = await parseJsonSafe(res);
-            if (user && (user.username || user.mail || user.companyName)) {
-                auth = { isAuth:true, user };
-            } else { auth = { isAuth:false, user:null }; }
-        } catch { auth = { isAuth:false, user:null }; }
+            const res = await authFetch('/api/v1/account/me', { method:'GET' });
+            if (!res.ok) { auth = {isAuth:false, account:null}; renderNav(); return; }
+            const account = await parseJsonSafe(res);
+            if (account && (account.username || account.mail || account.companyName)) {
+                auth = { isAuth:true, account };
+            } else { auth = { isAuth:false, account:null }; }
+        } catch { auth = { isAuth:false, account:null }; }
         renderNav();
     }
 
     function renderNav() {
         const navPublic = $('#nav-public'), navAuth = $('#nav-auth');
         if (auth.isAuth) {
-            const name = auth.user?.username || auth.user?.mail || auth.user?.email || auth.user?.companyName || 'user';
+            const name = auth.account?.username || auth.account?.mail || auth.account?.email || auth.account?.companyName || 'account';
             const userBtn = $('#userBtn'); userBtn.textContent = name; userBtn.href = '/account';
             show(navPublic, false); show(navAuth, true);
         } else { show(navPublic, true); show(navAuth, false); }

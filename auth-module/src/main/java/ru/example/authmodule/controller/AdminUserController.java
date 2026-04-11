@@ -10,9 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.example.authmodule.model.request.AdminUpdateUserRequest;
-import ru.example.authmodule.model.response.UserResponse;
 import ru.example.authmodule.model.response.UserUpdatedResponse;
-import ru.example.authmodule.service.UserService;
+import ru.example.authmodule.service.AccountService;
 
 @RestController
 @RequestMapping("/api/v1/admin/users")
@@ -20,7 +19,7 @@ import ru.example.authmodule.service.UserService;
 @Tag(name = "Администрирование пользователей", description = "Эндпоинты для управления пользователями администратором")
 public class AdminUserController {
 
-    private final UserService userService;
+    private final AccountService accountService;
 
     @Operation(
             summary = "Обновить пользователя",
@@ -39,6 +38,6 @@ public class AdminUserController {
             @PathVariable String publicId,
             @Valid @RequestBody AdminUpdateUserRequest request
     ) {
-        return ResponseEntity.ok(userService.update(publicId, request));
+        return ResponseEntity.ok(accountService.update(publicId, request));
     }
 }

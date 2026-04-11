@@ -65,7 +65,7 @@
         <a href="/login" class="muted">Войти</a>
         <a href="/register" class="muted">Регистрация</a>
     </nav>
-    <nav id="user-nav" style="display:none">
+    <nav id="account-nav" style="display:none">
         <a href="/catalog">Каталог</a>
         <a href="/account" id="username"></a>
         <button class="btn btn-outline" id="logoutBtn" type="button">Выйти</button>
@@ -100,7 +100,7 @@
     /* JWT как раньше */
     const TOKEN_KEY = "accessToken"; const META_KEY="authMeta";
     function loadAuth(){ const token=sessionStorage.getItem(TOKEN_KEY); const meta=JSON.parse(sessionStorage.getItem(META_KEY)||"{}"); return {token,meta}; }
-    function showAuthState(){ const {token,meta}=loadAuth(); if(token){ document.getElementById("guest-nav").style.display="none"; document.getElementById("user-nav").style.display="flex"; document.getElementById("username").textContent=meta.email||"Профиль"; } }
+    function showAuthState(){ const {token,meta}=loadAuth(); if(token){ document.getElementById("guest-nav").style.display="none"; document.getElementById("account-nav").style.display="flex"; document.getElementById("username").textContent=meta.email||"Профиль"; } }
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) logoutBtn.addEventListener("click",()=>{ sessionStorage.clear(); location.reload(); });
     showAuthState();

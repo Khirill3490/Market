@@ -1,9 +1,9 @@
 package ru.example.productservice.service;
 
 
-import ru.example.identitydomain.entity.User;
+import ru.example.identitydomain.entity.Account;
 
 public interface UserService {
 
-    User findByPublicId(String publicId);
+    Account findByPublicId(String publicId);
 }

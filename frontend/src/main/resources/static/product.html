@@ -38,7 +38,7 @@
         <a href="/login" class="muted">Войти</a>
         <a href="/register" class="muted">Регистрация</a>
     </nav>
-    <nav id="user-nav" style="display:none">
+    <nav id="account-nav" style="display:none">
         <a href="/catalog">Каталог</a>
         <a href="/account" id="username"></a>
         <button class="btn btn-outline" id="logoutBtn">Выйти</button>
@@ -76,7 +76,7 @@
         const { token, meta } = loadAuth();
         if (token) {
             document.getElementById("guest-nav").style.display = "none";
-            document.getElementById("user-nav").style.display = "flex";
+            document.getElementById("account-nav").style.display = "flex";
             document.getElementById("username").textContent = meta.email || "Профиль";
         }
     }

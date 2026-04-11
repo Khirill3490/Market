@@ -11,15 +11,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrentUserResponse {
+public class CurrentAccountResponse {
 
     private String keycloakUserId;
     private String username;
     private String email;
     private List<String> authorities;
 
-    private boolean localUserExists;
+    private boolean localAccountExists;
     private String localPublicId;
-    private String localRole;
-    private Boolean localActive;
+    private String accountType;
+    private String status;
+    private String companyPublicId;
 }

@@ -2,17 +2,17 @@ package ru.example.userservice.mapper;
 
 import org.springframework.stereotype.Component;
 
+import ru.example.identitydomain.entity.Account;
 import ru.example.identitydomain.entity.Company;
-import ru.example.identitydomain.entity.User;
 import ru.example.userservice.model.response.AccountResponse;
 
 @Component
 public class AccountMapper {
 
-    public AccountResponse toAccountResponse(User user, Company company) {
+    public AccountResponse toAccountResponse(Account account, Company company) {
         return AccountResponse.builder()
-                .username(user.getEmail())
-                .isActive(user.isActive())
+                .username(account.getEmail())
+                .isActive(account.isActive())
                 .companyName(company.getName())
                 .inn(company.getInn())
                 .city(company.getCity())

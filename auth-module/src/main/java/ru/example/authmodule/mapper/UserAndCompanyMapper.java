@@ -3,8 +3,8 @@ package ru.example.authmodule.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.example.authmodule.model.request.UserRegRequest;
+import ru.example.identitydomain.entity.Account;
 import ru.example.identitydomain.entity.Company;
-import ru.example.identitydomain.entity.User;
 import ru.example.identitydomain.entity.enums.RulesType;
 
 @Component
@@ -13,8 +13,8 @@ public class UserAndCompanyMapper {
 
 
 
-    public User toUser(UserRegRequest request) {
-        return User.builder()
+    public Account toUser(UserRegRequest request) {
+        return Account.builder()
                 .email(request.getEmail())
 //                .password(passwordEncoder.encode(request.getPassword()))
 //                .isActive(false)

@@ -9,7 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import ru.example.common.exception.ErrorMessageGlobal;
-import ru.example.identitydomain.entity.User;
+import ru.example.identitydomain.entity.Account;
 import ru.example.productservice.service.UserService;
 
 @Aspect
@@ -34,7 +34,7 @@ public class AuthAspect {
         }
 
         // Пример валидации в БД
-        User user = userService.findByPublicId(publicId);
+        Account account = userService.findByPublicId(publicId);
 
 
         return joinPoint.proceed();
