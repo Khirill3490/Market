@@ -1,8 +1,6 @@
 package ru.example.authmodule.security.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +10,11 @@ import ru.example.authmodule.repository.AccountRepository;
 import ru.example.authmodule.service.AccountService;
 import ru.example.identitydomain.entity.Account;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CurrentAccountService {
 
     private final AccountRepository accountRepository;
@@ -24,27 +22,49 @@ public class CurrentAccountService {
 
     public CurrentAccountResponse getCurrentAccount(Jwt jwt) {
         String keycloakUserId = requireKeycloakUserId(jwt);
-        String email = normalizeEmail(extractEmail(jwt));
-        String username = extractUsername(jwt);
+        String email = normalizeEmail(jwt.getClaimAsString("email"));
+        String firstName = blankToNull(jwt.getClaimAsString("given_name"));
+        String lastName = blankToNull(jwt.getClaimAsString("family_name"));
 
-        Optional<Account> accountOptional = resolveAccount(keycloakUserId, email);
+        Optional<Account> accountOptional = accountRepository.findByKeycloakUserId(keycloakUserId);
 
-        return buildResponse(
-                keycloakUserId,
-                username,
-                email,
-                accountOptional.orElse(null)
-        );
+        if (accountOptional.isEmpty()) {
+            return CurrentAccountResponse.builder()
+                    .keycloakUserId(keycloakUserId)
+                    .email(email)
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .localAccountExists(false)
+                    .accountPublicId(null)
+                    .accountType(null)
+                    .accountStatus(null)
+                    .build();
+        }
+
+        Account account = accountOptional.get();
+
+        return CurrentAccountResponse.builder()
+                .keycloakUserId(keycloakUserId)
+                .email(email)
+                .firstName(firstName)
+                .lastName(lastName)
+                .localAccountExists(true)
+                .accountPublicId(account.getPublicId())
+                .accountType(account.getAccountType() != null ? account.getAccountType().name() : null)
+                .accountStatus(account.getStatus() != null ? account.getStatus().name() : null)
+                .build();
     }
 
     @Transactional
     public Account getOrCreateCurrentAccount(Jwt jwt) {
         String keycloakUserId = requireKeycloakUserId(jwt);
-        String email = normalizeEmail(extractEmail(jwt));
+        String email = normalizeEmail(jwt.getClaimAsString("email"));
+        String firstName = blankToNull(jwt.getClaimAsString("given_name"));
+        String lastName = blankToNull(jwt.getClaimAsString("family_name"));
 
-        Optional<Account> existing = resolveAccount(keycloakUserId, email);
-        if (existing.isPresent()) {
-            return existing.get();
+        Optional<Account> existingAccount = accountRepository.findByKeycloakUserId(keycloakUserId);
+        if (existingAccount.isPresent()) {
+            return existingAccount.get();
         }
 
         if (email == null || email.isBlank()) {
@@ -53,28 +73,12 @@ public class CurrentAccountService {
             );
         }
 
-        String firstName = extractFirstName(jwt);
-        String lastName = extractLastName(jwt);
-
         return accountService.createShellAccount(
                 keycloakUserId,
                 email,
                 firstName,
                 lastName
         );
-    }
-
-    private Optional<Account> resolveAccount(String keycloakUserId, String email) {
-        Optional<Account> byKeycloakId = accountRepository.findByKeycloakUserId(keycloakUserId);
-        if (byKeycloakId.isPresent()) {
-            return byKeycloakId;
-        }
-
-        if (email == null || email.isBlank()) {
-            return Optional.empty();
-        }
-
-        return accountRepository.findByEmailEqualsIgnoreCase(email);
     }
 
     private String requireKeycloakUserId(Jwt jwt) {
@@ -85,42 +89,6 @@ public class CurrentAccountService {
         }
 
         return keycloakUserId;
-    }
-
-    private String extractEmail(Jwt jwt) {
-        String email = jwt.getClaimAsString("email");
-        if (email != null && !email.isBlank()) {
-            return email;
-        }
-
-        String preferredUsername = jwt.getClaimAsString("preferred_username");
-        if (preferredUsername != null && !preferredUsername.isBlank()) {
-            return preferredUsername;
-        }
-
-        return null;
-    }
-
-    private String extractUsername(Jwt jwt) {
-        String preferredUsername = jwt.getClaimAsString("preferred_username");
-        if (preferredUsername != null && !preferredUsername.isBlank()) {
-            return preferredUsername;
-        }
-
-        String email = jwt.getClaimAsString("email");
-        if (email != null && !email.isBlank()) {
-            return email;
-        }
-
-        return jwt.getSubject();
-    }
-
-    private String extractFirstName(Jwt jwt) {
-        return blankToNull(jwt.getClaimAsString("given_name"));
-    }
-
-    private String extractLastName(Jwt jwt) {
-        return blankToNull(jwt.getClaimAsString("family_name"));
     }
 
     private String normalizeEmail(String email) {
@@ -137,43 +105,5 @@ public class CurrentAccountService {
         }
 
         return value.trim();
-    }
-
-    private CurrentAccountResponse buildResponse(
-            String keycloakUserId,
-            String username,
-            String email,
-            Account account
-    ) {
-        List<String> authorities = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-        if (account == null) {
-            return CurrentAccountResponse.builder()
-                    .keycloakUserId(keycloakUserId)
-                    .username(username)
-                    .email(email)
-                    .authorities(authorities)
-                    .localAccountExists(false)
-                    .build();
-        }
-
-        return CurrentAccountResponse.builder()
-                .keycloakUserId(keycloakUserId)
-                .username(username)
-                .email(email)
-                .authorities(authorities)
-                .localAccountExists(true)
-                .localPublicId(account.getPublicId())
-                .accountType(account.getAccountType() != null ? account.getAccountType().name() : null)
-                .status(account.getStatus() != null ? account.getStatus().name() : null)
-                .companyPublicId(
-                        account.getCompany() != null ? account.getCompany().getPublicId() : null
-                )
-                .build();
     }
 }

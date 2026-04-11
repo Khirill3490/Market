@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,13 +12,12 @@ import java.util.List;
 public class CurrentAccountResponse {
 
     private String keycloakUserId;
-    private String username;
     private String email;
-    private List<String> authorities;
+    private String firstName;
+    private String lastName;
 
     private boolean localAccountExists;
-    private String localPublicId;
+    private String accountPublicId;
     private String accountType;
-    private String status;
-    private String companyPublicId;
+    private String accountStatus;
 }

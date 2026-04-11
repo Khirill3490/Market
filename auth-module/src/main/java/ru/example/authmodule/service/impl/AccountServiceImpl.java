@@ -1,9 +1,10 @@
-package ru.example.authmodule.service;
+package ru.example.authmodule.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.example.authmodule.repository.AccountRepository;
+import ru.example.authmodule.service.AccountService;
 import ru.example.identitydomain.entity.Account;
 import ru.example.identitydomain.entity.enums.AccountStatus;
 import ru.example.identitydomain.entity.enums.AccountType;
@@ -16,8 +17,8 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
 
-    @Transactional
     @Override
+    @Transactional
     public Account createShellAccount(
             String keycloakUserId,
             String email,
