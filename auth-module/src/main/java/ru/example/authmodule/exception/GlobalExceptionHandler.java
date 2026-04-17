@@ -17,18 +17,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleEntityNotFound(
-            EntityNotFoundException ex,
-            HttpServletRequest request
-    ) {
-        return buildErrorResponse(
-                HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                request,
-                null
-        );
-    }
 
     @ExceptionHandler(IncorrectDataException.class)
     public ResponseEntity<ApiErrorResponse> handleIncorrectData(
@@ -43,18 +31,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ErrorMessageGlobal.class)
-    public ResponseEntity<ApiErrorResponse> handleErrorMessageGlobal(
-            ErrorMessageGlobal ex,
-            HttpServletRequest request
-    ) {
-        return buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ex.getMessage(),
-                request,
-                null
-        );
-    }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleEntityAlreadyExists(
@@ -69,18 +45,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(RefreshTokenException.class)
-    public ResponseEntity<ApiErrorResponse> handleRefreshTokenException(
-            RefreshTokenException ex,
-            HttpServletRequest request
-    ) {
-        return buildErrorResponse(
-                HttpStatus.UNAUTHORIZED,
-                ex.getMessage(),
-                request,
-                null
-        );
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidationException(
@@ -159,16 +123,4 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(LegacyAuthFlowDisabledException.class)
-    public ResponseEntity<ApiErrorResponse> handleLegacyAuthFlowDisabled(
-            LegacyAuthFlowDisabledException ex,
-            HttpServletRequest request
-    ) {
-        return buildErrorResponse(
-                HttpStatus.GONE,
-                ex.getMessage(),
-                request,
-                null
-        );
-    }
 }
