@@ -27,7 +27,6 @@ public class CurrentUserService {
 
         return CurrentUserResponse.builder()
                 .accountPublicId(account.getPublicId())
-                .keycloakUserId(account.getKeycloakUserId())
                 .email(account.getEmail())
                 .firstName(account.getFirstName())
                 .lastName(account.getLastName())

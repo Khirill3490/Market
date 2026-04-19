@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class CurrentUserResponse {
 
     private String accountPublicId;
-    private String keycloakUserId;
     private String email;
     private String firstName;
     private String lastName;

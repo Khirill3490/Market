@@ -26,14 +26,25 @@ public class SecurityConfiguration {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
-                                "/api/v1/auth/**",
+                                "/",
+                                "/index",
+                                "/catalog",
+                                "/register",
+                                "/login",
+                                "/activation",
+                                "/account",
+                                "/product",
+                                "/assets/**"
+                        ).permitAll()
+                        .pathMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        .pathMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN")
                         .pathMatchers("/api/v1/products/**").permitAll()
+                        .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/auth/**").authenticated()
+                        .pathMatchers("/api/v1/users/**").authenticated()
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

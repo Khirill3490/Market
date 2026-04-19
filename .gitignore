@@ -12,6 +12,7 @@ out/
 
 common.env.properties
 !common.env.example.properties
+docker/.data/
 
 # VS Code
 .vscode/
