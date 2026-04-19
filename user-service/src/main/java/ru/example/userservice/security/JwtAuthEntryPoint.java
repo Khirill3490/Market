@@ -1,4 +1,4 @@
-package ru.example.authmodule.security.jwt;
+package ru.example.userservice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import ru.example.authmodule.exception.ApiErrorResponse;
+import ru.example.userservice.exception.ApiErrorResponse;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -22,9 +22,10 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
     ) throws IOException {
         log.error("Unauthorized error: {}", authException.getMessage());
 

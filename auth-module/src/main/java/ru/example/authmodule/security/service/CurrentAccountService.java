@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.example.authmodule.exception.EntityAlreadyExistsException;
 import ru.example.authmodule.exception.IncorrectDataException;
 import ru.example.authmodule.model.response.CurrentAccountResponse;
 import ru.example.authmodule.repository.AccountRepository;
@@ -73,7 +74,20 @@ public class CurrentAccountService {
             );
         }
 
-        return accountService.createShellAccount(
+        Optional<Account> accountWithSameEmail = accountRepository.findByEmailEqualsIgnoreCase(email);
+        if (accountWithSameEmail.isPresent()) {
+            Account found = accountWithSameEmail.get();
+
+            if (found.getKeycloakUserId() == null || !keycloakUserId.equals(found.getKeycloakUserId())) {
+                throw new EntityAlreadyExistsException(
+                        "Локальный account с таким email уже существует и привязан к другому пользователю"
+                );
+            }
+
+            return found;
+        }
+
+        return accountService.createLocalAccount(
                 keycloakUserId,
                 email,
                 firstName,

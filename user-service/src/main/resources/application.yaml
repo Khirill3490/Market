@@ -2,87 +2,40 @@ spring:
   application:
     name: user-service
 
+  config:
+    import:
+      - optional:file:.env.properties
+      - optional:file:../common.env.properties
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/app_db
-    username: postgres
-    password: postgres
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/app_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     hikari:
       maximum-pool-size: 5
       connection-timeout: 30000
 
-#  datasource:
-#    url: jdbc:h2:mem:testdb  # In-memory режим
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password: password
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console  # URL для доступа к консоли
-#      settings:
-#        web-allow-others: false  # Безопасность
-
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/app_db
-#    username: postgres
-#    password: postgres
-#    hikari:
-#      maximum-pool-size: 5
-#      connection-timeout: 30000
   jpa:
     open-in-view: false
-    show-sql: true
+    show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         order_inserts: true
         jdbc:
           batch_size: 1000
 
-  myAnnotation:
-    enabled: true
-
-  file:
-    export: exports/products.json
-
-
-  mail:
-    host: smtp.yandex.ru
-    port: 465
-    username: ru.kirill.service@yandex.ru
-    password: pfnqjqfzybbooqgr
-    properties:
-      mail:
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-    default-encoding: UTF-8
-
-  adminEmail:
-    recipients: khirill3490@yandex.ru
-#    recipients: support@example.com,copy@example.com,audit@example.com
-
-#
-#
-#app:
-#  jwt:
-#    secret: EFnoiYH3fUV5q9dls3vKojW0FBpZcueVC6UgQzLn68OaZKS5eDcnHdWLLLNEH3QQV76nRdnDg1kAjrKbWHrCoA==
-#    tokenExpiration: 10
-#    refreshTokenExpiration: 30
-#
-#  activation:
-#    url: http://127.0.0.1:9090/api/v1/auth/activate?id={id}
-#    salt: KMvNn6W@fWdT3R3n
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8088/realms/market}
 
 server:
-  port: 0
-  servlet:
-    context-path: /api/v1/user
+  port: ${SERVER_PORT:0}
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8080/eureka/
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}

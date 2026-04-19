@@ -6,7 +6,7 @@ import ru.example.identitydomain.entity.Account;
 
 public interface AccountService {
 
-    Account createShellAccount(
+    Account createLocalAccount(
             String keycloakUserId,
             String email,
             String firstName,

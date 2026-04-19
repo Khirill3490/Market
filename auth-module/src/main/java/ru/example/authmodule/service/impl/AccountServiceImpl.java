@@ -19,7 +19,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public Account createShellAccount(
+    public Account createLocalAccount(
             String keycloakUserId,
             String email,
             String firstName,

@@ -1,4 +1,4 @@
-package ru.example.authmodule.repository;
+package ru.example.userservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByKeycloakUserId(String keycloakUserId);
-    Optional<Account> findByEmailEqualsIgnoreCase(String email);
 }
