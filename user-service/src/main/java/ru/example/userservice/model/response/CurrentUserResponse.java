@@ -15,6 +15,7 @@ public class CurrentUserResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private String phone;
     private String accountType;
     private String accountStatus;
 }

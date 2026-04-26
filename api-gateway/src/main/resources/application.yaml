@@ -1,10 +1,12 @@
-
 spring:
   application:
     name: api-gateway
+
   config:
     import:
       - optional:file:common.env.properties
+      - optional:file:../common.env.properties
+
   cloud:
     gateway:
       server:
@@ -13,35 +15,22 @@ spring:
             locator:
               enabled: true
               lower-case-service-id: true
-#  main:
-#    web-application-type: reactive
-#          routes:
-#            - id: client_route
-#              uri: lb://eureka-client
-#              predicates:
-#                - Path=/api/test
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8088/realms/market
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8088/realms/market}
 
 server:
   port: 8080
 
-
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL}
-
-#eureka:
-#  client:
-#    enabled: false
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
 
 logging:
   level:
     root: INFO
     ru.example.apigateway: DEBUG
-
-

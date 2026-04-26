@@ -41,16 +41,6 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    operationsSorter: method
-    tagsSorter: alpha
-    oauth:
-      clientId: ${SWAGGER_CLIENT_ID:market-frontend}
-      usePkceWithAuthorizationCodeGrant: true
-  api-docs:
-    path: /v3/api-docs
 
 server:
   port: ${SERVER_PORT:8081}

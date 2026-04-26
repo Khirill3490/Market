@@ -36,7 +36,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16")
     implementation("org.flywaydb:flyway-core")
 
     runtimeOnly("org.postgresql:postgresql")
