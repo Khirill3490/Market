@@ -15,40 +15,31 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CurrentAccountService {
 
     private final AccountRepository accountRepository;
     private final AccountService accountService;
 
+    @Transactional
     public CurrentAccountResponse getCurrentAccount(Jwt jwt) {
         String keycloakUserId = requireKeycloakUserId(jwt);
         String email = normalizeEmail(jwt.getClaimAsString("email"));
         String firstName = blankToNull(jwt.getClaimAsString("given_name"));
         String lastName = blankToNull(jwt.getClaimAsString("family_name"));
 
-        Optional<Account> accountOptional = accountRepository.findByKeycloakUserId(keycloakUserId);
-
-        if (accountOptional.isEmpty()) {
-            return CurrentAccountResponse.builder()
-                    .keycloakUserId(keycloakUserId)
-                    .email(email)
-                    .firstName(firstName)
-                    .lastName(lastName)
-                    .localAccountExists(false)
-                    .accountPublicId(null)
-                    .accountType(null)
-                    .accountStatus(null)
-                    .build();
-        }
-
-        Account account = accountOptional.get();
+        Account account = accountRepository.findByKeycloakUserId(keycloakUserId)
+                .orElseGet(() -> createAccountIfNeeded(
+                        keycloakUserId,
+                        email,
+                        firstName,
+                        lastName
+                ));
 
         return CurrentAccountResponse.builder()
-                .keycloakUserId(keycloakUserId)
-                .email(email)
-                .firstName(firstName)
-                .lastName(lastName)
+                .keycloakUserId(account.getKeycloakUserId())
+                .email(account.getEmail())
+                .firstName(account.getFirstName())
+                .lastName(account.getLastName())
                 .localAccountExists(true)
                 .accountPublicId(account.getPublicId())
                 .accountType(account.getAccountType() != null ? account.getAccountType().name() : null)
@@ -56,18 +47,12 @@ public class CurrentAccountService {
                 .build();
     }
 
-    @Transactional
-    public Account getOrCreateCurrentAccount(Jwt jwt) {
-        String keycloakUserId = requireKeycloakUserId(jwt);
-        String email = normalizeEmail(jwt.getClaimAsString("email"));
-        String firstName = blankToNull(jwt.getClaimAsString("given_name"));
-        String lastName = blankToNull(jwt.getClaimAsString("family_name"));
-
-        Optional<Account> existingAccount = accountRepository.findByKeycloakUserId(keycloakUserId);
-        if (existingAccount.isPresent()) {
-            return existingAccount.get();
-        }
-
+    private Account createAccountIfNeeded(
+            String keycloakUserId,
+            String email,
+            String firstName,
+            String lastName
+    ) {
         if (email == null || email.isBlank()) {
             throw new IncorrectDataException(
                     "В JWT отсутствует email, поэтому невозможно создать локальный account"
