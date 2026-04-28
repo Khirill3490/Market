@@ -5,10 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.example.productservice.entity.Product;
-import ru.example.common.exception.EntityAlreadyExistsException;
-import ru.example.common.exception.EntityNotFoundException;
+import ru.example.productservice.exception.ProductAlreadyExistsException;
+import ru.example.productservice.exception.ProductNotFoundException;
 import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.repository.ProductRepository;
 import ru.example.productservice.service.ProductService;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -35,27 +37,35 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProductsForMainPage() {
-        return productRepository.findRandom8();
+        return productRepository.findAllWithBrandAndCategory()
+                .stream()
+                .limit(8)
+                .toList();
     }
 
     @Override
     public Product findById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ошибка. Продукт с id " + id + " не найден"));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Override
     public Product findByArt(String art) {
-        return productRepository.findByArtContainingIgnoreCase(art)
-                .orElseThrow(() -> new EntityNotFoundException("Ошибка. Продукт с art " + art + " не найден"));
+        return productRepository.findByArtIgnoreCase(art)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        "Товар с артикулом '" + art + "' не найден"
+                ));
     }
 
     @Override
     public List<Product> findByName(String name) {
-        return List.of();
+        return productRepository
+                .findByNameContainingIgnoreCase(name, Pageable.unpaged())
+                .getContent();
     }
 
     @Override
+    @Transactional
     public Product save(Product product, MultipartFile imageFile) {
         throwExceptionIfArtExists(product.getArt());
 
@@ -66,32 +76,33 @@ public class ProductServiceImpl implements ProductService {
         );
 
         product.setImg(imageUrl);
+
         return productRepository.save(product);
     }
 
     @Override
+    @Transactional
     public Product update(Long id, ProductRequest request) {
-        throwExceptionIfArtExists(request.getArt());
-        Product product = findById(id);
-
-        return null;
+        throw new UnsupportedOperationException("Обновление товара пока не реализовано");
     }
 
-
     @Override
+    @Transactional
     public void deleteById(Long id) {
-
-
+        Product product = findById(id);
+        productRepository.delete(product);
     }
 
     @Override
+    @Transactional
     public void deleteByArt(String art) {
-
+        Product product = findByArt(art);
+        productRepository.delete(product);
     }
 
     private void throwExceptionIfArtExists(String art) {
-        if (productRepository.existsByArtContainingIgnoreCase(art)) {
-            throw new EntityAlreadyExistsException("Ошибка. Товар с данным арт уже существует");
+        if (productRepository.existsByArtIgnoreCase(art)) {
+            throw new ProductAlreadyExistsException(art);
         }
     }
 }

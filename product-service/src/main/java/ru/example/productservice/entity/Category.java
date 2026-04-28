@@ -1,13 +1,17 @@
 package ru.example.productservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Table(
+        name = "category",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_category_name", columnNames = "name")
+        }
+)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,8 +20,10 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
-//    @Formula("(SELECT COUNT(p.id) FROM product p WHERE p.category_id = id)")
+
     @Transient
     private Long productCount;
 }

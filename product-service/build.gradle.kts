@@ -27,11 +27,19 @@ repositories {
 dependencies {
     implementation(project(":common"))
     implementation(project(":identity-domain"))
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-//    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+//    implementation("org.flywaydb:flyway-core")
+//    implementation("org.flywaydb:flyway-database-postgresql")
+
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")

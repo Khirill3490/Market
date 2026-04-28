@@ -1,8 +1,7 @@
 package ru.example.productservice.model.request;
 
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,14 +13,37 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductRequest {
 
-    private String art;           // ART – Артикул товара
-    private String brand;           // MAN – Производитель
+    @NotBlank(message = "Артикул товара обязателен")
+    @Size(max = 255, message = "Артикул товара не должен быть длиннее 255 символов")
+    private String art;
+
+    @NotBlank(message = "Бренд обязателен")
+    @Size(max = 255, message = "Название бренда не должно быть длиннее 255 символов")
+    private String brand;
+
+    @NotBlank(message = "Название товара обязательно")
+    @Size(max = 255, message = "Название товара не должно быть длиннее 255 символов")
     private String name;
-    private String inf;           // INF – Краткая информация
-    private String ext;           // EXT – Расширенная информация
-    private String url;           // URL – Ссылка на страницу товара
-    private String unit;          // UNIT – Единица измерения (шт., кг и т.д.)
-    private String sml;           // SML – Размер, вес или объём
-    private String cat;           // CAT – Категория
-    private String bar;           // BAR – Штрихкод
+
+    @Size(max = 2000, message = "Краткое описание слишком длинное")
+    private String inf;
+
+    @Size(max = 5000, message = "Расширенное описание слишком длинное")
+    private String ext;
+
+    @Size(max = 1024, message = "URL товара не должен быть длиннее 1024 символов")
+    private String url;
+
+    @Size(max = 64, message = "Единица измерения не должна быть длиннее 64 символов")
+    private String unit;
+
+    @Size(max = 255, message = "Размер/вес/объём не должен быть длиннее 255 символов")
+    private String sml;
+
+    @NotBlank(message = "Категория обязательна")
+    @Size(max = 255, message = "Название категории не должно быть длиннее 255 символов")
+    private String cat;
+
+    @Size(max = 255, message = "Штрихкод не должен быть длиннее 255 символов")
+    private String bar;
 }

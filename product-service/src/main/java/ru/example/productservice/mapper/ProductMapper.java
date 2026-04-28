@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.example.productservice.entity.Brand;
 import ru.example.productservice.entity.Product;
-import ru.example.common.exception.EntityNotFoundException;
+import ru.example.productservice.exception.BrandNotFoundException;
 import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.model.response.ProductResponse;
 import ru.example.productservice.repository.BrandRepository;
@@ -20,11 +20,10 @@ public class ProductMapper {
     public Product toProduct(ProductRequest request) {
         return Product.builder()
                 .art(request.getArt())
-                .brand(throwExceptionIfBrandNotExists(request.getBrand()))
+                .brand(findBrandByName(request.getBrand()))
                 .name(request.getName())
                 .inf(request.getInf())
                 .ext(request.getExt())
-                .img(request.getUrl())
                 .url(request.getUrl())
                 .unit(request.getUnit())
                 .sml(request.getSml())
@@ -35,6 +34,7 @@ public class ProductMapper {
 
     public ProductResponse toResponse(Product product) {
         return ProductResponse.builder()
+                .id(product.getId())
                 .art(product.getArt())
                 .brand(product.getBrand().getName())
                 .name(product.getName())
@@ -49,9 +49,8 @@ public class ProductMapper {
                 .build();
     }
 
-    private Brand throwExceptionIfBrandNotExists(String brand) {
-        return brandRepository.findByNameEqualsIgnoreCase(brand)
-                .orElseThrow(() -> new EntityNotFoundException("Ошибка в поле Бренд"));
+    private Brand findBrandByName(String brandName) {
+        return brandRepository.findByNameEqualsIgnoreCase(brandName)
+                .orElseThrow(() -> new BrandNotFoundException(brandName));
     }
-
 }

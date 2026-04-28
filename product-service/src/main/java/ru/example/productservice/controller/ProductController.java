@@ -1,109 +1,128 @@
 package ru.example.productservice.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import ru.example.productservice.entity.Product;
 import ru.example.productservice.mapper.ProductMapper;
-import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.model.request.ProductPagSearchRequest;
+import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.model.response.ProductResponse;
 import ru.example.productservice.service.ProductService;
 import ru.example.productservice.util.DataGenerationService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class ProductController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final DataGenerationService generationService;
 
-
     @GetMapping
-    public Page<ProductResponse> findWithPagination(ProductPagSearchRequest request) {
-        return productService
+    public ResponseEntity<Page<ProductResponse>> findWithPagination(
+            @Valid @ModelAttribute ProductPagSearchRequest request
+    ) {
+        Page<ProductResponse> response = productService
                 .findAll(request.getPage(), request.getSize())
                 .map(productMapper::toResponse);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/random")
     public ResponseEntity<List<ProductResponse>> getProductsForMainPage() {
-        return ResponseEntity.ok(productService
+        List<ProductResponse> response = productService
                 .getProductsForMainPage()
                 .stream()
                 .map(productMapper::toResponse)
-                .collect(Collectors.toList()));
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
-
-
 
     @GetMapping("/search/name")
-    public Page<ProductResponse> findByNameWithPagination(
+    public ResponseEntity<Page<ProductResponse>> findByNameWithPagination(
             @RequestParam("name") String name,
-            @ModelAttribute ProductPagSearchRequest request
+            @Valid @ModelAttribute ProductPagSearchRequest request
     ) {
-        return productService
+        Page<ProductResponse> response = productService
                 .findByName(name, request.getPage(), request.getSize())
                 .map(productMapper::toResponse);
-    }
 
-    @GetMapping("/search/id/{id}")
-    public ProductResponse findById(@PathVariable Long id) {
-        return productMapper.toResponse(productService.findById(id));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(productMapper.toResponse(productService.findById(id)));
+    public ResponseEntity<ProductResponse> getById(
+            @PathVariable @Positive(message = "id товара должен быть положительным") Long id
+    ) {
+        ProductResponse response = productMapper.toResponse(productService.findById(id));
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/search/art/{art}")
-    public ProductResponse findByArt(@PathVariable String art) {
-        return productMapper.toResponse(productService.findByArt(art));
+    public ResponseEntity<ProductResponse> findByArt(
+            @PathVariable String art
+    ) {
+        ProductResponse response = productMapper.toResponse(productService.findByArt(art));
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProductResponse> create(@RequestPart("data") ProductRequest jsonRequest,
-                                                  @RequestPart("image") MultipartFile imageFile) {
+    public ResponseEntity<ProductResponse> create(
+            @Valid @RequestPart("data") ProductRequest request,
+            @RequestPart("image") MultipartFile imageFile
+    ) {
+        Product product = productMapper.toProduct(request);
+        Product savedProduct = productService.save(product, imageFile);
+        ProductResponse response = productMapper.toResponse(savedProduct);
 
-        Product product = productMapper.toProduct(jsonRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productMapper.toResponse(productService.save(product, imageFile)));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
-
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ProductResponse> update(
-//            @PathVariable Long id,
-//            @RequestBody @Valid ProductRequest request) {
-//        return ResponseEntity.ok(productService.update(id, request));
-//    }
-
     @DeleteMapping("/id/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(
+            @PathVariable @Positive(message = "id товара должен быть положительным") Long id
+    ) {
         productService.deleteById(id);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @DeleteMapping("/art/{art}")
-    public ResponseEntity<Void> deleteById(@PathVariable String art) {
+    public ResponseEntity<Void> deleteByArt(
+            @PathVariable String art
+    ) {
         productService.deleteByArt(art);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
-    @GetMapping("/gen/{count}")
-    public String gen(@PathVariable int count) {
+    @PostMapping("/gen/{count}")
+    public ResponseEntity<String> generateProducts(
+            @PathVariable @Positive(message = "count должен быть положительным") int count
+    ) {
         generationService.save(count);
-        return "Сгенерировано";
+
+        return ResponseEntity.ok("Сгенерировано товаров: " + count);
     }
 }
