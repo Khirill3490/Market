@@ -14,7 +14,7 @@ import ru.example.userservice.service.OrderService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/me/orders")
+@RequestMapping("/api/v1/users/me/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -47,6 +47,16 @@ public class OrderController {
             @PathVariable String orderPublicId
     ) {
         OrderResponse response = orderService.getCurrentUserOrder(jwt, orderPublicId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{orderPublicId}/cancel")
+    public ResponseEntity<OrderResponse> cancelCurrentUserOrder(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable String orderPublicId
+    ) {
+        OrderResponse response = orderService.cancelCurrentUserOrder(jwt, orderPublicId);
 
         return ResponseEntity.ok(response);
     }

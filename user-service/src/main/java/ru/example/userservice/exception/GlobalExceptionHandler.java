@@ -128,6 +128,45 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ProductCatalogException.class)
+    public ResponseEntity<ErrorResponse> handleProductCatalogException(
+            ProductCatalogException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.BAD_GATEWAY,
+                exception.getMessage(),
+                request,
+                null
+        );
+    }
+
+    @ExceptionHandler(OrderCannotBeCancelledException.class)
+    public ResponseEntity<ErrorResponse> handleOrderCannotBeCancelled(
+            OrderCannotBeCancelledException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                request,
+                null
+        );
+    }
+
+    @ExceptionHandler(InvalidOrderStatusTransitionException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidOrderStatusTransition(
+            InvalidOrderStatusTransitionException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                request,
+                null
+        );
+    }
+
     private ResponseEntity<ErrorResponse> buildErrorResponse(
             HttpStatus status,
             String message,

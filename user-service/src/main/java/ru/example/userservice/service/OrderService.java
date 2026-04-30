@@ -13,4 +13,6 @@ public interface OrderService {
     List<OrderResponse> getCurrentUserOrders(Jwt jwt);
 
     OrderResponse getCurrentUserOrder(Jwt jwt, String orderPublicId);
+
+    OrderResponse cancelCurrentUserOrder(Jwt jwt, String orderPublicId);
 }

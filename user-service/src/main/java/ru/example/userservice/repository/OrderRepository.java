@@ -1,5 +1,7 @@
 package ru.example.userservice.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.example.identitydomain.entity.Order;
@@ -20,4 +22,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "deliveryAddress"
     })
     Optional<Order> findByPublicIdAndAccountId(String publicId, Long accountId);
+
+    @EntityGraph(attributePaths = {
+            "items",
+            "deliveryAddress",
+            "account"
+    })
+    Page<Order> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    @EntityGraph(attributePaths = {
+            "items",
+            "deliveryAddress",
+            "account"
+    })
+    Optional<Order> findByPublicId(String publicId);
 }

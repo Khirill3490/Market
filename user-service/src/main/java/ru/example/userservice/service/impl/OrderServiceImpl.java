@@ -5,11 +5,16 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.example.identitydomain.entity.*;
+import ru.example.identitydomain.entity.enums.OrderStatus;
+import ru.example.userservice.client.ProductCatalogClient;
 import ru.example.userservice.exception.CartIsEmptyException;
+import ru.example.userservice.exception.EntityNotFoundException;
+import ru.example.userservice.exception.OrderCannotBeCancelledException;
 import ru.example.userservice.exception.OrderNotFoundException;
+import ru.example.userservice.mapper.OrderMapper;
 import ru.example.userservice.model.request.CreateOrderRequest;
-import ru.example.userservice.model.response.OrderItemResponse;
 import ru.example.userservice.model.response.OrderResponse;
+import ru.example.userservice.model.response.ProductCatalogResponse;
 import ru.example.userservice.repository.AccountRepository;
 import ru.example.userservice.repository.AddressRepository;
 import ru.example.userservice.repository.CartRepository;
@@ -27,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
+    private final ProductCatalogClient productCatalogClient;
+    private final OrderMapper orderMapper;
 
     @Override
     @Transactional
@@ -42,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
 
         Address deliveryAddress = addressRepository
                 .findByPublicIdAndAccountId(request.addressPublicId(), account.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Адрес доставки не найден"));
+                .orElseThrow(() -> new EntityNotFoundException("Адрес доставки не найден"));
 
         Order order = Order.builder()
                 .account(account)
@@ -50,10 +57,13 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         for (CartItem cartItem : cart.getItems()) {
+            ProductCatalogResponse product = productCatalogClient
+                    .getProductByPublicId(cartItem.getProductPublicId());
+
             OrderItem orderItem = OrderItem.builder()
                     .productPublicId(cartItem.getProductPublicId())
-                    .productName(cartItem.getProductPublicId())
-                    .productImage(null)
+                    .productName(product.name())
+                    .productImage(product.img())
                     .quantity(cartItem.getQuantity())
                     .build();
 
@@ -64,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
 
         cart.getItems().clear();
 
-        return mapToResponse(savedOrder);
+        return orderMapper.toResponse(savedOrder);
     }
 
     @Override
@@ -74,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository
                 .findAllByAccountIdOrderByCreatedAtDesc(account.getId())
                 .stream()
-                .map(this::mapToResponse)
+                .map(orderMapper::toResponse)
                 .toList();
     }
 
@@ -86,7 +96,25 @@ public class OrderServiceImpl implements OrderService {
                 .findByPublicIdAndAccountId(orderPublicId, account.getId())
                 .orElseThrow(() -> new OrderNotFoundException(orderPublicId));
 
-        return mapToResponse(order);
+        return orderMapper.toResponse(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderResponse cancelCurrentUserOrder(Jwt jwt, String orderPublicId) {
+        Account account = getCurrentAccount(jwt);
+
+        Order order = orderRepository
+                .findByPublicIdAndAccountId(orderPublicId, account.getId())
+                .orElseThrow(() -> new OrderNotFoundException(orderPublicId));
+
+        if (order.getStatus() != OrderStatus.CREATED) {
+            throw new OrderCannotBeCancelledException(orderPublicId, order.getStatus());
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+
+        return orderMapper.toResponse(order);
     }
 
     private Account getCurrentAccount(Jwt jwt) {
@@ -96,35 +124,5 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new IllegalStateException(
                         "Локальный Account для текущего пользователя не найден"
                 ));
-    }
-
-    private OrderResponse mapToResponse(Order order) {
-        List<OrderItemResponse> items = order.getItems()
-                .stream()
-                .map(this::mapItemToResponse)
-                .toList();
-
-        int totalItems = items.stream()
-                .mapToInt(OrderItemResponse::quantity)
-                .sum();
-
-        return new OrderResponse(
-                order.getPublicId(),
-                order.getStatus(),
-                order.getDeliveryAddress().getPublicId(),
-                order.getCreatedAt(),
-                order.getUpdatedAt(),
-                items,
-                totalItems
-        );
-    }
-
-    private OrderItemResponse mapItemToResponse(OrderItem item) {
-        return new OrderItemResponse(
-                item.getProductPublicId(),
-                item.getProductName(),
-                item.getProductImage(),
-                item.getQuantity()
-        );
     }
 }
