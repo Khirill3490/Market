@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Map;
 
 @Builder
-public record ApiErrorResponse(
+public record ErrorResponse(
         Instant timestamp,
         int status,
         String error,

@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import ru.example.userservice.exception.ApiErrorResponse;
+import ru.example.userservice.exception.ErrorResponse;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -32,7 +32,7 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        ApiErrorResponse body = ApiErrorResponse.builder()
+        ErrorResponse body = ErrorResponse.builder()
                 .timestamp(Instant.now())
                 .status(HttpServletResponse.SC_UNAUTHORIZED)
                 .error("Unauthorized")
