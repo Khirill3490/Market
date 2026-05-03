@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +17,8 @@ public class ProductResponse {
     private String art;           // ART – Артикул товара
     private String brand;           // MAN – Производитель
     private String name;
+    private BigDecimal price;
+    private Integer stockQuantity;
     private String inf;           // INF – Краткая информация
     private String ext;           // EXT – Расширенная информация
     private String img;           // IMG – Путь к изображению или имя файла

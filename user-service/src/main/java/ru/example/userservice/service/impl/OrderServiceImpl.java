@@ -21,6 +21,7 @@ import ru.example.userservice.repository.CartRepository;
 import ru.example.userservice.repository.OrderRepository;
 import ru.example.userservice.service.OrderService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -60,11 +61,16 @@ public class OrderServiceImpl implements OrderService {
             ProductCatalogResponse product = productCatalogClient
                     .getProductByPublicId(cartItem.getProductPublicId());
 
+            BigDecimal unitPrice = product.price();
+            BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+
             OrderItem orderItem = OrderItem.builder()
                     .productPublicId(cartItem.getProductPublicId())
                     .productName(product.name())
                     .productImage(product.img())
                     .quantity(cartItem.getQuantity())
+                    .unitPrice(unitPrice)
+                    .totalPrice(totalPrice)
                     .build();
 
             order.addItem(orderItem);

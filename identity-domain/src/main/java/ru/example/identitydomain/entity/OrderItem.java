@@ -3,6 +3,8 @@ package ru.example.identitydomain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(
         name = "order_items",
@@ -33,7 +35,7 @@ public class OrderItem {
      * Идентификатор товара из product-service/catalog context.
      * Не делаем JPA-связь на Product.
      */
-    @Column(name = "product_public_id", nullable = false)
+    @Column(name = "product_public_id", nullable = false, length = 64)
     private String productPublicId;
 
     /**
@@ -54,4 +56,10 @@ public class OrderItem {
      */
     @Column(nullable = false)
     private Integer quantity;
+
+    @Column(name = "unit_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal unitPrice;
+
+    @Column(name = "total_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal totalPrice;
 }

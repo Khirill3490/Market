@@ -10,6 +10,7 @@ import ru.example.productservice.repository.BrandRepository;
 import ru.example.productservice.repository.CategoryRepository;
 import ru.example.productservice.repository.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,18 +39,20 @@ public class DataGenerationService {
         Random random = new Random();
 
         for (int i = 1; i <= count; i++) {
-            Product product = new Product();
-            product.setArt("ART-" + (1000 + i));
-            product.setBrand(brands.get(i % brands.size()));
-            product.setName("Товар " + i + " " + getRandomSuffix());
-            product.setInf("Краткое описание товара " + i);
-            product.setExt("Подробное описание товара " + i + ". " + getRandomFeatures());
-            product.setImg(imageCatalog.random());
-            product.setUrl("/product/" + i);
-            product.setUnit(units[random.nextInt(units.length)]);
-            product.setSml(getRandomSize());
-            product.setCategory(categories.get(random.nextInt(categories.size()))); // Устанавливаем случайную категорию
-            product.setBar(String.valueOf(100000000000L + i));
+            Product product = Product.builder()
+                    .art("ART-" + i)
+                    .brand(brands.get(i % brands.size()))
+                    .name("Товар " + i + " Pro")
+                    .price(BigDecimal.valueOf(1000 + random.nextInt(90000)))
+                    .inf("Краткое описание товара " + i)
+                    .ext("Подробное описание товара " + i)
+                    .img("https://picsum.photos/seed/" + i + "/400/300")
+                    .url("/product/" + i)
+                    .unit("шт")
+                    .sml("10x10x10 см")
+                    .category(categories.get(random.nextInt(categories.size())))
+                    .bar("100000000" + i)
+                    .build();
 
             products.add(product);
         }

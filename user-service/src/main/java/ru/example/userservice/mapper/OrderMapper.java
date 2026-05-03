@@ -6,6 +6,7 @@ import ru.example.identitydomain.entity.OrderItem;
 import ru.example.userservice.model.response.OrderItemResponse;
 import ru.example.userservice.model.response.OrderResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -21,6 +22,10 @@ public class OrderMapper {
                 .mapToInt(OrderItemResponse::quantity)
                 .sum();
 
+        BigDecimal totalAmount = items.stream()
+                .map(OrderItemResponse::totalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         return new OrderResponse(
                 order.getPublicId(),
                 order.getStatus(),
@@ -28,7 +33,8 @@ public class OrderMapper {
                 order.getCreatedAt(),
                 order.getUpdatedAt(),
                 items,
-                totalItems
+                totalItems,
+                totalAmount
         );
     }
 
@@ -37,7 +43,9 @@ public class OrderMapper {
                 item.getProductPublicId(),
                 item.getProductName(),
                 item.getProductImage(),
-                item.getQuantity()
+                item.getQuantity(),
+                item.getUnitPrice(),
+                item.getTotalPrice()
         );
     }
 }

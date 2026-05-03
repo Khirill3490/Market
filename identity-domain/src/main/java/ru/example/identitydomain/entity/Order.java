@@ -35,7 +35,7 @@ public class Order {
      * Публичный идентификатор заказа.
      * Его безопаснее отдавать наружу, чем внутренний Long id.
      */
-    @Column(name = "public_id", nullable = false, unique = true, updatable = false)
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 64)
     private String publicId;
 
     /**

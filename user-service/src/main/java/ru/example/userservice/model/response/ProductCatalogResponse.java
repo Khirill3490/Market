@@ -1,10 +1,14 @@
 package ru.example.userservice.model.response;
 
+import java.math.BigDecimal;
+
 public record ProductCatalogResponse(
         Long id,
         String art,
         String brand,
         String name,
+        BigDecimal price,
+        Integer stockQuantity,
         String inf,
         String ext,
         String img,

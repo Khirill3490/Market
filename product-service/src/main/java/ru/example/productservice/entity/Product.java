@@ -3,6 +3,8 @@ package ru.example.productservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(
         name = "products",
@@ -37,6 +39,12 @@ public class Product {
     private Brand brand;
 
     private String name;
+
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "stock_quantity", nullable = false)
+    private Integer stockQuantity;
 
     /**
      * INF — краткая информация.

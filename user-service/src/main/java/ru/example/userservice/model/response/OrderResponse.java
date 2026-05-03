@@ -2,6 +2,7 @@ package ru.example.userservice.model.response;
 
 import ru.example.identitydomain.entity.enums.OrderStatus;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public record OrderResponse(
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt,
         List<OrderItemResponse> items,
-        Integer totalItems
+        Integer totalItems,
+        BigDecimal totalAmount
 ) {
 }

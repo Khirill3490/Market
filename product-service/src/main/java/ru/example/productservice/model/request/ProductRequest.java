@@ -1,11 +1,12 @@
 package ru.example.productservice.model.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -24,6 +25,14 @@ public class ProductRequest {
     @NotBlank(message = "Название товара обязательно")
     @Size(max = 255, message = "Название товара не должно быть длиннее 255 символов")
     private String name;
+
+    @NotNull(message = "Цена товара обязательна")
+    @DecimalMin(value = "0.00", inclusive = true, message = "Цена товара не может быть отрицательной")
+    private BigDecimal price;
+
+    @NotNull(message = "Количество товара на складе обязательно")
+    @Min(value = 0, message = "Количество товара на складе не может быть меньше 0")
+    private Integer stockQuantity;
 
     @Size(max = 2000, message = "Краткое описание слишком длинное")
     private String inf;

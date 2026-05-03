@@ -1,19 +1,12 @@
 package ru.example.userservice.model.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import java.math.BigDecimal;
 import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CartResponse {
-
-    private String publicId;
-    private List<CartItemResponse> items;
-    private Integer totalItems;
+public record CartResponse(
+        String publicId,
+        List<CartItemResponse> items,
+        Integer totalItems,
+        BigDecimal totalAmount
+) {
 }

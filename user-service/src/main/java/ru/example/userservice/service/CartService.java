@@ -7,16 +7,20 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.example.identitydomain.entity.Account;
 import ru.example.identitydomain.entity.Cart;
 import ru.example.identitydomain.entity.CartItem;
+import ru.example.userservice.client.ProductCatalogClient;
 import ru.example.userservice.exception.EntityNotFoundException;
 import ru.example.userservice.exception.IncorrectDataException;
+import ru.example.userservice.exception.ProductOutOfStockException;
 import ru.example.userservice.model.request.AddCartItemRequest;
 import ru.example.userservice.model.request.UpdateCartItemQuantityRequest;
 import ru.example.userservice.model.response.CartItemResponse;
 import ru.example.userservice.model.response.CartResponse;
+import ru.example.userservice.model.response.ProductCatalogResponse;
 import ru.example.userservice.repository.AccountRepository;
 import ru.example.userservice.repository.CartItemRepository;
 import ru.example.userservice.repository.CartRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +31,9 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final AccountRepository accountRepository;
+    private final ProductCatalogClient productCatalogClient;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse getCurrentUserCart(Jwt jwt) {
         Account account = getCurrentAccount(jwt);
         Cart cart = getOrCreateCart(account);
@@ -41,23 +46,38 @@ public class CartService {
         Account account = getCurrentAccount(jwt);
         Cart cart = getOrCreateCart(account);
 
-        CartItem item = cartItemRepository.findByCartIdAndProductPublicId(
-                        cart.getId(),
-                        request.productPublicId()
-                )
-                .map(existingItem -> {
-                    existingItem.setQuantity(existingItem.getQuantity() + request.quantity());
-                    return existingItem;
-                })
-                .orElseGet(() -> CartItem.builder()
-                        .publicId(generatePublicId())
-                        .cart(cart)
-                        .productPublicId(request.productPublicId().trim())
-                        .quantity(request.quantity())
-                        .build()
-                );
+        ProductCatalogResponse product = productCatalogClient
+                .getProductByPublicId(request.productPublicId());
 
-        cartItemRepository.save(item);
+        CartItem existingItem = cart.getItems()
+                .stream()
+                .filter(item -> item.getProductPublicId().equals(request.productPublicId()))
+                .findFirst()
+                .orElse(null);
+
+        int requestedQuantity = request.quantity();
+
+        if (existingItem != null) {
+            requestedQuantity = existingItem.getQuantity() + request.quantity();
+        }
+
+        ensureStockAvailable(
+                product,
+                request.productPublicId(),
+                requestedQuantity
+        );
+
+        if (existingItem != null) {
+            existingItem.setQuantity(requestedQuantity);
+        } else {
+            CartItem newItem = CartItem.builder()
+                    .cart(cart)
+                    .productPublicId(request.productPublicId())
+                    .quantity(request.quantity())
+                    .build();
+
+            cart.getItems().add(newItem);
+        }
 
         return mapToCartResponse(cart);
     }
@@ -133,28 +153,43 @@ public class CartService {
     }
 
     private CartResponse mapToCartResponse(Cart cart) {
-        List<CartItemResponse> items = cartItemRepository.findAllByCartIdOrderByCreatedAtAsc(cart.getId())
+        List<CartItemResponse> items = cart.getItems()
                 .stream()
                 .map(this::mapToCartItemResponse)
                 .toList();
 
         int totalItems = items.stream()
-                .map(CartItemResponse::getQuantity)
-                .reduce(0, Integer::sum);
+                .mapToInt(CartItemResponse::quantity)
+                .sum();
 
-        return CartResponse.builder()
-                .publicId(cart.getPublicId())
-                .items(items)
-                .totalItems(totalItems)
-                .build();
+        BigDecimal totalAmount = items.stream()
+                .map(CartItemResponse::totalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new CartResponse(
+                cart.getPublicId(),
+                items,
+                totalItems,
+                totalAmount
+        );
     }
 
     private CartItemResponse mapToCartItemResponse(CartItem item) {
-        return CartItemResponse.builder()
-                .publicId(item.getPublicId())
-                .productPublicId(item.getProductPublicId())
-                .quantity(item.getQuantity())
-                .build();
+        ProductCatalogResponse product = productCatalogClient
+                .getProductByPublicId(item.getProductPublicId());
+
+        BigDecimal unitPrice = getRequiredPrice(product);
+        BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(item.getQuantity()));
+
+        return new CartItemResponse(
+                item.getPublicId(),
+                item.getProductPublicId(),
+                product.name(),
+                product.img(),
+                item.getQuantity(),
+                unitPrice,
+                totalPrice
+        );
     }
 
     private String requireKeycloakUserId(Jwt jwt) {
@@ -169,5 +204,33 @@ public class CartService {
 
     private String generatePublicId() {
         return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    private BigDecimal getRequiredPrice(ProductCatalogResponse product) {
+        if (product.price() == null) {
+            throw new IllegalStateException("product-service вернул товар без цены: " + product.id());
+        }
+
+        return product.price();
+    }
+
+    private void ensureStockAvailable(
+            ProductCatalogResponse product,
+            String productPublicId,
+            int requestedQuantity
+    ) {
+        Integer availableQuantity = product.stockQuantity();
+
+        if (availableQuantity == null) {
+            throw new IllegalStateException("product-service вернул товар без stockQuantity: " + product.id());
+        }
+
+        if (requestedQuantity > availableQuantity) {
+            throw new ProductOutOfStockException(
+                    productPublicId,
+                    requestedQuantity,
+                    availableQuantity
+            );
+        }
     }
 }
