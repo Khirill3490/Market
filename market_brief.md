@@ -1,470 +1,621 @@
-# Market Project — актуальный рабочий бриф для новых чатов
+# Market Project — актуальный рабочий бриф для нового чата
 
 ## 1. Что это за проект
 
-Это мой Java / Spring Boot multi-module проект, который я хочу довести до уровня **уверенного production-style backend проекта**, а не просто учебного pet-проекта. Базовая структура проекта: `api-gateway`, `auth-module`, `user-service`, `product-service`, `eureka-server`, `common`, `identity-domain`, `frontend` и служебные модули. fileciteturn50file0
+Это Java / Spring Boot multi-module проект **Market**, который нужно постепенно довести до уровня уверенного **production-style backend интернет-магазина**, а не простого учебного CRUD/pet-проекта.
 
-### Используемый стек
-- Java
-- Spring Boot
-- Spring Cloud
-- Eureka
-- Spring Cloud Gateway
-- Spring Security
-- Keycloak
-- PostgreSQL
-- Redis
-- JPA / Hibernate
-- Flyway
-- Gradle
-- Docker Compose
-- HTML / JS frontend fileciteturn50file0
+Базовая структура проекта:
 
----
-
-## 2. Главная цель
-
-Нужно не просто “дописать фичи”, а **постепенно превратить проект в полноценный production-style backend интернет-магазина**. Под этим подразумевается:
-- стабильная сборка из корня проекта
-- единый и чистый Gradle multi-module setup
-- отсутствие compile errors и недоделанных кусков
-- безопасная работа с конфигами и секретами
-- миграции БД через Flyway
-- понятная архитектура сервисов
-- хорошие практики безопасности
-- тесты
-- observability
-- CI/CD база
-- понятный roadmap развития fileciteturn50file0
-
----
-
-## 3. Как мне нужно помогать в новых чатах
-
-### Роль ChatGPT
-Ты для меня не просто отвечающий помощник, а **наставник / техлид / reviewer**, который:
-- ведет меня по проекту по шагам
-- помогает принимать архитектурные решения
-- объясняет, зачем нужна каждая технология
-- объясняет не только “что писать”, но и “почему так”
-- подсказывает, что в проекте хорошо, а что плохо
-- следит, чтобы проект двигался именно к production-подходу fileciteturn50file0
-
-### Формат помощи
-Мне нужен стиль:
-- пошагово
-- без лишней воды
-- как teacher / mentor style
-- сначала маленькие, понятные шаги, потом следующий этап
-- **обязательно разбирать код**: что делает каждый фрагмент, как он работает в цепочке, зачем он нужен и почему он устроен именно так
-
-### Важное правило
-**Не просто присылать код, а обязательно разбирать его.** Я хочу понимать, как всё устроено, а не слепо копировать. fileciteturn50file0
-
----
-
-## 4. Архитектурная основа, которая уже принята
-
-### Главный поворот
-Мы **не строим локальный auth-центр**. Принято решение, что:
-- **Keycloak** отвечает за identity / authentication / credential lifecycle
-- локальный backend **не должен** развивать старый `signin / refresh / logout` как основную auth-модель
-- email verification, password reset и credential lifecycle — зона ответственности Keycloak fileciteturn50file0
-
-### Целевая модель
-Проект движется к модели:
-
-**Keycloak identity -> local Account -> optional Company** fileciteturn50file0
-
-Это означает:
-- `Keycloak` — identity provider
-- `auth-module` — тонкий identity/account-provisioning слой
-- `Account` — локальная доменная сущность пользователя магазина
-- `Company` — отдельная **опциональная** бизнес-сущность
-- `user-service` — слой профиля и пользовательских бизнес-данных fileciteturn50file0turn49file14
-
-### Важное правило
-`Company` **не является обязательной** частью любого `Account`: обычный customer живёт без `Company`, seller/business flow должен быть отдельным сценарием. В самой сущности `Account` `Company` сейчас действительно optional. fileciteturn50file0turn49file14
-
----
-
-## 5. Security и Keycloak — принятый подход
-
-### Общий принцип
-Принято решение использовать **Keycloak как единственный identity/auth слой**, а backend-сервисы делать **OAuth2 Resource Server**. fileciteturn50file0
-
-### Практический смысл
-- пользователь логинится не в локальный backend, а через Keycloak
-- frontend / gateway инициирует внешний auth flow
-- клиент получает access token
-- gateway — внешняя точка входа и может прокидывать token дальше
-- **каждый backend-сервис, который принимает пользовательские HTTP-запросы, сам валидирует JWT**
-- мы **не строим** схему, где только один сервис валидирует токен, а остальные слепо доверяют заголовкам fileciteturn50file0
-
-### Важный вывод
-`api-gateway` — это входная точка, маршрутизация и, при необходимости, token relay, но **не единственный охранник**, которому все остальные сервисы безусловно доверяют. Каждый HTTP-сервис должен жить как самостоятельный resource server. fileciteturn50file0
-
----
-
-## 6. Что уже реально сделано по Keycloak и инфраструктуре
-
-### Локальная связка уже поднималась и проверялась
-Уже поднимались и совместно работали:
-- `postgres`
-- `keycloak`
-- `eureka-server`
+- `api-gateway`
 - `auth-module`
 - `user-service`
-- `api-gateway`
+- `product-service`
+- `eureka-server`
+- `common`
+- `identity-domain`
+- `frontend`
+- `docker` / инфраструктурные файлы
 
-Ключевая рабочая цепочка уже проверялась: **Keycloak -> gateway -> auth-module -> user-service**. По ручному прогону `/api/v1/auth/me` через gateway успешно возвращался account context по валидному JWT. fileciteturn49file9turn49file3
+Используемый стек:
 
-### Что настроено в Keycloak локально
-Локально уже настраивались:
-- realm `market`
-- browser client `market-web`
-- технический client `market-cli` для ручного получения access token
-- тестовый пользователь для smoke-тестов
+- Java 21
+- Spring Boot
+- Spring Cloud
+- Spring Cloud Gateway
+- Eureka
+- Spring Security
+- OAuth2 Resource Server
+- Keycloak
+- PostgreSQL
+- JPA / Hibernate
+- Flyway
+- Gradle multi-module
+- Docker Compose
+- HTML / JS frontend
 
-Это пока локальная dev-конфигурация, но она уже позволила вручную прогонять JWT flow. Осмысленно нужно держать в голове, что дальше хорошо бы прийти к realm export/import. Это уже было зафиксировано в старом брифе как правильная цель. fileciteturn50file0
-
----
-
-## 7. Текущая роль `auth-module`
-
-### Что он делает сейчас
-`auth-module` оставлен как **identity/account-provisioning слой**. Его публичный endpoint — `GET /api/v1/auth/me`. Внутри он теперь не просто “смотрит контекст”, а умеет по валидному JWT **найти или создать локальный `Account`**. Это реализовано в `CurrentAccountService`: он берёт `sub`, `email`, `given_name`, `family_name`, ищет `Account` по `keycloakUserId`, а если записи нет — создаёт локальный account через `AccountServiceImpl`. fileciteturn49file9turn49file8
-
-### Что это означает
-- отдельный публичный `/me/sync` **не нужен**
-- provisioning локального `Account` стал внутренней серверной механикой
-- первый вызов `/auth/me` уже может замкнуть Keycloak identity на локальную доменную модель fileciteturn50file0turn49file9
-
-### За что `auth-module` отвечает
-- current identity context
-- связка `Keycloak user -> local Account`
-- внутренний provisioning локального `Account`
-- технические account / identity use-case’ы fileciteturn50file0turn49file9
-
-### Что не считаем целевым публичным API
-По-прежнему не считаем целевыми:
-- `signin`
-- `refresh`
-- `logout`
-- `activate`
-- `forgotPassword`
-- `resetPassword`
-- публичный `/me/sync` fileciteturn50file0
+Главная цель проекта — не просто “дописать фичи”, а постепенно построить взрослый backend интернет-магазина с понятной архитектурой, security, миграциями, тестами, observability и нормальным roadmap развития.
 
 ---
 
-## 8. Текущая роль `user-service`
+## 2. Роль ChatGPT в работе над проектом
 
-### Что он должен делать
-`user-service` **не должен дублировать** `auth-module`. Его зона ответственности:
-- профиль пользователя
-- пользовательские данные приложения
-- customer/business context
-- адреса
-- корзина
-- дальше — настройки, кабинет, seller/customer flows fileciteturn50file0turn49file3turn49file1turn49file0
+ChatGPT должен выступать не просто как отвечающий помощник, а как **наставник / техлид / reviewer**.
 
-### Разграничение `/auth/me` и `/users/me`
-`auth-module /auth/me` — это endpoint про:
-- identity context
-- факт существования локального `Account`
-- базовую связку Keycloak identity с local Account
-- внутренний provisioning `Account` при первом заходе fileciteturn50file0turn49file9
+Нужно:
 
-`user-service /users/me` — это endpoint про:
-- профиль пользователя в приложении
-- чтение и обновление профильных полей локального `Account`
-- не identity-flow, а уже user/business data flow fileciteturn50file0turn49file2turn49file3
-
-### Критическое правило
-Нельзя допускать, чтобы `auth-module` и `user-service` превратились в два одинаковых сервиса с одинаковым `/me`. fileciteturn50file0
+- вести проект по шагам;
+- помогать принимать архитектурные решения;
+- объяснять, зачем нужна каждая технология и каждый слой;
+- подсказывать, где проект уже хорош, а где есть технический долг;
+- удерживать движение в сторону production-style backend;
+- не прыгать сразу в тяжёлую distributed complexity без крепкого фундамента.
 
 ---
 
-## 9. Что уже реально сделано в `user-service`
+## 3. Критически важный формат объяснения кода
 
-### Профиль текущего пользователя
-Уже собран профильный flow:
-- `GET /api/v1/users/me`
-- `PATCH /api/v1/users/me`
+Пользователю важно не просто получать готовый код, а **понимать, как он работает в системе**.
 
-`CurrentUserService` сейчас:
-- извлекает `keycloakUserId` из `Jwt`
-- ищет локальный `Account`
-- для `GET` возвращает `CurrentUserResponse`
-- для `PATCH` обновляет только профильные поля (`firstName`, `lastName`, `phone`) и возвращает обновлённый DTO fileciteturn49file2turn49file3
+Когда ChatGPT предлагает код, класс, сервис, контроллер, DTO, entity, repository, config или миграцию, нужно объяснять не только “что делает код”, но и его место в общей цепочке проекта.
 
-### Address flow
-Уже собран адресный слой:
-- список адресов текущего пользователя
-- создание адреса
-- обновление адреса
-- удаление адреса
+Обязательный формат объяснения:
 
-`AddressService` работает от текущего `Account`, а не от переданного userId, и все операции делает только внутри адресов текущего пользователя. Поиск адреса идёт по связке `addressPublicId + accountId`, а не просто по `publicId`, что защищает от доступа к чужим адресам. В сервисе уже реализована логика default-адреса: если новый адрес создаётся как основной, прежний default-адрес сбрасывается; при update можно сделать адрес новым default. Ручной smoke-test списка адресов через gateway уже успешно выполнялся. fileciteturn49file1turn49file6turn49file7
+1. **Где этот класс/метод находится в архитектуре.**
+2. **Кто его вызывает.**
+3. **На каком этапе request/business flow он срабатывает.**
+4. **Зачем он нужен.**
+5. **Что делает внутри по шагам.**
+6. **Как связан с другими классами.**
+7. **Какие есть нюансы, ограничения и технические долги.**
+8. **Как проверить это руками через curl/логи/IDEA.**
 
-### Cart flow — уже начат
-Уже собран каркас корзины:
+Пример желаемого стиля: не просто “`OrderMapper` преобразует `Order` в `OrderResponse`”, а объяснить, что `OrderMapper` вызывается из `OrderServiceImpl` и `AdminOrderServiceImpl` после того, как сервис нашёл или создал заказ; что он отделяет внутреннюю JPA entity от внешнего API-контракта; что благодаря этому controller не отдаёт entity напрямую, а возвращает безопасный DTO.
+
+Главное правило: **не присылать большие куски кода без объяснения их места в общей цепочке работы проекта**.
+
+---
+
+## 4. Принятая архитектурная основа
+
+Главное архитектурное решение:
+
+**Keycloak identity → local Account → optional Company → user/domain/business data**
+
+Принято:
+
+- `Keycloak` отвечает за identity, authentication и credential lifecycle.
+- Локальный backend не строит собственный полноценный auth-центр.
+- Не развиваем старые `signin / refresh / logout / activate / forgotPassword / resetPassword` как основную auth-модель.
+- Email verification, password reset, password lifecycle — зона ответственности Keycloak.
+- Backend-сервисы работают как OAuth2 Resource Server и сами валидируют JWT.
+- `api-gateway` — входная точка и маршрутизация, но не единственный “охранник”.
+- Нельзя строить схему, где gateway проверил токен, а остальные сервисы слепо доверяют заголовкам.
+
+Целевая локальная модель:
+
+- `Account` — локальная доменная сущность пользователя магазина.
+- `Company` — отдельная optional бизнес-сущность.
+- Обычный customer живёт без `Company`.
+- Seller/business flow должен быть отдельным сценарием.
+
+---
+
+## 5. Текущая роль `auth-module`
+
+`auth-module` оставлен как тонкий **identity/account-provisioning слой**.
+
+Его главный публичный endpoint:
+
+```http
+GET /api/v1/auth/me
+```
+
+Что делает `/auth/me`:
+
+- принимает валидный JWT от Keycloak;
+- берёт из JWT `sub`, `email`, `given_name`, `family_name`;
+- ищет локальный `Account` по `keycloakUserId`;
+- если локального `Account` нет — создаёт shell/local account;
+- возвращает current account/identity context.
+
+Что важно:
+
+- отдельный публичный `/me/sync` не нужен;
+- provisioning локального `Account` — внутренняя серверная механика;
+- `auth-module` не должен превращаться в полноценный локальный auth-сервер;
+- `auth-module` не должен дублировать `user-service`.
+
+---
+
+## 6. Текущая роль `user-service`
+
+`user-service` отвечает за пользовательские бизнес-данные приложения, а не за identity/auth.
+
+Его зона ответственности:
+
+- профиль текущего пользователя;
+- адреса;
+- корзина;
+- заказы;
+- пользовательские бизнес-сценарии;
+- дальше — customer/seller settings, seller/company flow.
+
+Разграничение:
+
+```text
+/auth/me     → identity/account context + provisioning
+/users/me    → профиль и пользовательские business data
+```
+
+Нельзя допускать, чтобы `auth-module` и `user-service` стали двумя одинаковыми сервисами с одинаковым `/me`.
+
+---
+
+## 7. Что уже сделано в `user-service`
+
+### 7.1. Профиль текущего пользователя
+
+Собран flow:
+
+```http
+GET   /api/v1/users/me
+PATCH /api/v1/users/me
+```
+
+`CurrentUserService`:
+
+- извлекает `keycloakUserId` из `Jwt`;
+- ищет локальный `Account`;
+- отдаёт `CurrentUserResponse`;
+- обновляет только профильные поля (`firstName`, `lastName`, `phone`).
+
+### 7.2. Address flow
+
+Собран flow адресов:
+
+```http
+GET    /api/v1/users/me/addresses
+POST   /api/v1/users/me/addresses
+PATCH  /api/v1/users/me/addresses/{addressPublicId}
+DELETE /api/v1/users/me/addresses/{addressPublicId}
+```
+
+Особенности:
+
+- все операции идут от текущего `Account`;
+- адрес ищется по связке `addressPublicId + accountId`, а не просто по `publicId`;
+- это защищает от доступа к чужим адресам;
+- реализована логика default-адреса.
+
+### 7.3. Cart flow
+
+Собрана корзина:
+
+- `Cart`
+- `CartItem`
 - `CartService`
-- сущности корзины и позиций корзины
-- DTO и controller под текущего пользователя
+- `CartController`
+- DTO request/response
 
-Текущая логика `CartService`:
-- по JWT находит текущий `Account`
-- находит или создаёт корзину текущего пользователя
-- умеет добавлять товар в корзину, увеличивая `quantity`, если товар уже есть
-- умеет менять количество позиции
-- умеет удалять позицию
-- умеет очищать корзину целиком
-- возвращает `CartResponse` с items и `totalItems` fileciteturn49file0turn49file5
+Текущая логика корзины:
 
-Важно: cart flow уже реализован по структуре, но в новом чате стоит проверить его целиком руками так же, как проверялись адреса. Это ещё не тот кусок, который стоит считать полностью отполированным до прод-уровня. Выше всего обратить внимание на транзакции: `getCurrentUserCart(...)` сейчас помечен `readOnly = true`, хотя внутри может создавать корзину, и это нужно дочистить. fileciteturn49file0
+- по JWT находится текущий `Account`;
+- находится или создаётся корзина текущего пользователя;
+- товар добавляется в корзину;
+- если товар уже есть — увеличивается `quantity`;
+- можно изменить количество позиции;
+- можно удалить позицию;
+- можно очистить корзину.
 
----
+Важные технические моменты:
 
-## 10. Состояние доменной модели
+- `CartRepository` должен использовать `@EntityGraph(attributePaths = "items")`, чтобы корзина подгружалась вместе с позициями.
+- В `Cart.items` должен быть `orphanRemoval = true`, чтобы `cart.getItems().clear()` реально удалял строки `cart_items` из БД.
+- `getCurrentUserCart(...)` не должен быть `@Transactional(readOnly = true)`, если внутри вызывается `getOrCreateCart(...)`, потому что первый GET корзины может создать корзину.
+- В `AddCartItemRequest` и `UpdateCartItemQuantityRequest` нужно иметь `@NotNull + @Min` для `quantity`.
 
-### `Account`
-`Account` уже оформлен как хорошая локальная сущность:
-- `publicId`
-- `keycloakUserId`
-- `email`
-- `firstName`
-- `lastName`
-- `phone`
-- `accountType`
-- `status`
-- optional `Company`
-- `createdAt`
-- `updatedAt`
-
-На уровне таблицы есть уникальные ограничения на `public_id`, `keycloak_user_id` и `email`. Это соответствует логике provisioning и текущему use-case’у профиля. fileciteturn49file14
-
-### `Address`
-`Address` уже добавлен как отдельная пользовательская бизнес-сущность, принадлежащая `Account`. Это первый настоящий user-domain объект поверх профиля. Он уже поддерживает default-адрес и хранит адресную информацию отдельно от базового профиля. fileciteturn49file1
-
-### `Cart` и `CartItem`
-Добавлена модель корзины текущего пользователя. На текущем этапе корзина хранит позиции по `productPublicId`, а не через внешний ключ к таблице товаров, что хорошо для разнесённой модульной архитектуры и будущего разделения bounded context’ов. fileciteturn49file0
+Cart сейчас развивается в сторону актуальных цен и stock-check через `product-service`.
 
 ---
 
-## 11. Что это означает технически
+## 8. Что уже сделано в `product-service`
 
-Нас всё ещё ждёт существенный рефакторинг, но фундамент уже заметно продвинулся. Нужно продолжать доводить до зрелого вида:
-- сущности
-- репозитории
-- сервисы
-- DTO
-- контроллеры
-- security-конфигурацию по модулям
-- миграции Flyway
-- разграничение ответственности между сервисами
-- error handling
-- тесты fileciteturn50file0
+`product-service` приведён ближе к общей архитектурной модели проекта.
 
-Но важное изменение по сравнению со старой картиной в том, что теперь проект уже не просто “готовится к новой архитектуре”, а **частично в ней работает**:
-- provisioning локального `Account` уже есть
-- профиль уже работает вокруг `Account`
-- адреса уже работают вокруг `Account`
-- корзина уже начата на той же модели fileciteturn49file9turn49file3turn49file1turn49file0
+Сделано:
 
----
+- добавлена Spring Security / OAuth2 Resource Server модель;
+- сервис сам валидирует JWT от Keycloak;
+- admin/write endpoints защищаются ролью `ADMIN`;
+- публичные GET endpoints каталога доступны без токена;
+- убрана старая кастомная auth-логика (`AuthAspect`, `PreAuthorization`, старые user-service классы внутри product-service);
+- `ddl-auto` приведён к `validate`;
+- Flyway в `product-service` пока выключен, потому что БД общая и миграции временно централизованы в `auth-module`;
+- исправлен `EUREKA_SERVER_URL` на нормальную схему через env;
+- добавлен `GlobalExceptionHandler` и единый `ErrorResponse`;
+- добавлены доменные exceptions для product/category/brand/duplicates/file processing;
+- controller/DTO слой почищен;
+- `ProductRequest` валидируется;
+- `ProductResponse` заполняется через mapper;
+- `Page` serialization стабилизирована через `@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)`;
+- `Product`, `Brand`, `Category` согласованы с миграциями;
+- `ProductRepository` использует точный поиск по артикулу, а не `Containing`;
+- import/export приведены к более аккуратному состоянию;
+- `ProductCatalogClient` в `user-service` должен обращаться к `product-service`, а не читать таблицу products напрямую.
 
-## 12. Что уже практически сделано
+Принцип ownership:
 
-### По `auth-module`
-Уже сделано:
-- модуль упрощён под новую модель
-- убран legacy local auth flow
-- оставлен честный `GET /api/v1/auth/me`
-- модуль работает как resource server
-- provisioning локального `Account` встроен внутрь flow `/auth/me` через `CurrentAccountService` и `AccountServiceImpl` fileciteturn50file0turn49file9turn49file8
+```text
+product-service владеет Product / Brand / Category / price / stockQuantity
+user-service не должен создавать ProductRepository и лезть напрямую в таблицу products
+```
 
-### По `user-service`
-Уже сделано:
-- собран профиль текущего пользователя (`GET /users/me`, `PATCH /users/me`)
-- собран address flow
-- собран каркас cart flow
-- сервис строится вокруг `Account`, а не вокруг старого `User` fileciteturn49file2turn49file3turn49file1turn49file0
-
-### По архитектурному пониманию
-Уже зафиксировано и частично проверено руками:
-- Keycloak логинит пользователя
-- gateway может прокидывать access token дальше
-- backend-сервисы сами валидируют JWT
-- `auth-module` и `user-service` реально разведены по ответственности
-- базовая цепочка identity → local account → profile → addresses → cart уже существует в коде fileciteturn50file0turn49file9turn49file3turn49file1turn49file0
+Да, сейчас физически БД одна, но логические границы сервисов нужно соблюдать уже сейчас, чтобы потом проще разделять БД/схемы.
 
 ---
 
-## 13. Обновлённый roadmap
+## 9. Миграции и текущая стратегия БД
 
-### Этап 1. Техническая стабилизация проекта
-Цель: сделать проект стабильно собираемым и запускаемым.
+Сейчас используется одна общая dev-БД. Поэтому временно **один владелец миграций** — `auth-module`.
 
-Что нужно делать:
-- держать модули в едином состоянии
-- убирать compile errors и рассинхроны имен/контрактов
-- привести конфиги и секреты в порядок
-- держать working local flow через Keycloak + gateway + eureka + auth-module + user-service fileciteturn50file0
+Почему так:
 
-### Этап 2. Доведение identity/account слоя
-Что нужно делать:
-- удержать `auth-module` как identity/provisioning слой
-- не плодить публичный `/me/sync`
-- дочистить транзакции и edge-cases provisioning’а
-- зафиксировать текущую модель `Account + optional Company` как локальную основу проекта fileciteturn50file0turn49file9turn49file14
+- если каждый сервис со своей папкой Flyway будет смотреть в одну и ту же `flyway_schema_history`, начнутся конфликты;
+- пока БД общая, безопаснее держать все текущие миграции в одном месте;
+- позже можно будет перейти к разным схемам или отдельным БД.
 
-### Этап 3. Доведение `user-service`
-Что нужно делать:
-- подчистить `CurrentUserService`, `AddressService`, `CartService`
-- добавить/удержать единый `ErrorResponse` и `@RestControllerAdvice`
-- руками прогнать профиль, адреса и корзину end-to-end
-- решить edge-cases по default address и cart semantics fileciteturn49file3turn49file1turn49file0
+Текущая стратегия:
 
-### Этап 4. Бизнес-слой магазина
-Что нужно делать:
-- завершить корзину
-- затем переходить к заказам
-- после этого — seller/business onboarding, company lifecycle, product ownership / management
+```text
+Сейчас:
+  одна PostgreSQL БД app_db
+  миграции в auth-module
 
-Последовательность, которая сейчас выглядит естественной:
-**profile -> addresses -> cart -> orders -> seller/company flow**. fileciteturn50file0turn49file1turn49file0
+Ближайшее будущее:
+  одна PostgreSQL, но разные schemas: identity, user_domain, catalog, orders
 
-### Этап 5. Общая зрелость платформы
-Что нужно делать:
-- единый security-подход по всем HTTP-сервисам
-- выравнивание `product-service`
-- тесты
-- observability
-- CI/CD
-- позже — shared security module, если повторяющийся security-код действительно дозреет до вынесения fileciteturn50file0
+Позже:
+  отдельные БД по сервисам: identity_db, user_db, catalog_db, order_db
+```
 
----
+Файлы миграций уже/должны быть примерно такие:
 
-## 14. Что пока не нужно делать слишком рано
+- `V1__init_account_and_company_schema.sql`
+- `V2__create_addresses.sql`
+- `V3__create_carts_and_cart_items.sql`
+- `V4__create_product_catalog_schema.sql`
+- `V5__create_orders.sql`
+- `V6__add_price_and_stock_to_products_and_orders.sql`
 
-Пока не надо без необходимости навешивать:
-- Kafka
-- Saga
-- Kubernetes
-- Vault
-- event-driven всё подряд
-- service mesh
-- чрезмерную distributed complexity
+`V6` должен содержать:
 
-Сначала нужен **крепкий фундамент** вокруг identity/account/profile/address/cart и только потом более тяжёлая distributed-инфраструктура. fileciteturn50file0turn49file1turn49file0
+```sql
+ALTER TABLE products
+    ADD COLUMN price NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    ADD COLUMN stock_quantity INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE products
+    ADD CONSTRAINT chk_products_stock_quantity_non_negative
+    CHECK (stock_quantity >= 0);
+
+ALTER TABLE order_items
+    ADD COLUMN unit_price NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
+    ADD COLUMN total_price NUMERIC(12, 2) NOT NULL DEFAULT 0.00;
+```
+
+Если миграции ещё не запускались, их можно редактировать/объединять. Если уже применены — нельзя менять содержимое старых миграций, надо создавать новую.
 
 ---
 
-## 15. Приоритетный порядок работ сейчас
+## 10. Orders v1 — что уже сделано
 
-Вот текущий правильный порядок:
+Добавлен базовый order flow.
 
-1. **Удержать и дочистить `auth-module` и `user-service` в новой модели**
-2. **Подтвердить руками end-to-end flow через Keycloak + gateway**
-3. **Дочистить профиль, адреса и корзину**
-4. **Затем идти в заказы**
-5. **После этого переходить к seller/company flow и product ownership**
-6. **Параллельно выравнивать `product-service` по security и зрелости**
-7. **Потом усиливать тесты, observability и CI/CD** fileciteturn49file9turn49file3turn49file1turn49file0turn50file0
+В `identity-domain` добавлены:
 
----
+- `Order`
+- `OrderItem`
+- `OrderStatus`
 
-## 16. Как нужно объяснять технологии и код
+Заказ строится вокруг текущего `Account` и адреса доставки.
 
-Это критически важный пункт для новых чатов.
+Пользовательский API:
 
-Мне нужно, чтобы помощь была не в формате “держи код”, а в формате:
-- сначала коротко определить этап
-- потом объяснить, зачем изменение нужно
-- потом показать код
-- потом **обязательно разобрать код**:
-  - что делает каждый фрагмент
-  - как он работает в цепочке запроса / бизнес-логики
-  - почему он нужен
-  - почему выбран именно такой вариант
-- потом коротко сказать, как это проверить руками
+```http
+POST  /api/v1/users/me/orders
+GET   /api/v1/users/me/orders
+GET   /api/v1/users/me/orders/{orderPublicId}
+PATCH /api/v1/users/me/orders/{orderPublicId}/cancel
+```
 
-### Важное правило
-**Не просто присылать код, а обязательно разбирать его.**
+Логика создания заказа:
 
-И ещё одно правило:
-- идти маленькими шагами
-- не перепрыгивать сразу через полпроекта
-- не делать большие необъяснённые пачки изменений fileciteturn50file0
+```text
+JWT
+  → local Account
+  → Cart текущего Account
+  → проверка, что корзина не пустая
+  → Address по addressPublicId + accountId
+  → Order
+  → OrderItems из CartItems
+  → clear Cart
+  → OrderResponse
+```
 
----
+Важные решения:
 
-## 17. Как продолжать работу в новом чате
+- `OrderItem` не имеет JPA-связи на `Product`;
+- вместо этого хранится `productPublicId` и snapshot товара;
+- это нужно, чтобы заказ не зависел от текущего состояния товара в каталоге;
+- старый заказ должен помнить цену/название/картинку товара на момент оформления.
 
-Когда я прихожу в новый чат, нужно опираться на этот документ и продолжать с позиции, что:
-- у меня multi-module проект Market
-- Keycloak выбран как единственный identity/auth слой
-- backend-сервисы работают как resource servers
-- gateway — входная точка, но не единственный проверяющий слой
-- локальная доменная модель уже переведена на `Account + optional Company`
-- `auth-module` уже умеет provisioning локального `Account`
-- `user-service` уже умеет профиль текущего пользователя
-- `user-service` уже умеет адреса текущего пользователя
-- `user-service` уже имеет каркас корзины
-- следующий естественный use-case после доведения корзины — заказы fileciteturn50file0turn49file9turn49file3turn49file1turn49file0
+Orders v1 был проверен end-to-end до внедрения полной price/stock логики:
 
-### Предпочтительный формат работы
-Лучший формат работы со мной:
-1. коротко определить текущий этап
-2. сказать, что именно делаем сейчас
-3. идти маленькими шагами
-4. обязательно объяснять код и архитектурную логику
-5. фиксировать, что уже улучшили
-6. только потом переходить к следующему шагу fileciteturn50file0
+- заказ создавался из корзины;
+- корзина очищалась;
+- список заказов возвращал созданный заказ.
 
 ---
 
-## 18. Ближайшая практическая цель
+## 11. Admin Orders — что уже сделано
 
-### Фаза 1 — стабилизация identity/account/user слоя
-- окончательно удержать `auth-module` как identity / provisioning слой
-- удержать `user-service` как профильный и пользовательский бизнес-сервис
-- дочистить транзакции и edge-cases в профильном, address и cart сервисах fileciteturn49file9turn49file3turn49file1turn49file0
+Принято решение пока **не создавать отдельный `admin-module`**.
 
-### Фаза 2 — user-domain магазинного слоя
-- профиль
-- адреса
-- корзина
-- затем заказы fileciteturn49file3turn49file1turn49file0
+Текущий подход:
 
-### Фаза 3 — business growth
-- company / seller flow
-- product ownership / management
-- order lifecycle
-- дальше — observability, tests, CI/CD и общая зрелость платформы fileciteturn50file0
+```text
+user-service
+  /api/v1/users/me/orders   → пользовательский order flow
+  /api/v1/admin/orders      → админский order flow
+```
+
+Почему так:
+
+- заказы сейчас физически и логически живут в `user-service`;
+- отдельный admin-module пока преждевременен;
+- но API уже разделён на user/admin;
+- позже admin-module можно будет сделать как orchestration layer, который ходит в разные сервисы через клиентов.
+
+Добавлены:
+
+- `AdminOrderController`
+- `AdminOrderService`
+- `AdminOrderServiceImpl`
+- `UpdateOrderStatusRequest`
+- `InvalidOrderStatusTransitionException`
+
+Админский API:
+
+```http
+GET   /api/v1/admin/orders?page=0&size=20
+GET   /api/v1/admin/orders/{orderPublicId}
+PATCH /api/v1/admin/orders/{orderPublicId}/status
+```
+
+Добавлена пагинация для admin orders, потому что список всех заказов не должен возвращаться целиком.
+
+Разделение логики:
+
+```text
+OrderService       → пользовательские действия с заказами текущего Account
+AdminOrderService  → админские действия со всеми заказами
+OrderMapper        → общий mapper Order → OrderResponse
+```
+
+Статусные переходы пока примерно такие:
+
+```text
+CREATED    -> PROCESSING или CANCELLED
+PROCESSING -> SHIPPED или CANCELLED
+PAID       -> PROCESSING или CANCELLED
+SHIPPED    -> DELIVERED
+DELIVERED  -> terminal
+CANCELLED  -> terminal
+```
 
 ---
 
-## 19. Короткая формулировка текущей цели
+## 12. ProductCatalogClient и service-to-service вызовы
 
-**Я хочу превратить текущий Market-проект в production-style backend интернет-магазина, где Keycloak отвечает за identity/auth, gateway является входной точкой, backend-сервисы работают как resource servers, `auth-module` отвечает за identity/account provisioning, а локальный backend хранит и обслуживает свои доменные бизнес-сущности вокруг модели `Account + optional Company`. На текущем этапе уже построен слой identity -> local account -> profile -> addresses -> cart, и дальше проект нужно развивать в сторону orders, seller/company flow и общей зрелости платформы. При этом мне важно не просто получать код, а понимать, как и почему он работает.** fileciteturn50file0turn49file9turn49file3turn49file1turn49file0
+Принято решение: `user-service` не создаёт `ProductRepository` и не читает таблицу `products` напрямую.
 
+Правильный подход:
 
-## Для ответов чата
+```text
+user-service
+  → ProductCatalogClient
+  → product-service
+  → ProductCatalogResponse
+```
 
-Формат объяснения кода
+Почему:
 
-Когда ChatGPT предлагает код, класс, сервис, контроллер, DTO, entity, repository, config или миграцию, нужно объяснять не только “что делает код”, но и его место в общей цепочке проекта:
+- `product-service` владеет товаром;
+- `user-service` владеет корзиной/заказами;
+- даже если БД сейчас одна, логические границы сервисов надо соблюдать;
+- в будущем при разделении БД это уменьшит боль миграции.
 
-1. где этот класс находится в архитектуре;
-2. кто его вызывает;
-3. на каком этапе request/business flow он срабатывает;
-4. зачем он нужен;
-5. что делает внутри по шагам;
-6. как связан с другими классами;
-7. какие есть нюансы и технические долги;
-8. как проверить это руками.
+Добавлен/планируется:
 
-Цель — не просто копировать готовый код, а понимать, как он работает в системе.
+- `RestClientConfiguration` с `@LoadBalanced RestClient.Builder`;
+- `ProductCatalogClient`;
+- `ProductCatalogResponse` в `user-service`.
+
+`ProductCatalogClient` пока фактически вызывает product by `id`, хотя поле в корзине называется `productPublicId`. Это технический долг: позже лучше добавить настоящий `publicId` в `Product` и искать товары по нему.
+
+На текущем этапе допустимо, что `CartItem.productPublicId` хранит строковое значение product id (`"1"`, `"2"`), но это нужно явно помнить.
+
+---
+
+## 13. Price / Stock — текущее состояние и ближайшая цель
+
+Начат этап добавления цены и остатков.
+
+Цель:
+
+```text
+product-service:
+  Product.price
+  Product.stockQuantity
+  ProductRequest.price / stockQuantity
+  ProductResponse.price / stockQuantity
+  ProductMapper маппит эти поля
+
+user-service:
+  ProductCatalogResponse.price / stockQuantity
+  OrderItem.unitPrice / totalPrice
+  OrderItemResponse.unitPrice / totalPrice
+  OrderResponse.totalAmount
+  OrderMapper считает totalAmount
+  OrderServiceImpl сохраняет price snapshot при создании заказа
+  CartResponse показывает актуальные цены и totalAmount
+  CartService проверяет stockQuantity при add/update item
+```
+
+В `product-service` пользователь уже сообщил, что сделал изменения по `Product`, `ProductRequest`, `ProductResponse`, `ProductMapper` для price/stock.
+
+`DataGenerationService` пока специально не трогался. Решение: не переделывать генератор на каждом маленьком изменении модели, а перед запуском/проверкой один раз привести его к актуальной модели (`price`, `stockQuantity`).
+
+Перед проверкой `/gen/{count}` обязательно обновить `DataGenerationService`, иначе он может создавать `Product` с `price = null` и `stockQuantity = null`.
+
+---
+
+## 14. Cart с ценами и stock-check — ближайшая работа
+
+Следующий логичный блок — довести корзину до взрослого состояния.
+
+Целевая логика `GET /api/v1/users/me/cart`:
+
+```json
+{
+  "publicId": "...",
+  "items": [
+    {
+      "publicId": "...",
+      "productPublicId": "1",
+      "productName": "Sony Товар 1 Pro",
+      "productImage": "https://...",
+      "quantity": 2,
+      "unitPrice": 1999.99,
+      "totalPrice": 3999.98
+    }
+  ],
+  "totalItems": 2,
+  "totalAmount": 3999.98
+}
+```
+
+Важная логика:
+
+- корзина показывает **актуальную** цену из `product-service`;
+- заказ хранит **snapshot** цены в `order_items`;
+- `CartItem` цену в БД пока не хранит;
+- `OrderItem` цену в БД хранит.
+
+Почему:
+
+```text
+Cart:
+  товар может лежать в корзине долго
+  цена может измениться
+  корзина должна показать актуальную цену
+
+Order:
+  заказ оформлен
+  цена должна сохраниться навсегда как snapshot
+```
+
+Stock-check в cart:
+
+- при добавлении товара в корзину нужно спросить `product-service`;
+- получить `stockQuantity`;
+- если итоговое количество в корзине больше остатка — бросить `ProductOutOfStockException`;
+- при update quantity тоже проверять `stockQuantity`.
+
+Пока stock только проверяем. Не списываем остатки при добавлении в корзину.
+
+Правильная взрослая логика позже:
+
+```text
+cart:
+  информативно проверяет доступность
+
+order:
+  финально проверяет доступность
+  после успешного оформления инициирует списание stock
+
+product-service:
+  владеет списанием stock
+```
+
+---
+
+## 15. Что пока не нужно делать слишком рано
+
+Пока не надо без необходимости добавлять:
+
+- Kafka;
+- Saga;
+- Kubernetes;
+- Vault;
+- service mesh;
+- event-driven всё подряд;
+- сложное резервирование склада;
+- отдельный `admin-module`;
+- отдельный `inventory-service`.
+
+Сначала нужен крепкий фундамент:
+
+```text
+identity/account
+profile
+addresses
+cart
+orders
+admin orders
+price
+stock check
+product ownership
+seller/company flow
+tests
+observability
+CI/CD
+```
+
+---
+
+## 16. Текущий roadmap от текущей точки
+
+Ближайший порядок работ:
+
+1. Довести price/stock до консистентного состояния во всех слоях.
+2. Обновить `OrderItem`, `OrderResponse`, `OrderMapper`, `OrderServiceImpl` для price snapshot.
+3. Обновить `CartResponse` и `CartServiceImpl`, чтобы корзина показывала актуальные цены и totalAmount.
+4. Добавить `ProductOutOfStockException` и stock-check в cart add/update.
+5. Добавить финальную stock-проверку при создании заказа.
+6. Перед запуском обновить `DataGenerationService` под `price` и `stockQuantity`.
+7. Запустить миграции, сервисы и проверить полный flow через curl.
+8. После стабилизации перейти к product `publicId`, stock decrement, seller/company ownership.
+9. Потом — тесты, observability, CI/CD, Keycloak realm export/import.
+
+---
+
+## 17. Проверенные локальные моменты
+
+- IDEA была переустановлена, настройки в целом подтянулись.
+- Проект запускается.
+- Пользователь подтвердил, что всё нужное в IDEA/окружении снова работает.
+- Keycloak был проверен: realm `market` существует, `.well-known/openid-configuration` отдаёт `200 OK`.
+- Была проблема с пользователем `user`: Keycloak отвечал `Account is not fully set up`; рабочим оказался `testuser` с ролью `ADMIN`.
+- Для admin-запросов можно использовать `testuser` с `ADMIN`.
+- `auth-module`, `user-service`, `product-service`, gateway и Eureka уже поднимались и проверялись в ручных сценариях.
+
+---
+
+## 18. Короткая формулировка текущего состояния
+
+Market — это multi-module Spring Boot проект интернет-магазина. Архитектурно принято, что Keycloak отвечает за identity/auth, backend-сервисы работают как OAuth2 Resource Server, gateway является входной точкой, но не единственной security-границей. Локальная доменная модель строится вокруг `Account + optional Company`. `auth-module` отвечает за identity/account provisioning через `/api/v1/auth/me`. `user-service` отвечает за профиль, адреса, корзину и заказы. `product-service` отвечает за каталог товаров, цену и остатки.
+
+На текущем этапе уже построены и частично проверены profile/address/cart/orders/admin-orders flows. Сейчас проект находится на этапе доведения price/stock логики: товар получает `price` и `stockQuantity`, заказ должен сохранять price snapshot, корзина должна показывать актуальные цены и проверять остатки через `product-service`.
+
+Главное правило работы: идти маленькими шагами, писать production-style код, не просто присылать классы, а объяснять их место в request/business flow и связи с остальными частями проекта.
