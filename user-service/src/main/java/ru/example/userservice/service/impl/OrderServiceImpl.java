@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.example.identitydomain.entity.*;
 import ru.example.identitydomain.entity.enums.OrderStatus;
 import ru.example.userservice.client.ProductCatalogClient;
-import ru.example.userservice.exception.CartIsEmptyException;
-import ru.example.userservice.exception.EntityNotFoundException;
-import ru.example.userservice.exception.OrderCannotBeCancelledException;
-import ru.example.userservice.exception.OrderNotFoundException;
+import ru.example.userservice.exception.*;
 import ru.example.userservice.mapper.OrderMapper;
 import ru.example.userservice.model.request.CreateOrderRequest;
 import ru.example.userservice.model.response.OrderResponse;
@@ -61,7 +58,13 @@ public class OrderServiceImpl implements OrderService {
             ProductCatalogResponse product = productCatalogClient
                     .getProductByPublicId(cartItem.getProductPublicId());
 
-            BigDecimal unitPrice = product.price();
+            ensureStockAvailable(
+                    product,
+                    cartItem.getProductPublicId(),
+                    cartItem.getQuantity()
+            );
+
+            BigDecimal unitPrice = getRequiredPrice(product);
             BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
 
             OrderItem orderItem = OrderItem.builder()
@@ -121,6 +124,34 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.CANCELLED);
 
         return orderMapper.toResponse(order);
+    }
+
+    private BigDecimal getRequiredPrice(ProductCatalogResponse product) {
+        if (product.price() == null) {
+            throw new IllegalStateException("product-service вернул товар без цены: " + product.id());
+        }
+
+        return product.price();
+    }
+
+    private void ensureStockAvailable(
+            ProductCatalogResponse product,
+            String productPublicId,
+            int requestedQuantity
+    ) {
+        Integer availableQuantity = product.stockQuantity();
+
+        if (availableQuantity == null) {
+            throw new IllegalStateException("product-service вернул товар без stockQuantity: " + product.id());
+        }
+
+        if (requestedQuantity > availableQuantity) {
+            throw new ProductOutOfStockException(
+                    productPublicId,
+                    requestedQuantity,
+                    availableQuantity
+            );
+        }
     }
 
     private Account getCurrentAccount(Jwt jwt) {

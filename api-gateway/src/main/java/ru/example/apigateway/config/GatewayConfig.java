@@ -12,8 +12,15 @@ public class GatewayConfig {
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(
-                        "auth_route", r -> r.path("/api/v1/auth/**", "/api/v1/admin/**")
+                        "auth_route", r -> r.path("/api/v1/auth/**")
                                 .uri("lb://auth-module")
+                )
+                .route(
+                        "admin_order_route", r -> r.path(
+                                        "/api/v1/admin/orders",
+                                        "/api/v1/admin/orders/**"
+                                )
+                                .uri("lb://user-service")
                 )
                 .route(
                         "product_route", r -> r.path("/api/v1/products/**")
@@ -22,11 +29,6 @@ public class GatewayConfig {
                 .route(
                         "user_route", r -> r.path("/api/v1/users/**")
                                 .uri("lb://user-service")
-                )
-                .route("frontend_route", r -> r.path("/",
-                                "/index", "/catalog", "/register", "/login", "/activation", "/account", "/assets/**",
-                                "/product")
-                        .uri("lb://frontend")
                 )
                 .build();
     }

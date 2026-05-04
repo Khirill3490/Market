@@ -71,6 +71,7 @@ public class CartService {
             existingItem.setQuantity(requestedQuantity);
         } else {
             CartItem newItem = CartItem.builder()
+                    .publicId(generatePublicId())
                     .cart(cart)
                     .productPublicId(request.productPublicId())
                     .quantity(request.quantity())
@@ -95,6 +96,15 @@ public class CartService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Позиция корзины текущего пользователя не найдена"
                 ));
+
+        ProductCatalogResponse product = productCatalogClient
+                .getProductByPublicId(item.getProductPublicId());
+
+        ensureStockAvailable(
+                product,
+                item.getProductPublicId(),
+                request.quantity()
+        );
 
         item.setQuantity(request.quantity());
         cartItemRepository.save(item);
