@@ -50,6 +50,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product findByPublicId(String publicId) {
+        return productRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        "Товар с publicId=" + publicId + " не найден"
+                ));
+    }
+
+    @Override
     public Product findByArt(String art) {
         return productRepository.findByArtIgnoreCase(art)
                 .orElseThrow(() -> new ProductNotFoundException(

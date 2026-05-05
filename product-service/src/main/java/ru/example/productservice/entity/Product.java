@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -24,6 +25,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false, length = 64)
+    private String publicId;
 
     /**
      * ART — артикул товара.
@@ -92,4 +96,12 @@ public class Product {
      * BAR — штрихкод.
      */
     private String bar;
+
+    @PrePersist
+    void prePersist() {
+        if (this.publicId == null || this.publicId.isBlank()) {
+            this.publicId = UUID.randomUUID().toString().replace("-", "");
+        }
+    }
+
 }

@@ -27,6 +27,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @EntityGraph(attributePaths = {"brand", "category"})
     Optional<Product> findById(Long id);
 
+    @EntityGraph(attributePaths = {"brand", "category"})
+    Optional<Product> findByPublicId(String publicId);
+
     boolean existsByArtIgnoreCase(String art);
 
     @Query("""

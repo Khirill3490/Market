@@ -23,11 +23,17 @@ public class GatewayConfig {
                                 .uri("lb://user-service")
                 )
                 .route(
-                        "product_route", r -> r.path("/api/v1/products/**")
+                        "product_route", r -> r.path(
+                                        "/api/v1/products",
+                                        "/api/v1/products/**"
+                                )
                                 .uri("lb://product-service")
                 )
                 .route(
-                        "user_route", r -> r.path("/api/v1/users/**")
+                        "user_route", r -> r.path(
+                                "/api/v1/users/**",
+                                        "/api/v1/users"
+                                )
                                 .uri("lb://user-service")
                 )
                 .build();

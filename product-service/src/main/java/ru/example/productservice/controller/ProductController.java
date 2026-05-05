@@ -63,11 +63,11 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getById(
-            @PathVariable @Positive(message = "id товара должен быть положительным") Long id
+    @GetMapping("/public/{publicId}")
+    public ResponseEntity<ProductResponse> getByPublicId(
+            @PathVariable String publicId
     ) {
-        ProductResponse response = productMapper.toResponse(productService.findById(id));
+        ProductResponse response = productMapper.toResponse(productService.findByPublicId(publicId));
 
         return ResponseEntity.ok(response);
     }

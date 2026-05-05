@@ -16,6 +16,7 @@ public interface ProductService {
     List<Product> getProductsForMainPage();
 
     Product findById(Long id);
+    Product findByPublicId(String publicId);
     Product findByArt(String art);
     List<Product> findByName(String name);
     Product save(Product product, MultipartFile imageFile);

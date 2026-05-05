@@ -18,7 +18,7 @@ public class ProductCatalogClient {
             ProductCatalogResponse response = restClientBuilder
                     .build()
                     .get()
-                    .uri("http://product-service/api/v1/products/{productPublicId}", productPublicId)
+                    .uri("http://product-service/api/v1/products/public/{productPublicId}", productPublicId)
                     .retrieve()
                     .body(ProductCatalogResponse.class);
 

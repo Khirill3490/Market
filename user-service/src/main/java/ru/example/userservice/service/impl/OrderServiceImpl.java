@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
 
     private BigDecimal getRequiredPrice(ProductCatalogResponse product) {
         if (product.price() == null) {
-            throw new IllegalStateException("product-service вернул товар без цены: " + product.id());
+            throw new IllegalStateException("product-service вернул товар без цены: " + product.publicId());
         }
 
         return product.price();
@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
         Integer availableQuantity = product.stockQuantity();
 
         if (availableQuantity == null) {
-            throw new IllegalStateException("product-service вернул товар без stockQuantity: " + product.id());
+            throw new IllegalStateException("product-service вернул товар без stockQuantity: " + product.publicId());
         }
 
         if (requestedQuantity > availableQuantity) {

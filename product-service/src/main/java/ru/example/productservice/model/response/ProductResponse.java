@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class ProductResponse {
 
-    private Long id;
+    private String publicId;
     private String art;           // ART – Артикул товара
     private String brand;           // MAN – Производитель
     private String name;

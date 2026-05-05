@@ -3,7 +3,7 @@ package ru.example.userservice.model.response;
 import java.math.BigDecimal;
 
 public record ProductCatalogResponse(
-        Long id,
+        String publicId,
         String art,
         String brand,
         String name,
