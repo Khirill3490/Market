@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.example.productservice.entity.Product;
 import ru.example.productservice.exception.ProductAlreadyExistsException;
 import ru.example.productservice.exception.ProductNotFoundException;
+import ru.example.productservice.exception.ProductOutOfStockException;
 import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.repository.ProductRepository;
 import ru.example.productservice.service.ProductService;
@@ -96,8 +97,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        Product product = findById(id);
+    public Product decreaseStock(String publicId, int quantity) {
+        Product product = findByPublicId(publicId);
+
+        Integer currentStock = product.getStockQuantity();
+
+        if (currentStock == null) {
+            throw new IllegalStateException("У товара с publicId=" + publicId + " не задан stockQuantity");
+        }
+
+        if (quantity > currentStock) {
+            throw new ProductOutOfStockException(
+                    publicId,
+                    quantity,
+                    currentStock
+            );
+        }
+
+        product.setStockQuantity(currentStock - quantity);
+
+        return product;
+    }
+
+    @Override
+    @Transactional
+    public void deleteByPublicId(String publicId) {
+        Product product = findByPublicId(publicId);
         productRepository.delete(product);
     }
 

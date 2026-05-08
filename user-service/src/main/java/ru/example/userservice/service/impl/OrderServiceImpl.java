@@ -79,6 +79,13 @@ public class OrderServiceImpl implements OrderService {
             order.addItem(orderItem);
         }
 
+        for (CartItem cartItem : cart.getItems()) {
+            productCatalogClient.decreaseStock(
+                    cartItem.getProductPublicId(),
+                    cartItem.getQuantity()
+            );
+        }
+
         Order savedOrder = orderRepository.save(order);
 
         cart.getItems().clear();

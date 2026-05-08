@@ -21,6 +21,7 @@ public interface ProductService {
     List<Product> findByName(String name);
     Product save(Product product, MultipartFile imageFile);
     Product update(Long id, ProductRequest request);
-    void deleteById(Long id);
+    Product decreaseStock(String publicId, int quantity);
+    void deleteByPublicId(String publicId);
     void deleteByArt(String art);
 }

@@ -1,7 +1,7 @@
 package ru.example.productservice.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.example.productservice.entity.Product;
 import ru.example.productservice.mapper.ProductMapper;
+import ru.example.productservice.model.request.DecreaseStockRequest;
 import ru.example.productservice.model.request.ProductPagSearchRequest;
 import ru.example.productservice.model.request.ProductRequest;
 import ru.example.productservice.model.response.ProductResponse;
@@ -65,7 +66,7 @@ public class ProductController {
 
     @GetMapping("/public/{publicId}")
     public ResponseEntity<ProductResponse> getByPublicId(
-            @PathVariable String publicId
+            @PathVariable @NotBlank(message = "publicId товара не должен быть пустым") String publicId
     ) {
         ProductResponse response = productMapper.toResponse(productService.findByPublicId(publicId));
 
@@ -95,11 +96,11 @@ public class ProductController {
                 .body(response);
     }
 
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<Void> deleteById(
-            @PathVariable @Positive(message = "id товара должен быть положительным") Long id
+    @DeleteMapping("/public/{publicId}")
+    public ResponseEntity<Void> deleteByPublicId(
+            @PathVariable @NotBlank(message = "publicId товара не должен быть пустым") String publicId
     ) {
-        productService.deleteById(id);
+        productService.deleteByPublicId(publicId);
 
         return ResponseEntity
                 .noContent()
@@ -117,12 +118,23 @@ public class ProductController {
                 .build();
     }
 
-    @PostMapping("/gen/{count}")
-    public ResponseEntity<String> generateProducts(
-            @PathVariable @Positive(message = "count должен быть положительным") int count
-    ) {
-        generationService.save(count);
+//    @PostMapping("/gen/{count}")
+//    public ResponseEntity<String> generateProducts(
+//            @PathVariable @Positive(message = "count должен быть положительным") int count
+//    ) {
+//        generationService.save(count);
+//
+//        return ResponseEntity.ok("Сгенерировано товаров: " + count);
+//    }
 
-        return ResponseEntity.ok("Сгенерировано товаров: " + count);
+    @PatchMapping("/public/{publicId}/stock/decrease")
+    public ResponseEntity<ProductResponse> decreaseStock(
+            @PathVariable @NotBlank(message = "publicId товара не должен быть пустым") String publicId,
+            @Valid @RequestBody DecreaseStockRequest request
+    ) {
+        Product product = productService.decreaseStock(publicId, request.quantity());
+        ProductResponse response = productMapper.toResponse(product);
+
+        return ResponseEntity.ok(response);
     }
 }

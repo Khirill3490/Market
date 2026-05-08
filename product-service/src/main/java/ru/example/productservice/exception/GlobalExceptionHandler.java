@@ -175,6 +175,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ProductOutOfStockException.class)
+    public ResponseEntity<ErrorResponse> handleProductOutOfStock(
+            ProductOutOfStockException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                request
+        );
+    }
+
     private ResponseEntity<ErrorResponse> buildErrorResponse(
             HttpStatus status,
             String message,

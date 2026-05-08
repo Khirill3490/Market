@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import ru.example.userservice.exception.ProductCatalogException;
+import ru.example.userservice.model.request.DecreaseStockRequest;
 import ru.example.userservice.model.response.ProductCatalogResponse;
 
 @Component
@@ -35,5 +36,27 @@ public class ProductCatalogClient {
                     exception
             );
         }
+    }
+
+    public ProductCatalogResponse decreaseStock(String productPublicId, int quantity) {
+        ProductCatalogResponse response = restClientBuilder
+                .build()
+                .patch()
+                .uri(
+                        "http://product-service/api/v1/products/public/{productPublicId}/stock/decrease",
+                        productPublicId
+                )
+                .body(new DecreaseStockRequest(quantity))
+                .retrieve()
+                .body(ProductCatalogResponse.class);
+
+        if (response == null) {
+            throw new IllegalStateException(
+                    "product-service вернул пустой ответ при списании stock для товара: "
+                            + productPublicId
+            );
+        }
+
+        return response;
     }
 }
