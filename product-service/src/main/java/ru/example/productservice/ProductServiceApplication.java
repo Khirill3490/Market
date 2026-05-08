@@ -2,10 +2,10 @@ package ru.example.productservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
+import org.springframework.kafka.annotation.EnableKafka;
 
 @SpringBootApplication(scanBasePackages = "ru.example.productservice")
+@EnableKafka
 public class ProductServiceApplication {
 
     public static void main(String[] args) {

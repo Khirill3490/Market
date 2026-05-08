@@ -32,6 +32,15 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8088/realms/market}
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        acks: all
+        enable.idempotence: true
+
 server:
   port: ${SERVER_PORT:0}
 
@@ -39,3 +48,13 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+
+market:
+  kafka:
+    topics:
+      stock-reservation-requested: market.order.stock-reservation-requested.v1
+
+  outbox:
+    batch-size: 50
+    max-attempts: 5
+    publish-delay-ms: 5000

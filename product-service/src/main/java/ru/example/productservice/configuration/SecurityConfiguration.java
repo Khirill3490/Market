@@ -69,9 +69,14 @@ public class SecurityConfiguration {
                                 "/",
                                 "/random",
                                 "/search/**",
-                                "/{id}",
+                                "/public/**",
                                 "/categories/**"
                         ).permitAll()
+
+                        // Временный internal-like endpoint.
+                        // Его вызывает user-service при создании заказа.
+                        .requestMatchers(HttpMethod.PATCH, "/public/*/stock/decrease")
+                        .authenticated()
 
                         .requestMatchers(
                                 "/gen/**",

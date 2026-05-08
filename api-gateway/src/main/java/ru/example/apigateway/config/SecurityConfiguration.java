@@ -3,6 +3,7 @@ package ru.example.apigateway.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -36,15 +37,21 @@ public class SecurityConfiguration {
                                 "/product",
                                 "/assets/**"
                         ).permitAll()
-                        .pathMatchers(
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
+
+                        // Каталог читают все
+                        .pathMatchers(HttpMethod.GET,
+                                "/api/v1/products",
+                                "/api/v1/products/**"
                         ).permitAll()
-                        .pathMatchers("/api/v1/products/**").permitAll()
+                        .pathMatchers(
+                                "/api/v1/products",
+                                "/api/v1/products/**"
+                        ).hasRole("ADMIN")
+
                         .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .pathMatchers("/api/v1/auth/**").authenticated()
                         .pathMatchers("/api/v1/users/**").authenticated()
+
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

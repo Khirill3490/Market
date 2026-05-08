@@ -39,6 +39,20 @@ spring:
   file:
     export: exports/products.json
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: product-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        acks: all
+        enable.idempotence: true
+
 server:
   port: ${SERVER_PORT:0}
   servlet:
@@ -48,3 +62,9 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+
+market:
+  kafka:
+    topics:
+      stock-reservation-requested: market.order.stock-reservation-requested.v1
+      stock-reservation-result: market.product.stock-reservation-result.v1

@@ -17,6 +17,15 @@ import ru.example.userservice.repository.AddressRepository;
 import ru.example.userservice.repository.CartRepository;
 import ru.example.userservice.repository.OrderRepository;
 import ru.example.userservice.service.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.example.userservice.entity.OrderOutboxEvent;
+import ru.example.userservice.entity.OutboxEventStatus;
+import ru.example.userservice.model.event.StockReservationRequestedEvent;
+import ru.example.userservice.repository.OrderOutboxEventRepository;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,8 +39,10 @@ public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
+    private final OrderOutboxEventRepository orderOutboxEventRepository;
     private final ProductCatalogClient productCatalogClient;
     private final OrderMapper orderMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     @Transactional
@@ -52,7 +63,10 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .account(account)
                 .deliveryAddress(deliveryAddress)
+                .status(OrderStatus.PENDING_STOCK_RESERVATION)
                 .build();
+
+        List<StockReservationRequestedEvent.Item> reservationItems = new ArrayList<>();
 
         for (CartItem cartItem : cart.getItems()) {
             ProductCatalogResponse product = productCatalogClient
@@ -77,16 +91,21 @@ public class OrderServiceImpl implements OrderService {
                     .build();
 
             order.addItem(orderItem);
-        }
 
-        for (CartItem cartItem : cart.getItems()) {
-            productCatalogClient.decreaseStock(
+            reservationItems.add(new StockReservationRequestedEvent.Item(
                     cartItem.getProductPublicId(),
                     cartItem.getQuantity()
-            );
+            ));
         }
 
         Order savedOrder = orderRepository.save(order);
+
+        OrderOutboxEvent outboxEvent = createStockReservationRequestedOutboxEvent(
+                savedOrder,
+                reservationItems
+        );
+
+        orderOutboxEventRepository.save(outboxEvent);
 
         cart.getItems().clear();
 
@@ -168,5 +187,36 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new IllegalStateException(
                         "Локальный Account для текущего пользователя не найден"
                 ));
+    }
+
+    private OrderOutboxEvent createStockReservationRequestedOutboxEvent(
+            Order order,
+            List<StockReservationRequestedEvent.Item> reservationItems
+    ) {
+        StockReservationRequestedEvent payload = new StockReservationRequestedEvent(
+                order.getPublicId(),
+                reservationItems
+        );
+
+        String payloadJson;
+        try {
+            payloadJson = objectMapper.writeValueAsString(payload);
+        } catch (JsonProcessingException exception) {
+            throw new IllegalStateException(
+                    "Не удалось сериализовать событие резервирования stock для заказа: "
+                            + order.getPublicId(),
+                    exception
+            );
+        }
+
+        return OrderOutboxEvent.builder()
+                .eventId(UUID.randomUUID())
+                .aggregateType("ORDER")
+                .aggregateId(order.getPublicId())
+                .eventType("StockReservationRequested")
+                .payload(payloadJson)
+                .status(OutboxEventStatus.NEW)
+                .attempts(0)
+                .build();
     }
 }

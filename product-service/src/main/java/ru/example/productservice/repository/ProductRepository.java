@@ -1,13 +1,14 @@
 package ru.example.productservice.repository;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.example.productservice.entity.Product;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,4 +40,27 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             join fetch p.category
             """)
     List<Product> findAllWithBrandAndCategory();
+
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        update Product p
+        set p.stockQuantity = p.stockQuantity - :quantity
+        where p.publicId = :publicId
+          and p.stockQuantity >= :quantity
+        """)
+    int decreaseStockIfEnough(
+            @Param("publicId") String publicId,
+            @Param("quantity") int quantity
+    );
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        select p
+        from Product p
+        where p.publicId in :publicIds
+        """)
+    List<Product> findAllByPublicIdInForUpdate(
+            @Param("publicIds") Collection<String> publicIds
+    );
 }

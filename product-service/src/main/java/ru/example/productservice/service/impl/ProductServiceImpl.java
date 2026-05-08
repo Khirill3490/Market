@@ -98,25 +98,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product decreaseStock(String publicId, int quantity) {
-        Product product = findByPublicId(publicId);
+        int updatedRows = productRepository.decreaseStockIfEnough(publicId, quantity);
 
-        Integer currentStock = product.getStockQuantity();
+        if (updatedRows == 0) {
+            Product product = findByPublicId(publicId);
 
-        if (currentStock == null) {
-            throw new IllegalStateException("У товара с publicId=" + publicId + " не задан stockQuantity");
-        }
-
-        if (quantity > currentStock) {
             throw new ProductOutOfStockException(
                     publicId,
                     quantity,
-                    currentStock
+                    product.getStockQuantity()
             );
         }
 
-        product.setStockQuantity(currentStock - quantity);
-
-        return product;
+        return findByPublicId(publicId);
     }
 
     @Override
