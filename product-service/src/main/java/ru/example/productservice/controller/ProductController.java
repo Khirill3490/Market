@@ -1,7 +1,9 @@
 package ru.example.productservice.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -118,14 +120,22 @@ public class ProductController {
                 .build();
     }
 
-//    @PostMapping("/gen/{count}")
-//    public ResponseEntity<String> generateProducts(
-//            @PathVariable @Positive(message = "count должен быть положительным") int count
-//    ) {
-//        generationService.save(count);
-//
-//        return ResponseEntity.ok("Сгенерировано товаров: " + count);
-//    }
+    @PostMapping("/gen/{count}")
+    public ResponseEntity<List<ProductResponse>> generateProducts(
+            @PathVariable
+            @Positive(message = "count должен быть положительным")
+            @Max(value = 1000, message = "count не должен быть больше 1000")
+            int count
+    ) {
+        List<ProductResponse> response = generationService.save(count)
+                .stream()
+                .map(productMapper::toResponse)
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
 
     @PatchMapping("/public/{publicId}/stock/decrease")
     public ResponseEntity<ProductResponse> decreaseStock(

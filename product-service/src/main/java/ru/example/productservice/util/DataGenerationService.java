@@ -2,7 +2,7 @@ package ru.example.productservice.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import ru.example.productservice.entity.Brand;
 import ru.example.productservice.entity.Category;
 import ru.example.productservice.entity.Product;
@@ -13,7 +13,8 @@ import ru.example.productservice.repository.ProductRepository;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -24,34 +25,44 @@ public class DataGenerationService {
     private final CategoryRepository categoryRepository;
     private final ImageCatalog imageCatalog;
 
-    public void save(int count) {
-        addBrand();
-        addCategory();
-        productRepository.saveAll(generateTestProducts(count));
+    @Transactional
+    public List<Product> save(int count) {
+        List<Brand> brands = ensureDefaultBrands();
+        List<Category> categories = ensureDefaultCategories();
+
+        List<Product> products = generateTestProducts(count, brands, categories);
+
+        return productRepository.saveAll(products);
     }
 
-    public List<Product> generateTestProducts(int count) {
+    private List<Product> generateTestProducts(
+            int count,
+            List<Brand> brands,
+            List<Category> categories
+    ) {
         List<Product> products = new ArrayList<>();
-        List<Brand> brands = brandRepository.findAll();
-        List<Category> categories = categoryRepository.findAll(); // Получаем все категории из БД
-        String[] units = {"шт.", "кг", "л", "упак."};
-
-        Random random = new Random();
+        long batchId = System.currentTimeMillis();
 
         for (int i = 1; i <= count; i++) {
+            Brand brand = randomItem(brands);
+            Category category = randomItem(categories);
+
+            String art = "TEST-SAGA-" + batchId + "-" + i;
+
             Product product = Product.builder()
-                    .art("ART-" + i)
-                    .brand(brands.get(i % brands.size()))
-                    .name("Товар " + i + " Pro")
-                    .price(BigDecimal.valueOf(1000 + random.nextInt(90000)))
-                    .inf("Краткое описание товара " + i)
-                    .ext("Подробное описание товара " + i)
-                    .img("https://picsum.photos/seed/" + i + "/400/300")
-                    .url("/product/" + i)
-                    .unit("шт")
-                    .sml("10x10x10 см")
-                    .category(categories.get(random.nextInt(categories.size())))
-                    .bar("100000000" + i)
+                    .art(art)
+                    .brand(brand)
+                    .name("Тестовый товар Saga " + i + " " + getRandomSuffix())
+                    .price(randomPrice())
+                    .stockQuantity(randomStockQuantity())
+                    .inf("Краткое описание тестового товара " + i)
+                    .ext("Подробное описание тестового товара для проверки Saga Outbox Kafka")
+                    .img(imageCatalog.random())
+                    .url("/product/" + art.toLowerCase())
+                    .unit(randomUnit())
+                    .sml(getRandomSize())
+                    .category(category)
+                    .bar(randomBarcode())
                     .build();
 
             products.add(product);
@@ -60,98 +71,96 @@ public class DataGenerationService {
         return products;
     }
 
-    // Остальные методы остаются без изменений
-    private String getRandomSuffix() {
-        String[] suffixes = {"Pro", "Lite", "Plus", "Max", "Air", "Gold"};
-        return suffixes[new Random().nextInt(suffixes.length)];
+    private List<Brand> ensureDefaultBrands() {
+        List<Brand> brands = new ArrayList<>();
+
+        brands.add(getOrCreateBrand("Apple", "Apple Inc", "https://www.apple.com"));
+        brands.add(getOrCreateBrand("Samsung", "Samsung Electronics", "https://www.samsung.com"));
+        brands.add(getOrCreateBrand("Sony", "Sony Corporation", "https://www.sony.com"));
+        brands.add(getOrCreateBrand("HP", "HP, Hewlett Packard", "https://www.hp.com"));
+        brands.add(getOrCreateBrand("Lenovo", "Lenovo Group", "https://www.lenovo.com"));
+
+        return brands;
     }
 
-    private String getRandomFeatures() {
-        String[] features = {"Водонепроницаемый", "Энергосберегающий", "Стильный дизайн",
-                "Удобный", "Прочный", "Компактный"};
-        return features[new Random().nextInt(features.length)];
+    private Brand getOrCreateBrand(
+            String name,
+            String psName,
+            String url
+    ) {
+        return brandRepository.findByNameEqualsIgnoreCase(name)
+                .orElseGet(() -> {
+                    Brand brand = new Brand();
+                    brand.setName(name);
+                    brand.setPsName(psName);
+                    brand.setUrl(url);
+
+                    return brandRepository.save(brand);
+                });
+    }
+
+    private List<Category> ensureDefaultCategories() {
+        List<Category> categories = new ArrayList<>();
+
+        categories.add(getOrCreateCategory("Электроника"));
+        categories.add(getOrCreateCategory("Бытовая техника"));
+        categories.add(getOrCreateCategory("Одежда"));
+        categories.add(getOrCreateCategory("Мебель"));
+        categories.add(getOrCreateCategory("Спорт"));
+        categories.add(getOrCreateCategory("Книги"));
+        categories.add(getOrCreateCategory("Игрушки"));
+
+        return categories;
+    }
+
+    private Category getOrCreateCategory(String name) {
+        return categoryRepository.findByName(name)
+                .orElseGet(() -> {
+                    Category category = new Category();
+                    category.setName(name);
+
+                    return categoryRepository.save(category);
+                });
+    }
+
+    private BigDecimal randomPrice() {
+        int price = ThreadLocalRandom.current().nextInt(1000, 90_001);
+
+        return BigDecimal.valueOf(price);
+    }
+
+    private int randomStockQuantity() {
+        return ThreadLocalRandom.current().nextInt(5, 101);
+    }
+
+    private String randomUnit() {
+        String[] units = {"шт.", "кг", "л", "упак."};
+
+        return units[ThreadLocalRandom.current().nextInt(units.length)];
+    }
+
+    private String getRandomSuffix() {
+        String[] suffixes = {"Pro", "Lite", "Plus", "Max", "Air", "Gold"};
+
+        return suffixes[ThreadLocalRandom.current().nextInt(suffixes.length)];
     }
 
     private String getRandomSize() {
-        Random r = new Random();
-        return r.nextInt(50) + "x" + r.nextInt(50) + "x" + r.nextInt(50) + " см";
+        int width = ThreadLocalRandom.current().nextInt(5, 51);
+        int height = ThreadLocalRandom.current().nextInt(5, 51);
+        int depth = ThreadLocalRandom.current().nextInt(5, 51);
+
+        return width + "x" + height + "x" + depth + " см";
     }
 
-    private void addBrand() {
-        List<Brand> brands = new ArrayList<>();
-        Brand brand1 = new Brand();
-        brand1.setName("Apple");
-        brand1.setPsName("Apple Inc");
-        brand1.setUrl("https://www.apple.com");
-
-        Brand brand2 = new Brand();
-        brand2.setName("Samsung");
-        brand2.setPsName("Samsung Electronics");
-        brand2.setUrl("https://www.samsung.com");
-
-        Brand brand3 = new Brand();
-        brand3.setName("Sony");
-        brand3.setPsName("Sony Corporation");
-        brand3.setUrl("https://www.sony.com");
-
-        Brand brand4 = new Brand();
-        brand4.setName("HP");
-        brand4.setPsName("HP,Hewlett Packard");
-        brand4.setUrl("https://www.hp.com");
-
-        Brand brand5 = new Brand();
-        brand5.setName("Lenovo");
-        brand5.setPsName("Lenovo Group");
-        brand5.setUrl("https://www.lenovo.com");
-
-        brands.add(brand1);
-        brands.add(brand2);
-        brands.add(brand3);
-        brands.add(brand4);
-        brands.add(brand5);
-
-        brandRepository.saveAll(brands);
-
-
+    private String randomBarcode() {
+        return UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 13);
     }
 
-    public void addCategory() {
-        List<Category> defaultCategories = new ArrayList<>();
-
-        Category electronics = new Category();
-        electronics.setName("Электроника");
-        defaultCategories.add(electronics);
-
-        Category appliances = new Category();
-        appliances.setName("Бытовая техника");
-        defaultCategories.add(appliances);
-
-        Category clothing = new Category();
-        clothing.setName("Одежда");
-        defaultCategories.add(clothing);
-
-        Category furniture = new Category();
-        furniture.setName("Мебель");
-        defaultCategories.add(furniture);
-
-        Category sport = new Category();
-        sport.setName("Спорт");
-        defaultCategories.add(sport);
-
-        Category books = new Category();
-        books.setName("Книги");
-        defaultCategories.add(books);
-
-        Category toys = new Category();
-        toys.setName("Игрушки");
-        defaultCategories.add(toys);
-
-        categoryRepository.saveAll(defaultCategories);
+    private <T> T randomItem(List<T> items) {
+        return items.get(ThreadLocalRandom.current().nextInt(items.size()));
     }
-
-
-
-
-
 }
-

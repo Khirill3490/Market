@@ -44,7 +44,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
-        update Product p
+
+            update Product p
         set p.stockQuantity = p.stockQuantity - :quantity
         where p.publicId = :publicId
           and p.stockQuantity >= :quantity
@@ -59,6 +60,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         select p
         from Product p
         where p.publicId in :publicIds
+        order by p.publicId
         """)
     List<Product> findAllByPublicIdInForUpdate(
             @Param("publicIds") Collection<String> publicIds

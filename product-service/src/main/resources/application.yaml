@@ -68,3 +68,8 @@ market:
     topics:
       stock-reservation-requested: market.order.stock-reservation-requested.v1
       stock-reservation-result: market.product.stock-reservation-result.v1
+
+  outbox:
+    batch-size: 50
+    max-attempts: 5
+    publish-delay-ms: 5000

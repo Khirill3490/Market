@@ -56,24 +56,26 @@ public class StockReservationSagaServiceImpl implements StockReservationSagaServ
     }
 
     private StockReservationResultEvent tryReserveStock(StockReservationRequestedEvent event) {
-        Set<String> productPublicIds = event.items()
-                .stream()
-                .map(StockReservationRequestedEvent.Item::productPublicId)
-                .collect(Collectors.toSet());
+        Map<String, Integer> requestedByProductPublicId = aggregateRequestedQuantities(event);
 
-        List<Product> products = productRepository.findAllByPublicIdInForUpdate(productPublicIds);
+        List<Product> products = productRepository.findAllByPublicIdInForUpdate(
+                requestedByProductPublicId.keySet()
+        );
 
         Map<String, Product> productsByPublicId = products.stream()
                 .collect(Collectors.toMap(Product::getPublicId, Function.identity()));
 
-        for (StockReservationRequestedEvent.Item item : event.items()) {
-            Product product = productsByPublicId.get(item.productPublicId());
+        for (Map.Entry<String, Integer> entry : requestedByProductPublicId.entrySet()) {
+            String productPublicId = entry.getKey();
+            Integer requestedQuantity = entry.getValue();
+
+            Product product = productsByPublicId.get(productPublicId);
 
             if (product == null) {
                 return new StockReservationResultEvent(
                         event.orderPublicId(),
                         false,
-                        "Товар productPublicId=" + item.productPublicId() + " не найден"
+                        "Товар productPublicId=" + productPublicId + " не найден"
                 );
             }
 
@@ -81,24 +83,24 @@ public class StockReservationSagaServiceImpl implements StockReservationSagaServ
                 return new StockReservationResultEvent(
                         event.orderPublicId(),
                         false,
-                        "У товара productPublicId=" + item.productPublicId() + " не задан stockQuantity"
+                        "У товара productPublicId=" + productPublicId + " не задан stockQuantity"
                 );
             }
 
-            if (product.getStockQuantity() < item.quantity()) {
+            if (product.getStockQuantity() < requestedQuantity) {
                 return new StockReservationResultEvent(
                         event.orderPublicId(),
                         false,
-                        "Недостаточно товара productPublicId=" + item.productPublicId()
-                                + ". Запрошено: " + item.quantity()
+                        "Недостаточно товара productPublicId=" + productPublicId
+                                + ". Запрошено: " + requestedQuantity
                                 + ", доступно: " + product.getStockQuantity()
                 );
             }
         }
 
-        for (StockReservationRequestedEvent.Item item : event.items()) {
-            Product product = productsByPublicId.get(item.productPublicId());
-            product.setStockQuantity(product.getStockQuantity() - item.quantity());
+        for (Map.Entry<String, Integer> entry : requestedByProductPublicId.entrySet()) {
+            Product product = productsByPublicId.get(entry.getKey());
+            product.setStockQuantity(product.getStockQuantity() - entry.getValue());
         }
 
         return new StockReservationResultEvent(
@@ -134,5 +136,37 @@ public class StockReservationSagaServiceImpl implements StockReservationSagaServ
                 .status(OutboxEventStatus.NEW)
                 .attempts(0)
                 .build();
+    }
+
+    private Map<String, Integer> aggregateRequestedQuantities(
+            StockReservationRequestedEvent event
+    ) {
+        if (event.items() == null || event.items().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "StockReservationRequestedEvent должен содержать хотя бы один item"
+            );
+        }
+
+        Map<String, Integer> result = new TreeMap<>();
+
+        for (StockReservationRequestedEvent.Item item : event.items()) {
+            if (item.productPublicId() == null || item.productPublicId().isBlank()) {
+                throw new IllegalArgumentException("productPublicId не должен быть пустым");
+            }
+
+            if (item.quantity() == null || item.quantity() <= 0) {
+                throw new IllegalArgumentException(
+                        "quantity должен быть положительным для productPublicId=" + item.productPublicId()
+                );
+            }
+
+            result.merge(
+                    item.productPublicId(),
+                    item.quantity(),
+                    Integer::sum
+            );
+        }
+
+        return result;
     }
 }
