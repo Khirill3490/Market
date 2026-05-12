@@ -8,7 +8,4 @@ public class ProductOutOfStockException extends RuntimeException {
                 + ", доступно: " + availableQuantity);
     }
 
-    public ProductOutOfStockException(String message) {
-        super(message);
-    }
 }

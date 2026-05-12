@@ -1,0 +1,457 @@
+### Market: ручная проверка Order Saga + Outbox + Kafka
+### Положи этот файл, например, сюда: scripts/order-saga-flow-ru.http
+###
+### Как пользоваться:
+### 1. Запусти инфраструктуру: postgres, keycloak, kafka
+### 2. Запусти приложения: eureka-server, product-service, user-service, api-gateway
+### 3. Запускай запросы сверху вниз через IntelliJ HTTP Client
+###
+### Важно:
+### - В твоём проекте список товаров работает со слешем в конце:
+###   /api/v1/products/?page=0&size=...
+### - Endpoint получения товара по publicId слеша в конце не требует:
+###   /api/v1/products/public/{publicId}
+### - Если подходящих товаров нет, сначала получи admin token и запусти генерацию товаров.
+### - После этого запускай пользовательский flow:
+###   токен -> адрес -> корзина -> заказ -> проверка статуса/остатка товара.
+###
+### Для проверки ОТКАЗНОГО сценария STOCK_RESERVATION_FAILED:
+### 1. Получить токены: №1 и №2
+### 2. Выбрать товар: №5 и №6
+### 3. Получить/создать адрес: №7 или №8
+### 4. Очистить корзину: №9
+### 5. Добавить товар в корзину: №11
+### 6. Уменьшить stock товара админским запросом: №20
+### 7. Создать заказ: №21
+### 8. Подождать 5–10 секунд
+### 9. Проверить заказ: №15
+
+
+@baseUrl = http://localhost:8080
+@keycloakUrl = http://localhost:8088
+@realm = market
+@clientId = market-cli
+
+### Измени эти значения, если в Keycloak у тебя другие пользователи/пароли
+@userUsername = user
+@userPassword = 12345
+@adminUsername = testuser
+@adminPassword = 12345
+
+### Сколько товаров генерировать для dev-проверок
+@generateCount = 20
+
+### Количество товара, которое кладём в корзину
+### Для успешного сценария можно поставить 1
+### Для отказного сценария удобно поставить 10
+@orderQuantity = 10
+
+
+### ---------------------------------------------------------------------------
+### 1. Получить USER token
+### Этот токен нужен для обычных пользовательских запросов:
+### адреса, корзина, заказы.
+### ---------------------------------------------------------------------------
+
+POST {{keycloakUrl}}/realms/{{realm}}/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{clientId}}&grant_type=password&username={{userUsername}}&password={{userPassword}}
+
+> {%
+client.test("USER token получен", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200 от Keycloak");
+    client.assert(response.body.access_token, "access_token отсутствует");
+});
+
+client.global.set("userToken", response.body.access_token);
+%}
+
+
+### ---------------------------------------------------------------------------
+### 2. Получить ADMIN token
+### Нужен для генерации товаров и админских действий со stock.
+### Если пользователь не имеет роли ADMIN, защищённые запросы могут вернуть 403.
+### ---------------------------------------------------------------------------
+
+POST {{keycloakUrl}}/realms/{{realm}}/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{clientId}}&grant_type=password&username={{adminUsername}}&password={{adminPassword}}
+
+> {%
+client.test("ADMIN token получен", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200 от Keycloak");
+    client.assert(response.body.access_token, "access_token отсутствует");
+});
+
+client.global.set("adminToken", response.body.access_token);
+%}
+
+
+### ---------------------------------------------------------------------------
+### 3. Проверить текущего пользователя
+### Заодно проверяем цепочку:
+### JWT -> gateway -> user-service.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me
+Authorization: Bearer {{userToken}}
+
+
+### ---------------------------------------------------------------------------
+### 4. Сгенерировать тестовые товары
+### Запускай, если товаров нет или среди них нет товаров с price > 0 и stockQuantity > 0.
+### Ожидаем: 201 Created и массив созданных ProductResponse.
+### ---------------------------------------------------------------------------
+
+POST {{baseUrl}}/api/v1/products/gen/{{generateCount}}
+Authorization: Bearer {{adminToken}}
+
+> {%
+client.test("Товары сгенерированы", function () {
+    client.assert(response.status === 201 || response.status === 200, "Ожидался HTTP 201/200");
+});
+
+const products = Array.isArray(response.body) ? response.body : [];
+const validProduct = products.find(function (p) {
+    return p.publicId && Number(p.price) > 0 && Number(p.stockQuantity) > 0;
+});
+
+if (validProduct) {
+    client.global.set("productPublicId", validProduct.publicId);
+    client.global.set("stockBefore", String(validProduct.stockQuantity));
+}
+%}
+
+
+### ---------------------------------------------------------------------------
+### 5. Получить список товаров
+### В твоём проекте здесь нужен слеш после /products/.
+### Запрос также пытается сохранить первый товар, у которого:
+### price > 0 и stockQuantity > 0.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/products/?page=0&size=100
+
+> {%
+client.test("Страница товаров получена", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200");
+    client.assert(response.body.content, "response.body.content отсутствует");
+});
+
+const products = response.body.content || [];
+const validProduct = products.find(function (p) {
+    return p.publicId && Number(p.price) > 0 && Number(p.stockQuantity) > 0;
+});
+
+client.test("Подходящий товар найден", function () {
+    client.assert(validProduct, "Нет товара с price > 0 и stockQuantity > 0. Сначала запусти генерацию товаров №4.");
+});
+
+if (validProduct) {
+    client.global.set("productPublicId", validProduct.publicId);
+    client.global.set("stockBefore", String(validProduct.stockQuantity));
+}
+%}
+
+
+### ---------------------------------------------------------------------------
+### 6. Получить выбранный товар до оформления заказа
+### Ожидаем: stockQuantity > 0
+### Здесь мы точно фиксируем stockBefore для последующей проверки.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/products/public/{{productPublicId}}
+
+> {%
+client.test("Выбранный товар получен", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200");
+    client.assert(response.body.publicId, "publicId товара отсутствует");
+    client.assert(Number(response.body.stockQuantity) > 0, "stockQuantity должен быть > 0");
+});
+
+client.global.set("stockBefore", String(response.body.stockQuantity));
+%}
+
+
+### ---------------------------------------------------------------------------
+### 7. Получить существующие адреса пользователя
+### Если адрес уже есть, сохраняем publicId первого адреса в addressPublicId.
+### Если список пуст, запускай следующий запрос №8.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me/addresses
+Authorization: Bearer {{userToken}}
+
+> {%
+client.test("Ответ со списком адресов получен", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200");
+    client.assert(Array.isArray(response.body), "Ожидался массив адресов");
+});
+
+if (Array.isArray(response.body) && response.body.length > 0) {
+    client.global.set("addressPublicId", response.body[0].publicId);
+}
+%}
+
+
+### ---------------------------------------------------------------------------
+### 8. Создать адрес
+### Запускай только если request №7 не сохранил addressPublicId.
+### Ожидаем: 201 Created.
+### ---------------------------------------------------------------------------
+
+POST {{baseUrl}}/api/v1/users/me/addresses
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "label": "Дом",
+  "country": "Russia",
+  "region": "Moscow",
+  "city": "Moscow",
+  "street": "Tverskaya",
+  "house": "1",
+  "apartment": "10",
+  "postalCode": "123456",
+  "comment": "Тестовый адрес для Saga flow",
+  "isDefault": true
+}
+
+> {%
+client.test("Адрес создан", function () {
+    client.assert(response.status === 201, "Ожидался HTTP 201");
+    client.assert(response.body.publicId, "publicId адреса отсутствует");
+});
+
+client.global.set("addressPublicId", response.body.publicId);
+%}
+
+
+### ---------------------------------------------------------------------------
+### 9. Очистить корзину перед тестом
+### Ожидаем: 204 No Content.
+### ---------------------------------------------------------------------------
+
+DELETE {{baseUrl}}/api/v1/users/me/cart
+Authorization: Bearer {{userToken}}
+
+
+### ---------------------------------------------------------------------------
+### 10. Получить корзину после очистки
+### Нужен для проверки, что перед тестом в корзине ничего не осталось.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me/cart
+Authorization: Bearer {{userToken}}
+
+
+### ---------------------------------------------------------------------------
+### 11. Добавить выбранный товар в корзину
+### Количество берётся из переменной @orderQuantity.
+### Ожидаем: 200 OK и товар появляется в корзине.
+### ---------------------------------------------------------------------------
+
+POST {{baseUrl}}/api/v1/users/me/cart/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "productPublicId": "{{productPublicId}}",
+  "quantity": {{orderQuantity}}
+}
+
+> {%
+client.test("Товар добавлен в корзину", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200");
+    client.assert(response.body.items, "items корзины отсутствуют");
+    client.assert(response.body.items.length > 0, "Корзина не должна быть пустой");
+});
+
+const item = response.body.items && response.body.items[0];
+if (item && item.publicId) {
+    client.global.set("cartItemPublicId", item.publicId);
+}
+%}
+
+
+### ---------------------------------------------------------------------------
+### 12. Проверить корзину перед созданием заказа
+### Ожидаем: в корзине лежит товар из запроса №11.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me/cart
+Authorization: Bearer {{userToken}}
+
+
+### ---------------------------------------------------------------------------
+### 13. Создать заказ — успешный/обычный сценарий
+### Первый ответ ожидается таким:
+### status = PENDING_STOCK_RESERVATION
+###
+### Этот запрос запускает Saga:
+### user-service в одной транзакции создаёт:
+### - Order
+### - OrderItem snapshot
+### - order_outbox_event StockReservationRequested
+###
+### Затем асинхронная цепочка продолжается через Kafka.
+### ---------------------------------------------------------------------------
+
+POST {{baseUrl}}/api/v1/users/me/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "addressPublicId": "{{addressPublicId}}"
+}
+
+> {%
+client.test("Заказ создан", function () {
+    client.assert(response.status === 201, "Ожидался HTTP 201");
+    client.assert(response.body.publicId, "publicId заказа отсутствует");
+    client.assert(response.body.status === "PENDING_STOCK_RESERVATION", "Ожидался PENDING_STOCK_RESERVATION в первом ответе");
+});
+
+client.global.set("orderPublicId", response.body.publicId);
+%}
+
+
+### ---------------------------------------------------------------------------
+### 14. Проверить заказ сразу после создания
+### Он ещё может быть в статусе PENDING_STOCK_RESERVATION,
+### если асинхронная Saga ещё не успела завершиться.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me/orders/{{orderPublicId}}
+Authorization: Bearer {{userToken}}
+
+
+### ---------------------------------------------------------------------------
+### 15. Проверить заказ после завершения Saga
+### Перед запуском подожди вручную 5–10 секунд.
+###
+### Для успешного сценария ожидаем:
+### status = CONFIRMED
+###
+### Для отказного сценария ожидаем:
+### status = STOCK_RESERVATION_FAILED
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me/orders/{{orderPublicId}}
+Authorization: Bearer {{userToken}}
+
+> {%
+client.test("Статус заказа после Saga корректный", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200");
+    client.assert(
+        response.body.status === "CONFIRMED" ||
+        response.body.status === "STOCK_RESERVATION_FAILED" ||
+        response.body.status === "PENDING_STOCK_RESERVATION",
+        "Неожиданный статус заказа: " + response.body.status
+    );
+});
+%}
+
+
+### ---------------------------------------------------------------------------
+### 16. Проверить выбранный товар после заказа
+### В успешном сценарии stockQuantity должен уменьшиться.
+### В отказном сценарии после StockReservationFailed дополнительного списания быть не должно.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/products/public/{{productPublicId}}
+
+> {%
+client.test("Товар после заказа получен", function () {
+    client.assert(response.status === 200, "Ожидался HTTP 200");
+    client.assert(response.body.publicId, "publicId товара отсутствует");
+});
+
+client.global.set("stockAfter", String(response.body.stockQuantity));
+
+const before = Number(client.global.get("stockBefore"));
+const after = Number(response.body.stockQuantity);
+
+client.log("stockBefore=" + before);
+client.log("stockAfter=" + after);
+%}
+
+
+### ---------------------------------------------------------------------------
+### 17. Получить все заказы текущего пользователя
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/users/me/orders
+Authorization: Bearer {{userToken}}
+
+
+### ---------------------------------------------------------------------------
+### 18. Опционально: admin-список заказов
+### Требуется роль ADMIN.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/admin/orders?page=0&size=10
+Authorization: Bearer {{adminToken}}
+
+
+### ---------------------------------------------------------------------------
+### 19. Опционально: получить конкретный заказ от имени ADMIN
+### Требуется роль ADMIN.
+### ---------------------------------------------------------------------------
+
+GET {{baseUrl}}/api/v1/admin/orders/{{orderPublicId}}
+Authorization: Bearer {{adminToken}}
+
+
+### ---------------------------------------------------------------------------
+### 20. Подготовка отказного сценария STOCK_RESERVATION_FAILED
+###
+### Зачем:
+### 1. В корзину мы уже положили, например, 10 единиц товара через запрос №11.
+### 2. До создания заказа админским запросом уменьшаем stock.
+### 3. В момент обработки Saga product-service увидит:
+###    в заказе просят больше, чем осталось на складе.
+### 4. Он создаст StockReservationFailed.
+###
+### Важно:
+### Этот endpoint напрямую меняет stock.
+### Использовать только для dev-тестирования.
+### ---------------------------------------------------------------------------
+
+PATCH {{baseUrl}}/api/v1/products/public/{{productPublicId}}/stock/decrease
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "quantity": 34
+}
+
+
+### ---------------------------------------------------------------------------
+### 21. Создать заказ после подготовки отказного сценария
+### Первый HTTP-ответ снова ожидается:
+### status = PENDING_STOCK_RESERVATION
+###
+### А после завершения Saga запрос №15 должен показать:
+### status = STOCK_RESERVATION_FAILED
+### ---------------------------------------------------------------------------
+
+POST {{baseUrl}}/api/v1/users/me/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "addressPublicId": "{{addressPublicId}}"
+}
+
+> {%
+client.test("Заказ для отказного сценария создан", function () {
+    client.assert(response.status === 201, "Ожидался HTTP 201");
+    client.assert(response.body.publicId, "publicId заказа отсутствует");
+    client.assert(response.body.status === "PENDING_STOCK_RESERVATION", "Ожидался PENDING_STOCK_RESERVATION в первом ответе");
+});
+
+client.global.set("orderPublicId", response.body.publicId);
+%}

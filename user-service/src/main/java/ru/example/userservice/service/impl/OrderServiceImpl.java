@@ -72,11 +72,6 @@ public class OrderServiceImpl implements OrderService {
             ProductCatalogResponse product = productCatalogClient
                     .getProductByPublicId(cartItem.getProductPublicId());
 
-            ensureStockAvailable(
-                    product,
-                    cartItem.getProductPublicId(),
-                    cartItem.getQuantity()
-            );
 
             BigDecimal unitPrice = getRequiredPrice(product);
             BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
@@ -160,25 +155,6 @@ public class OrderServiceImpl implements OrderService {
         return product.price();
     }
 
-    private void ensureStockAvailable(
-            ProductCatalogResponse product,
-            String productPublicId,
-            int requestedQuantity
-    ) {
-        Integer availableQuantity = product.stockQuantity();
-
-        if (availableQuantity == null) {
-            throw new IllegalStateException("product-service вернул товар без stockQuantity: " + product.publicId());
-        }
-
-        if (requestedQuantity > availableQuantity) {
-            throw new ProductOutOfStockException(
-                    productPublicId,
-                    requestedQuantity,
-                    availableQuantity
-            );
-        }
-    }
 
     private Account getCurrentAccount(Jwt jwt) {
         String keycloakUserId = jwt.getSubject();

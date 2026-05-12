@@ -10,6 +10,11 @@ build/
 *.iws
 out/
 
+
+frontend/
+
+
+
 common.env.properties
 !common.env.example.properties
 docker/.data/
