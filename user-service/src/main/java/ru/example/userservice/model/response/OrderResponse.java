@@ -9,6 +9,7 @@ import java.util.List;
 public record OrderResponse(
         String publicId,
         OrderStatus status,
+        String statusReason,
         String deliveryAddressPublicId,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt,

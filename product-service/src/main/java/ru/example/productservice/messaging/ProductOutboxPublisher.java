@@ -51,7 +51,7 @@ public class ProductOutboxPublisher {
     private void publishEvent(ProductOutboxEvent event) {
         try {
             ProducerRecord<String, String> record = new ProducerRecord<>(
-                    KafkaTopics.STOCK_RESERVATION_RESULT,
+                    resolveTopic(event.getEventType()),
                     event.getAggregateId(),
                     event.getPayload()
             );
@@ -101,5 +101,20 @@ public class ProductOutboxPublisher {
                 name,
                 value.getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    private String resolveTopic(String eventType) {
+        return switch (eventType) {
+            case "StockReservationSucceeded", "StockReservationFailed" ->
+                    KafkaTopics.STOCK_RESERVATION_RESULT;
+
+            case "StockReleaseSucceeded", "StockReleaseFailed" ->
+                    KafkaTopics.STOCK_RELEASE_RESULT;
+
+            default ->
+                    throw new IllegalArgumentException(
+                            "Неизвестный тип product outbox event: " + eventType
+                    );
+        };
     }
 }

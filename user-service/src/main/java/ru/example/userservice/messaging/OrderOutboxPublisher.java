@@ -51,7 +51,7 @@ public class OrderOutboxPublisher {
     private void publishEvent(OrderOutboxEvent event) {
         try {
             ProducerRecord<String, String> record = new ProducerRecord<>(
-                    KafkaTopics.STOCK_RESERVATION_REQUESTED,
+                    resolveTopic(event.getEventType()),
                     event.getAggregateId(),
                     event.getPayload()
             );
@@ -101,5 +101,20 @@ public class OrderOutboxPublisher {
                 name,
                 value.getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    private String resolveTopic(String eventType) {
+        return switch (eventType) {
+            case "StockReservationRequested" ->
+                    KafkaTopics.STOCK_RESERVATION_REQUESTED;
+
+            case "OrderCancellationRequested" ->
+                    KafkaTopics.ORDER_CANCELLATION_REQUESTED;
+
+            default ->
+                    throw new IllegalArgumentException(
+                            "Неизвестный тип order outbox event: " + eventType
+                    );
+        };
     }
 }

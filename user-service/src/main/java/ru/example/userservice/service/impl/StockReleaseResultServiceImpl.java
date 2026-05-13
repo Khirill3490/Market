@@ -7,19 +7,19 @@ import ru.example.identitydomain.entity.Order;
 import ru.example.identitydomain.entity.enums.OrderStatus;
 import ru.example.userservice.entity.ProcessedKafkaEvent;
 import ru.example.userservice.exception.OrderNotFoundException;
-import ru.example.userservice.model.event.StockReservationResultEvent;
+import ru.example.userservice.model.event.StockReleaseResultEvent;
 import ru.example.userservice.repository.OrderRepository;
 import ru.example.userservice.repository.ProcessedKafkaEventRepository;
 import ru.example.userservice.service.OrderStatusTransitionService;
-import ru.example.userservice.service.StockReservationResultService;
+import ru.example.userservice.service.StockReleaseResultService;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class StockReservationResultServiceImpl implements StockReservationResultService {
+public class StockReleaseResultServiceImpl implements StockReleaseResultService {
 
-    private static final String CONSUMER_NAME = "user-service-stock-reservation-result-consumer";
+    private static final String CONSUMER_NAME = "user-service-stock-release-result-consumer";
 
     private final OrderRepository orderRepository;
     private final ProcessedKafkaEventRepository processedKafkaEventRepository;
@@ -27,9 +27,9 @@ public class StockReservationResultServiceImpl implements StockReservationResult
 
     @Override
     @Transactional
-    public void handleStockReservationResult(
+    public void handleStockReleaseResult(
             UUID sourceEventId,
-            StockReservationResultEvent event
+            StockReleaseResultEvent event
     ) {
         if (processedKafkaEventRepository.existsByEventIdAndConsumerName(sourceEventId, CONSUMER_NAME)) {
             return;
@@ -38,17 +38,17 @@ public class StockReservationResultServiceImpl implements StockReservationResult
         Order order = orderRepository.findByPublicId(event.orderPublicId())
                 .orElseThrow(() -> new OrderNotFoundException(event.orderPublicId()));
 
-        if (order.getStatus() == OrderStatus.PENDING_STOCK_RESERVATION) {
+        if (order.getStatus() == OrderStatus.CANCELLATION_REQUESTED) {
             if (event.success()) {
                 orderStatusTransitionService.changeStatus(
                         order,
-                        OrderStatus.CONFIRMED,
-                        null
+                        OrderStatus.CANCELLED,
+                        "Заказ успешно отменён"
                 );
             } else {
                 orderStatusTransitionService.changeStatus(
                         order,
-                        OrderStatus.STOCK_RESERVATION_FAILED,
+                        OrderStatus.CANCELLATION_FAILED,
                         resolveFailureReason(event)
                 );
             }
@@ -62,9 +62,9 @@ public class StockReservationResultServiceImpl implements StockReservationResult
         );
     }
 
-    private String resolveFailureReason(StockReservationResultEvent event) {
+    private String resolveFailureReason(StockReleaseResultEvent event) {
         if (event.reason() == null || event.reason().isBlank()) {
-            return "Резервирование товара не удалось";
+            return "Не удалось освободить резерв товара при отмене заказа";
         }
 
         return event.reason();

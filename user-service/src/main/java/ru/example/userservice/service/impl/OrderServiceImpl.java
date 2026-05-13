@@ -1,5 +1,7 @@
 package ru.example.userservice.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -7,28 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.example.identitydomain.entity.*;
 import ru.example.identitydomain.entity.enums.OrderStatus;
 import ru.example.userservice.client.ProductCatalogClient;
-import ru.example.userservice.exception.*;
+import ru.example.userservice.entity.OrderOutboxEvent;
+import ru.example.userservice.entity.OutboxEventStatus;
+import ru.example.userservice.exception.CartIsEmptyException;
+import ru.example.userservice.exception.EntityNotFoundException;
+import ru.example.userservice.exception.OrderCannotBeCancelledException;
+import ru.example.userservice.exception.OrderNotFoundException;
 import ru.example.userservice.mapper.OrderMapper;
+import ru.example.userservice.model.event.OrderCancellationRequestedEvent;
+import ru.example.userservice.model.event.StockReservationRequestedEvent;
 import ru.example.userservice.model.request.CreateOrderRequest;
 import ru.example.userservice.model.response.OrderResponse;
 import ru.example.userservice.model.response.ProductCatalogResponse;
-import ru.example.userservice.repository.AccountRepository;
-import ru.example.userservice.repository.AddressRepository;
-import ru.example.userservice.repository.CartRepository;
-import ru.example.userservice.repository.OrderRepository;
+import ru.example.userservice.repository.*;
 import ru.example.userservice.service.OrderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.example.userservice.entity.OrderOutboxEvent;
-import ru.example.userservice.entity.OutboxEventStatus;
-import ru.example.userservice.model.event.StockReservationRequestedEvent;
-import ru.example.userservice.repository.OrderOutboxEventRepository;
-
-import java.util.ArrayList;
-import java.util.UUID;
+import ru.example.userservice.service.OrderStatusTransitionService;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductCatalogClient productCatalogClient;
     private final OrderMapper orderMapper;
     private final ObjectMapper objectMapper;
+    private final OrderStatusTransitionService orderStatusTransitionService;
 
     @Override
     @Transactional
@@ -95,6 +96,8 @@ public class OrderServiceImpl implements OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
+        orderStatusTransitionService.recordInitialStatus(savedOrder);
+
         OrderOutboxEvent outboxEvent = createStockReservationRequestedOutboxEvent(
                 savedOrder,
                 reservationItems
@@ -138,11 +141,20 @@ public class OrderServiceImpl implements OrderService {
                 .findByPublicIdAndAccountId(orderPublicId, account.getId())
                 .orElseThrow(() -> new OrderNotFoundException(orderPublicId));
 
-        if (order.getStatus() != OrderStatus.CREATED) {
+        if (order.getStatus() != OrderStatus.CONFIRMED) {
             throw new OrderCannotBeCancelledException(orderPublicId, order.getStatus());
         }
 
-        order.setStatus(OrderStatus.CANCELLED);
+        orderStatusTransitionService.changeStatus(
+                order,
+                OrderStatus.CANCELLATION_REQUESTED,
+                "Пользователь запросил отмену заказа"
+        );
+
+        OrderOutboxEvent outboxEvent =
+                createOrderCancellationRequestedOutboxEvent(order);
+
+        orderOutboxEventRepository.save(outboxEvent);
 
         return orderMapper.toResponse(order);
     }
@@ -190,6 +202,32 @@ public class OrderServiceImpl implements OrderService {
                 .aggregateType("ORDER")
                 .aggregateId(order.getPublicId())
                 .eventType("StockReservationRequested")
+                .payload(payloadJson)
+                .status(OutboxEventStatus.NEW)
+                .attempts(0)
+                .build();
+    }
+
+    private OrderOutboxEvent createOrderCancellationRequestedOutboxEvent(Order order) {
+        OrderCancellationRequestedEvent payload =
+                new OrderCancellationRequestedEvent(order.getPublicId());
+
+        String payloadJson;
+        try {
+            payloadJson = objectMapper.writeValueAsString(payload);
+        } catch (JsonProcessingException exception) {
+            throw new IllegalStateException(
+                    "Не удалось сериализовать событие запроса отмены заказа: "
+                            + order.getPublicId(),
+                    exception
+            );
+        }
+
+        return OrderOutboxEvent.builder()
+                .eventId(UUID.randomUUID())
+                .aggregateType("ORDER")
+                .aggregateId(order.getPublicId())
+                .eventType("OrderCancellationRequested")
                 .payload(payloadJson)
                 .status(OutboxEventStatus.NEW)
                 .attempts(0)

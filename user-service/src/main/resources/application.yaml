@@ -59,6 +59,9 @@ market:
     topics:
       stock-reservation-requested: market.order.stock-reservation-requested.v1
       stock-reservation-result: market.product.stock-reservation-result.v1
+      order-cancellation-requested: market.order.cancellation-requested.v1
+      stock-release-result: market.product.stock-release-result.v1
+
 
   outbox:
     batch-size: 50

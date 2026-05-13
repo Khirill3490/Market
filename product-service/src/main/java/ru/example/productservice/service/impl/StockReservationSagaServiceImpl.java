@@ -5,15 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.example.productservice.entity.OutboxEventStatus;
-import ru.example.productservice.entity.ProcessedKafkaEvent;
-import ru.example.productservice.entity.Product;
-import ru.example.productservice.entity.ProductOutboxEvent;
+import ru.example.productservice.entity.*;
 import ru.example.productservice.model.event.StockReservationRequestedEvent;
 import ru.example.productservice.model.event.StockReservationResultEvent;
 import ru.example.productservice.repository.ProcessedKafkaEventRepository;
 import ru.example.productservice.repository.ProductOutboxEventRepository;
 import ru.example.productservice.repository.ProductRepository;
+import ru.example.productservice.repository.StockReservationRepository;
 import ru.example.productservice.service.StockReservationSagaService;
 
 import java.util.*;
@@ -30,6 +28,7 @@ public class StockReservationSagaServiceImpl implements StockReservationSagaServ
     private final ProcessedKafkaEventRepository processedKafkaEventRepository;
     private final ProductOutboxEventRepository productOutboxEventRepository;
     private final ObjectMapper objectMapper;
+    private final StockReservationRepository stockReservationRepository;
 
     @Override
     @Transactional
@@ -91,17 +90,37 @@ public class StockReservationSagaServiceImpl implements StockReservationSagaServ
                 return new StockReservationResultEvent(
                         event.orderPublicId(),
                         false,
-                        "Недостаточно товара productPublicId=" + productPublicId
-                                + ". Запрошено: " + requestedQuantity
+                        "Недостаточно товара «" + product.getName() + "». "
+                                + "Запрошено: " + requestedQuantity
                                 + ", доступно: " + product.getStockQuantity()
                 );
             }
         }
 
+        List<StockReservation> reservations = new ArrayList<>();
+
         for (Map.Entry<String, Integer> entry : requestedByProductPublicId.entrySet()) {
-            Product product = productsByPublicId.get(entry.getKey());
-            product.setStockQuantity(product.getStockQuantity() - entry.getValue());
+            String productPublicId = entry.getKey();
+            Integer requestedQuantity = entry.getValue();
+
+            Product product = productsByPublicId.get(productPublicId);
+
+            product.setStockQuantity(
+                    product.getStockQuantity() - requestedQuantity
+            );
+
+            StockReservation reservation = StockReservation.builder()
+                    .orderPublicId(event.orderPublicId())
+                    .product(product)
+                    .productPublicId(productPublicId)
+                    .quantity(requestedQuantity)
+                    .status(StockReservationStatus.RESERVED)
+                    .build();
+
+            reservations.add(reservation);
         }
+
+        stockReservationRepository.saveAll(reservations);
 
         return new StockReservationResultEvent(
                 event.orderPublicId(),

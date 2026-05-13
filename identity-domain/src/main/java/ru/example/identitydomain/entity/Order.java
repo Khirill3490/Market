@@ -62,6 +62,13 @@ public class Order {
     private OrderStatus status;
 
     /**
+     * Пояснение к текущему статусу заказа.
+     * Например, причина STOCK_RESERVATION_FAILED.
+     */
+    @Column(name = "status_reason", columnDefinition = "TEXT")
+    private String statusReason;
+
+    /**
      * Позиции заказа.
      */
     @OneToMany(
