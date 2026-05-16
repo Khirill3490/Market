@@ -25,7 +25,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common"))
     implementation(project(":identity-domain"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

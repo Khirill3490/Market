@@ -14,6 +14,12 @@ public final class KafkaTopics {
     public static final String STOCK_RELEASE_RESULT =
             "market.product.stock-release-result.v1";
 
+    public static final String STOCK_RESERVATION_RESULT_DLT =
+            STOCK_RESERVATION_RESULT + ".dlt";
+
+    public static final String STOCK_RELEASE_RESULT_DLT =
+            STOCK_RELEASE_RESULT + ".dlt";
+
     private KafkaTopics() {
     }
 }

@@ -10,6 +10,15 @@ import ru.example.productservice.messaging.KafkaTopics;
 public class KafkaTopicConfiguration {
 
     @Bean
+    public NewTopic stockReservationRequestedTopic() {
+        return TopicBuilder
+                .name(KafkaTopics.STOCK_RESERVATION_REQUESTED)
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
     public NewTopic stockReservationResultTopic() {
         return TopicBuilder
                 .name(KafkaTopics.STOCK_RESERVATION_RESULT)
@@ -31,6 +40,24 @@ public class KafkaTopicConfiguration {
     public NewTopic stockReleaseResultTopic() {
         return TopicBuilder
                 .name(KafkaTopics.STOCK_RELEASE_RESULT)
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic stockReservationRequestedDltTopic() {
+        return TopicBuilder
+                .name(KafkaTopics.STOCK_RESERVATION_REQUESTED_DLT)
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic orderCancellationRequestedDltTopic() {
+        return TopicBuilder
+                .name(KafkaTopics.ORDER_CANCELLATION_REQUESTED_DLT)
                 .partitions(3)
                 .replicas(1)
                 .build();

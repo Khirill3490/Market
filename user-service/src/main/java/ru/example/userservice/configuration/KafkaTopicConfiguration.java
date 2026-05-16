@@ -44,4 +44,22 @@ public class KafkaTopicConfiguration {
                 .replicas(1)
                 .build();
     }
+
+    @Bean
+    public NewTopic stockReservationResultDltTopic() {
+        return TopicBuilder
+                .name(KafkaTopics.STOCK_RESERVATION_RESULT_DLT)
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic stockReleaseResultDltTopic() {
+        return TopicBuilder
+                .name(KafkaTopics.STOCK_RELEASE_RESULT_DLT)
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
 }

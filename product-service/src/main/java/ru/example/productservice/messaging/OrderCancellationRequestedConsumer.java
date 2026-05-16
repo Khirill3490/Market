@@ -1,11 +1,13 @@
 package ru.example.productservice.messaging;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
+import ru.example.productservice.messaging.exception.NonRetryableKafkaEventException;
 import ru.example.productservice.model.event.OrderCancellationRequestedEvent;
 import ru.example.productservice.service.StockReleaseSagaService;
 
@@ -27,14 +29,12 @@ public class OrderCancellationRequestedConsumer {
             String payload,
             @Header("eventId") String eventId
     ) {
-        try {
-            OrderCancellationRequestedEvent event = objectMapper.readValue(
-                    payload,
-                    OrderCancellationRequestedEvent.class
-            );
+        UUID parsedEventId = parseEventId(eventId);
+        OrderCancellationRequestedEvent event = parsePayload(payload, eventId);
 
+        try {
             stockReleaseSagaService.handleOrderCancellationRequested(
-                    UUID.fromString(eventId),
+                    parsedEventId,
                     event
             );
 
@@ -45,14 +45,48 @@ public class OrderCancellationRequestedConsumer {
             );
         } catch (Exception exception) {
             log.error(
-                    "Failed to handle order cancellation requested event: eventId={}, payload={}",
+                    "Failed to process order cancellation requested event: eventId={}, orderPublicId={}",
                     eventId,
-                    payload,
+                    event.orderPublicId(),
                     exception
             );
 
             throw new IllegalStateException(
-                    "Failed to handle order cancellation requested event: " + eventId,
+                    "Failed to process order cancellation requested event: " + eventId,
+                    exception
+            );
+        }
+    }
+
+    private UUID parseEventId(String eventId) {
+        if (eventId == null || eventId.isBlank()) {
+            throw new NonRetryableKafkaEventException(
+                    "Kafka eventId header is missing or blank"
+            );
+        }
+
+        try {
+            return UUID.fromString(eventId);
+        } catch (IllegalArgumentException exception) {
+            throw new NonRetryableKafkaEventException(
+                    "Kafka eventId header is not a valid UUID: " + eventId,
+                    exception
+            );
+        }
+    }
+
+    private OrderCancellationRequestedEvent parsePayload(
+            String payload,
+            String eventId
+    ) {
+        try {
+            return objectMapper.readValue(
+                    payload,
+                    OrderCancellationRequestedEvent.class
+            );
+        } catch (JsonProcessingException exception) {
+            throw new NonRetryableKafkaEventException(
+                    "Failed to deserialize OrderCancellationRequestedEvent: eventId=" + eventId,
                     exception
             );
         }
