@@ -21,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderOutboxEvent {
+public class OrderOutboxEvent   {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
