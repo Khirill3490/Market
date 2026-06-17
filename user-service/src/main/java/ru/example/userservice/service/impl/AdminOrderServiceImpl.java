@@ -15,6 +15,7 @@ import ru.example.userservice.model.request.UpdateOrderStatusRequest;
 import ru.example.userservice.model.response.OrderResponse;
 import ru.example.userservice.repository.OrderRepository;
 import ru.example.userservice.service.AdminOrderService;
+import ru.example.userservice.service.OrderStatusTransitionService;
 
 import java.util.Map;
 import java.util.Set;
@@ -26,14 +27,18 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderStatusTransitionService orderStatusTransitionService;
 
     private static final Map<OrderStatus, Set<OrderStatus>> ALLOWED_TRANSITIONS = Map.of(
-            OrderStatus.CREATED, Set.of(OrderStatus.PROCESSING, OrderStatus.CANCELLED),
-            OrderStatus.PROCESSING, Set.of(OrderStatus.SHIPPED, OrderStatus.CANCELLED),
+            OrderStatus.CONFIRMED, Set.of(OrderStatus.PROCESSING),
+            OrderStatus.PROCESSING, Set.of(OrderStatus.SHIPPED),
             OrderStatus.SHIPPED, Set.of(OrderStatus.DELIVERED),
-            OrderStatus.PAID, Set.of(OrderStatus.PROCESSING, OrderStatus.CANCELLED),
             OrderStatus.DELIVERED, Set.of(),
-            OrderStatus.CANCELLED, Set.of()
+            OrderStatus.CANCELLED, Set.of(),
+            OrderStatus.STOCK_RESERVATION_FAILED, Set.of(),
+            OrderStatus.CANCELLATION_REQUESTED, Set.of(),
+            OrderStatus.CANCELLATION_FAILED, Set.of(),
+            OrderStatus.PENDING_STOCK_RESERVATION, Set.of()
     );
 
     @Override
@@ -64,7 +69,11 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             throw new InvalidOrderStatusTransitionException(currentStatus, targetStatus);
         }
 
-        order.setStatus(targetStatus);
+        orderStatusTransitionService.changeStatus(
+                order,
+                targetStatus,
+                "Статус заказа изменён администратором"
+        );
 
         return orderMapper.toResponse(order);
     }

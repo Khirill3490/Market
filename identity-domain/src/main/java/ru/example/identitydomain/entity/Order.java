@@ -92,7 +92,7 @@ public class Order {
         }
 
         if (status == null) {
-            status = OrderStatus.CREATED;
+            status = OrderStatus.PENDING_STOCK_RESERVATION;
         }
 
         OffsetDateTime now = OffsetDateTime.now();
