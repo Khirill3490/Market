@@ -10,11 +10,7 @@ build/
 *.iws
 out/
 
-
-
 common/
-
-
 
 common.env.properties
 !common.env.example.properties

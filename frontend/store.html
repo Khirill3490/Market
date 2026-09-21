@@ -1,450 +1,263 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="cache-control" content="max-age=604800" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="max-age=604800" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<title>bilalDevX | One of the Biggest Online Shopping Platform</title>
+    <title>MarketPlace | Каталог товаров</title>
 
-<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-<!-- jQuery -->
-<script src="js/jquery-2.0.0.min.js" type="text/javascript"></script>
+    <!-- jQuery -->
+    <script src="js/jquery-2.0.0.min.js" type="text/javascript"></script>
 
-<!-- Bootstrap4 files-->
-<script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap4 files-->
+    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
 
-<!-- Font awesome 5 -->
-<link href="fonts/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
+    <!-- Font awesome 5 -->
+    <link href="fonts/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
 
-<!-- custom style -->
-<link href="css/ui.css" rel="stylesheet" type="text/css"/>
-<link href="css/responsive.css" rel="stylesheet" media="only screen and (max-width: 1200px)" />
+    <!-- custom style -->
+    <link href="css/ui.css" rel="stylesheet" type="text/css"/>
+    <link href="css/responsive.css" rel="stylesheet" media="only screen and (max-width: 1200px)" />
 
-<!-- custom javascript -->
-<script src="js/script.js" type="text/javascript"></script>
+    <!-- custom javascript -->
+    <script src="js/script.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-/// some script
-
-// jquery ready start
-$(document).ready(function() {
-	// jQuery code
-
-}); 
-// jquery end
-</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Общий jQuery-код шаблона, если понадобится позже
+        });
+    </script>
 
 </head>
 <body>
 
-
 <header class="section-header">
-<nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
-<div class="container">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTop4">
-    <ul class="navbar-nav mr-auto">
-    	<li class="nav-item dropdown">
-		 	<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">   Language </a>
-		    <ul class="dropdown-menu small">
-				<li><a class="dropdown-item" href="#">English</a></li>
-				<li><a class="dropdown-item" href="#">Arabic</a></li>
-				<li><a class="dropdown-item" href="#">Russian </a></li>
-		    </ul>
-		</li>
-		<li class="nav-item dropdown">
-			<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> USD </a>
-			<ul class="dropdown-menu small">
-				<li><a class="dropdown-item" href="#">EUR</a></li>
-				<li><a class="dropdown-item" href="#">AED</a></li>
-				<li><a class="dropdown-item" href="#">RUBL </a></li>
-		    </ul>
-		</li>
-    </ul>
-    <ul class="navbar-nav">
-		<li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> Email </a></li>
-		<li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> Call us </a></li>
-	</ul> <!-- list-inline //  -->
-  </div> <!-- navbar-collapse .// -->
-</div> <!-- container //  -->
-</nav>
+    <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Открыть меню">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-<section class="header-main border-bottom">
-	<div class="container">
-<div class="row align-items-center">
-	<div class="col-lg-2 col-md-3 col-6">
-		<a href="./" class="brand-wrap" style="font-size: 30px;">
-			<!-- <img class="logo" src="./images/logo.png"> -->
-			bilal<span style="color: blue; font-weight: bold;">DevX</span>
-		</a> <!-- brand-wrap.// -->
-	</div>
-	<div class="col-lg col-sm col-md col-6 flex-grow-0">
-		<div class="category-wrap dropdown d-inline-block float-right">
-			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
-				<i class="fa fa-bars"></i> All category 
-			</button>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" href="#">Machinery / Mechanical Parts / Tools </a>
-				<a class="dropdown-item" href="#">Consumer Electronics / Home Appliances </a>
-				<a class="dropdown-item" href="#">Auto / Transportation</a>
-				<a class="dropdown-item" href="#">Apparel / Textiles / Timepieces </a>
-				<a class="dropdown-item" href="#">Home & Garden / Construction / Lights </a>
-				<a class="dropdown-item" href="#">Beauty & Personal Care / Health </a> 
-			</div>
-		</div>  <!-- category-wrap.// -->
-	</div> <!-- col.// -->
-	<a href="./store.html" class="btn btn-outline-primary">Store</a>
-	<div class="col-lg  col-md-6 col-sm-12 col">
-		<form action="#" class="search">
-			<div class="input-group w-100">
-			    <input type="text" class="form-control" style="width:60%;" placeholder="Search">
-			    
-			    <div class="input-group-append">
-			      <button class="btn btn-primary" type="submit">
-			        <i class="fa fa-search"></i>
-			      </button>
-			    </div>
-		    </div>
-		</form> <!-- search-wrap .end// -->
-	</div> <!-- col.// -->
-	<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
-				<div class="d-flex justify-content-end mb-3 mb-lg-0">
-					<div class="widget-header">
-						<small class="title text-muted">Welcome guest!</small>
-						<div> 
-							<a href="./signin.html">Sign in</a> <span class="dark-transp"> | </span>
-							<a href="./register.html"> Register</a>
-						</div>
-					</div>
-					<a href="./cart.html" class="widget-header pl-3 ml-3">
-						<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
-						<span class="badge badge-pill badge-danger notify">0</span>
-					</a>
-				</div> <!-- widgets-wrap.// -->
-			</div> <!-- col.// -->
-</div> <!-- row.// -->
-	</div> <!-- container.// -->
-</section> <!-- header-main .// -->
+            <div class="collapse navbar-collapse" id="navbarTop4">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <span class="nav-link">Русский</span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">RUB ₽</span>
+                    </li>
+                </ul>
 
+                <ul class="navbar-nav">
+                    <li>
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-envelope"></i> Почта
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-phone"></i> Связаться
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <section class="header-main border-bottom">
+        <div class="container">
+            <div class="row align-items-center">
 
-</header> <!-- section-header.// -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <a href="./index.html" class="brand-wrap" style="font-size: 30px;">
+                        Market<span style="color: blue; font-weight: bold;">Place</span>
+                    </a>
+                </div>
 
+                <div class="col-lg col-sm col-md col-6 flex-grow-0">
+                    <div class="category-wrap dropdown d-inline-block float-right">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bars"></i> Все категории
+                        </button>
 
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Станки и оборудование</a>
+                            <a class="dropdown-item" href="#">Инструменты и оснастка</a>
+                            <a class="dropdown-item" href="#">Электрика и автоматика</a>
+                            <a class="dropdown-item" href="#">Авто и транспорт</a>
+                            <a class="dropdown-item" href="#">Строительство и материалы</a>
+                            <a class="dropdown-item" href="#">Расходники и комплектующие</a>
+                        </div>
+                    </div>
+                </div>
 
-<!-- ========================= SECTION PAGETOP ========================= -->
+                <a href="./store.html" class="btn btn-outline-primary">Каталог</a>
+
+                <div class="col-lg col-md-6 col-sm-12 col">
+                    <form action="#" class="search">
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control" style="width:60%;" placeholder="Поиск товаров">
+
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+                    <div class="d-flex justify-content-end mb-3 mb-lg-0">
+                        <div class="widget-header">
+                            <small class="title text-muted">Добро пожаловать!</small>
+                            <div>
+                                <a href="./signin.html">Войти</a>
+                                <span class="dark-transp"> | </span>
+                                <a href="./register.html">Регистрация</a>
+                            </div>
+                        </div>
+
+                        <a href="./cart.html" class="widget-header pl-3 ml-3">
+                            <div class="icon icon-sm rounded-circle border">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <span class="badge badge-pill badge-danger notify">0</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</header>
+
 <section class="section-pagetop bg">
-<div class="container">
-	<h2 class="title-page">Our Store</h2>
-	
-</div> <!-- container //  -->
+    <div class="container">
+        <h2 class="title-page">Каталог товаров</h2>
+    </div>
 </section>
-<!-- ========================= SECTION INTRO END// ========================= -->
 
-<!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-content padding-y">
-<div class="container">
+    <div class="container">
 
-<div class="row">
-	<aside class="col-md-3">
-		
-<div class="card">
-	<article class="filter-group">
-		<header class="card-header">
-			<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
-				<i class="icon-control fa fa-chevron-down"></i>
-				<h6 class="title">Categories</h6>
-			</a>
-		</header>
-		<div class="filter-content collapse show" id="collapse_1">
-			<div class="card-body">
-				
-				<ul class="list-menu">
-				<li><a href="#">People  </a></li>
-				<li><a href="#">Watches </a></li>
-				<li><a href="#">Cinema  </a></li>
-				<li><a href="#">Clothes  </a></li>
-				<li><a href="#">Home items </a></li>
-				<li><a href="#">Animals</a></li>
-				<li><a href="#">People </a></li>
-				</ul>
+        <div class="row">
+            <aside class="col-md-3">
 
-			</div> <!-- card-body.// -->
-		</div>
-	</article> <!-- filter-group  .// -->
-	<article class="filter-group">
-		<header class="card-header">
-			<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
-				<i class="icon-control fa fa-chevron-down"></i>
-				<h6 class="title">Sizes </h6>
-			</a>
-		</header>
-		<div class="filter-content collapse show" id="collapse_4" >
-			<div class="card-body">
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> XS </span>
-			  </label>
+                <div class="card">
 
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> SM </span>
-			  </label>
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Категории</h6>
+                            </a>
+                        </header>
 
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> LG </span>
-			  </label>
+                        <div class="filter-content collapse show" id="collapse_1">
+                            <div class="card-body">
+                                <ul class="list-menu">
+                                    <li><a href="#">Станки и оборудование</a></li>
+                                    <li><a href="#">Инструменты</a></li>
+                                    <li><a href="#">Электрика</a></li>
+                                    <li><a href="#">Автотовары</a></li>
+                                    <li><a href="#">Строительные материалы</a></li>
+                                    <li><a href="#">Расходники</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
 
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> XXL </span>
-			  </label>
-		</div><!-- card-body.// -->
-		</div>
-	</article> <!-- filter-group .// -->
-	
-	<article class="filter-group">
-		<header class="card-header">
-			<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
-				<i class="icon-control fa fa-chevron-down"></i>
-				<h6 class="title">Price range </h6>
-			</a>
-		</header>
-		<div class="filter-content collapse show" id="collapse_3">
-			<div class="card-body">
-				
-				<div class="form-row">
-				<div class="form-group col-md-6">
-				  <label>Min</label>
-				  <!-- <input class="form-control" placeholder="$0" type="number"> -->
-				  	<select class="mr-2 form-control">
-						<option value="0">$0</option>
-						<option value="50">$50</option>
-						<option value="100">$100</option>
-						<option value="150">$150</option>
-						<option value="200">$200</option>
-						<option value="500">$500</option>
-						<option value="1000">$1000</option>
-					</select>
-				</div>
-				<div class="form-group text-right col-md-6">
-				  <label>Max</label>
-				  	<select class="mr-2 form-control">
-						<option value="50">$50</option>
-						<option value="100">$100</option>
-						<option value="150">$150</option>
-						<option value="200">$200</option>
-						<option value="500">$500</option>
-						<option value="1000">$1000</option>
-						<option value="2000">$2000+</option>
-					</select>
-				</div>
-				</div> <!-- form-row.// -->
-				<button class="btn btn-block btn-primary">Apply</button>
-			</div><!-- card-body.// -->
-		</div>
-	</article> <!-- filter-group .// -->
-	
-</div> <!-- card.// -->
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Диапазон цены</h6>
+                            </a>
+                        </header>
 
-	</aside> <!-- col.// -->
-	<main class="col-md-9">
+                        <div class="filter-content collapse show" id="collapse_3">
+                            <div class="card-body">
 
-<header class="border-bottom mb-4 pb-3">
-		<div class="form-inline">
-			<span class="mr-md-auto">32 Items found </span>
-			
-		</div>
-</header><!-- sect-heading -->
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>От</label>
+                                        <select class="mr-2 form-control">
+                                            <option value="0">0 ₽</option>
+                                            <option value="1000">1 000 ₽</option>
+                                            <option value="5000">5 000 ₽</option>
+                                            <option value="10000">10 000 ₽</option>
+                                            <option value="50000">50 000 ₽</option>
+                                            <option value="100000">100 000 ₽</option>
+                                            <option value="500000">500 000 ₽</option>
+                                        </select>
+                                    </div>
 
-<div class="row">
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				
-				<img src="images/items/1.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Great item name goes here</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-						<del class="price-old">$1980</del>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-success">Added to cart </a>
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+                                    <div class="form-group text-right col-md-6">
+                                        <label>До</label>
+                                        <select class="mr-2 form-control">
+                                            <option value="1000">1 000 ₽</option>
+                                            <option value="5000">5 000 ₽</option>
+                                            <option value="10000">10 000 ₽</option>
+                                            <option value="50000">50 000 ₽</option>
+                                            <option value="100000">100 000 ₽</option>
+                                            <option value="500000">500 000 ₽</option>
+                                            <option value="1000000">1 000 000 ₽+</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/2.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+                                <button class="btn btn-block btn-primary">Применить</button>
+                            </div>
+                        </div>
+                    </article>
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/3.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+                </div>
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/4.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+            </aside>
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/5.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+            <main class="col-md-9">
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/6.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+                <header class="border-bottom mb-4 pb-3">
+                    <div class="form-inline">
+                        <span id="store-products-count" class="mr-md-auto">Загрузка товаров...</span>
+                    </div>
+                </header>
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/7.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
+                <div id="store-products-grid" class="row">
+                    <div class="col-12">
+                        <p>Загрузка товаров...</p>
+                    </div>
+                </div>
 
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="images/items/1.jpg">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="./product-detail.html" class="title">Product name goes here just for demo item</a>
-					<div class="price-wrap mt-2">
-						<span class="price">$1280</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>	
-			</figcaption>
-		</figure>
-	</div> <!-- col.// -->
-</div> <!-- row end.// -->
+                <nav class="mt-4" aria-label="Навигация по страницам каталога">
+                    <ul id="store-pagination" class="pagination"></ul>
+                </nav>
 
+            </main>
+        </div>
 
-<nav class="mt-4" aria-label="Page navigation sample">
-  <ul class="pagination">
-    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-  </ul>
-</nav>
-
-	</main> <!-- col.// -->
-
-</div>
-
-</div> <!-- container .//  -->
+    </div>
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
 
-<!-- ========================= FOOTER ========================= -->
 <footer class="section-footer border-top padding-y">
-	<div class="container">
-		<p class="float-md-right"> 
-			&copy Copyright 2019 All rights reserved
-		</p>
-		<p>
-			<a href="#">Terms and conditions</a>
-		</p>
-	</div><!-- //container -->
+    <div class="container">
+        <p class="float-md-right">
+            &copy; 2026 MarketPlace. Все права защищены.
+        </p>
+        <p>
+            <a href="#">Условия использования</a>
+        </p>
+    </div>
 </footer>
-<!-- ========================= FOOTER END // ========================= -->
 
-
+<script src="js/api.js" type="text/javascript"></script>
+<script src="js/store-page.js" type="text/javascript"></script>
 
 </body>
 </html>
