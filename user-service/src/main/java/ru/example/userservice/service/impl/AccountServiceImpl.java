@@ -1,10 +1,10 @@
-package ru.example.authmodule.service.impl;
+package ru.example.userservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.example.authmodule.repository.AccountRepository;
-import ru.example.authmodule.service.AccountService;
+import ru.example.userservice.repository.AccountRepository;
+import ru.example.userservice.service.impl.AccountService;
 import ru.example.identitydomain.entity.Account;
 import ru.example.identitydomain.entity.enums.AccountStatus;
 import ru.example.identitydomain.entity.enums.AccountType;

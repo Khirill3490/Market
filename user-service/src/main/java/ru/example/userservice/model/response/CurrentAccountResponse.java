@@ -1,4 +1,4 @@
-package ru.example.authmodule.model.response;
+package ru.example.userservice.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

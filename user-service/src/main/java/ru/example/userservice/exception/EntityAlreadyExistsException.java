@@ -1,4 +1,4 @@
-package ru.example.authmodule.exception;
+package ru.example.userservice.exception;
 
 public class EntityAlreadyExistsException extends RuntimeException {
 

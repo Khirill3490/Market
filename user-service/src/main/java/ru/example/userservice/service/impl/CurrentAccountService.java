@@ -1,14 +1,14 @@
-package ru.example.authmodule.security.service;
+package ru.example.userservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.example.authmodule.exception.EntityAlreadyExistsException;
-import ru.example.authmodule.exception.IncorrectDataException;
-import ru.example.authmodule.model.response.CurrentAccountResponse;
-import ru.example.authmodule.repository.AccountRepository;
-import ru.example.authmodule.service.AccountService;
+import ru.example.userservice.exception.EntityAlreadyExistsException;
+import ru.example.userservice.exception.IncorrectDataException;
+import ru.example.userservice.model.response.CurrentAccountResponse;
+import ru.example.userservice.repository.AccountRepository;
+import ru.example.userservice.service.impl.AccountServiceImpl;
 import ru.example.identitydomain.entity.Account;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CurrentAccountService {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
 
     @Transactional
     public CurrentAccountResponse getCurrentAccount(Jwt jwt) {
