@@ -62,6 +62,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/users/**").authenticated()
+                        .requestMatchers("/api/v1/auth/me").authenticated()
                         .anyRequest().denyAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

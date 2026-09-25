@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByKeycloakUserId(String keycloakUserId);
+
+    Optional<Account> findByEmailEqualsIgnoreCase(String email);
 }

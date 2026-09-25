@@ -13,7 +13,7 @@ public class GatewayConfig {
         return builder.routes()
                 .route(
                         "auth_route", r -> r.path("/api/v1/auth/**")
-                                .uri("lb://auth-module")
+                                .uri("lb://user-service")
                 )
                 .route(
                         "admin_order_route", r -> r.path(

@@ -1,4 +1,4 @@
-package ru.example.authmodule.service;
+package ru.example.userservice.service;
 
 
 import ru.example.identitydomain.entity.Account;

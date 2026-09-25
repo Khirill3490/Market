@@ -8,7 +8,7 @@ import ru.example.userservice.exception.EntityAlreadyExistsException;
 import ru.example.userservice.exception.IncorrectDataException;
 import ru.example.userservice.model.response.CurrentAccountResponse;
 import ru.example.userservice.repository.AccountRepository;
-import ru.example.userservice.service.impl.AccountServiceImpl;
+import ru.example.userservice.service.AccountService;
 import ru.example.identitydomain.entity.Account;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CurrentAccountService {
 
     private final AccountRepository accountRepository;
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
 
     @Transactional
     public CurrentAccountResponse getCurrentAccount(Jwt jwt) {
